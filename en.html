@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LojiXcel – Excel AI for Logistics</title>
+<meta name="description" content="AI-powered Excel assistant for logistics and supply-chain teams: shipment, inventory, freight and KPI analysis.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#7f4ea8">
+<link rel="canonical" href="https://lojixcel.app/en/">
+<link rel="alternate" hreflang="tr" href="https://lojixcel.app/">
+<link rel="alternate" hreflang="en" href="https://lojixcel.app/en/">
+<link rel="alternate" hreflang="x-default" href="https://lojixcel.app/en/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="tr_TR">
+<meta property="og:title" content="LojiXcel – Excel AI for Logistics">
+<meta property="og:description" content="AI-powered Excel assistant for logistics and supply-chain teams.">
+<meta property="og:url" content="https://lojixcel.app/en/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='11' fill='%237f4ea8'/%3E%3Crect x='8' y='9' width='32' height='30' rx='4' fill='%23fff'/%3E%3Cpath d='M8 13a4 4 0 0 1 4-4h24a4 4 0 0 1 4 4v4H8z' fill='%23c7a3d2'/%3E%3Cpath d='M13 34l8-8 6 4 9-10' fill='none' stroke='%237f4ea8' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('lx-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');else if(t==='auto')document.documentElement.removeAttribute('data-theme')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --surface-2:#f7f3fb; --ink:#111111; --ink-2:#4a4458; --line:#e7def0;
+  --brand:#7f4ea8; --brand-2:#9c93e5; --brand-fill:#7f4ea8; --brand-fill-2:#c7a3d2; --on-brand:#ffffff; --on-brand-2:#111111;
+  --accent:#7f4ea8; --accent-ink:#ffffff; --accent-text:#7f4ea8; --accent-soft:#f3ecf8; --lilac:#c7a3d2; --mauve:#ba8cbe; --periwinkle:#9c93e5;
+  --ok:#15803d; --ok-strong:#166534; --ok-soft:#dcf2e3; --bad:#b91c1c; --header-bg:rgba(255,255,255,.92);
+  --gridline:rgba(127,78,168,.09); --colhead:#f3eef8; --ii:#111111; --iw:#ffffff;
+  --radius:14px; --shadow:0 1px 2px rgba(17,17,17,.05),0 8px 24px rgba(127,78,168,.08);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#110d17; --surface:#18131f; --surface-2:#211a2b; --ink:#f3eff8; --ink-2:#b3a9c2; --line:#30263d;
+    --brand:#c7a3d2; --brand-2:#9c93e5; --brand-fill:#7f4ea8; --brand-fill-2:#ba8cbe; --on-brand:#ffffff; --on-brand-2:#111111;
+    --accent:#7f4ea8; --accent-ink:#ffffff; --accent-text:#c7a3d2; --accent-soft:#2a2038; --lilac:#c7a3d2; --mauve:#ba8cbe; --periwinkle:#9c93e5;
+    --gridline:rgba(199,163,210,.07); --colhead:#1e1828; --ii:#f3eff8; --iw:#18131f; --switch-off:#6b6180; --ok:#4ade80; --ok-strong:#4ade80; --ok-soft:#12301f; --bad:#f87171; --header-bg:rgba(17,13,23,.92);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#110d17; --surface:#18131f; --surface-2:#211a2b; --ink:#f3eff8; --ink-2:#b3a9c2; --line:#30263d;
+  --brand:#c7a3d2; --brand-2:#9c93e5; --brand-fill:#7f4ea8; --brand-fill-2:#ba8cbe; --on-brand:#ffffff; --on-brand-2:#111111;
+  --accent:#7f4ea8; --accent-ink:#ffffff; --accent-text:#c7a3d2; --accent-soft:#2a2038; --lilac:#c7a3d2; --mauve:#ba8cbe; --periwinkle:#9c93e5;
+  --gridline:rgba(199,163,210,.07); --colhead:#1e1828; --ii:#f3eff8; --iw:#18131f; --switch-off:#6b6180; --ok:#4ade80; --ok-strong:#4ade80; --ok-soft:#12301f; --bad:#f87171; --header-bg:rgba(17,13,23,.92);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-padding-top:76px}
+@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+code,.code,table.t td.n{font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0}
+body{font-family:Manrope,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:3px;border-radius:6px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;left:16px;top:-60px;z-index:100;background:var(--brand-fill);color:var(--on-brand);padding:10px 14px;border-radius:8px;font-weight:700}
+.skip:focus{top:10px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 16px}
+section{padding:84px 0}
+h1,h2,h3{line-height:1.2;letter-spacing:-.02em}
+h2{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:800;text-align:center;margin-bottom:12px}
+.lead{color:var(--ink-2);text-align:center;max-width:680px;margin:0 auto 44px;font-size:1.05rem}
+.eyebrow{display:block;text-align:center;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);margin-bottom:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:10px;font-weight:700;font-size:.95rem;border:1px solid transparent;cursor:pointer;transition:transform .15s,background .15s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-ghost{background:var(--surface);border-color:var(--line);color:var(--ink)}
+.btn-dark{background:var(--brand-fill);color:var(--on-brand)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.g2,.g3,.g4{grid-template-columns:1fr}section{padding:60px 0}}
+.ico{width:60px;height:60px;border-radius:14px;display:grid;place-items:center;background:var(--accent-soft);color:var(--brand);margin-bottom:14px}
+.ico svg{width:44px;height:44px}
+.card h3{font-size:1.08rem;margin-bottom:6px}
+.card p{color:var(--ink-2);font-size:.94rem}
+
+/* Header */
+header{position:sticky;top:0;z-index:50;background:var(--header-bg);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:66px;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.2rem;flex-shrink:0}
+.logo-mark{width:34px;height:34px;display:block;flex-shrink:0}.logo-mark svg{display:block;width:100%;height:100%}
+.logo b{color:var(--accent-text)}
+.menu{display:flex;gap:26px;font-weight:600;font-size:.94rem;color:var(--ink-2)}
+.menu a:hover{color:var(--ink)}
+.menu .menu-login,.menu .menu-lang{display:none}
+.nav-cta{display:flex;gap:10px;align-items:center;flex-shrink:0}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;font:700 .78rem 'JetBrains Mono',monospace;flex-shrink:0}
+.lang span,.lang b{padding:7px 8px;line-height:1}
+.lang span{background:var(--brand-fill);color:var(--on-brand)}
+.lang b{color:var(--ink-2);font-weight:700}
+.lang:hover b{color:var(--brand)}
+@media(max-width:600px){.nav-cta .lang{display:none}}
+.burger{display:none;background:none;border:1px solid var(--line);border-radius:8px;width:40px;height:40px;color:var(--ink);cursor:pointer;flex-shrink:0}
+@media(max-width:900px){.menu,.nav-cta .btn-ghost{display:none}.burger{display:grid;place-items:center}
+  .menu.open{display:flex;flex-direction:column;position:absolute;top:66px;left:0;right:0;max-height:calc(100vh - 66px);max-height:calc(100dvh - 66px);overflow-y:auto;overscroll-behavior:contain;background:var(--surface);padding:20px 16px;border-bottom:1px solid var(--line);gap:16px;box-shadow:var(--shadow)}
+  .menu .menu-login,.menu .menu-lang{display:block}}
+@media(max-width:420px){.nav-cta .btn-primary{padding:10px 12px;font-size:.85rem}}
+@media(max-width:350px){.logo{font-size:1.05rem;gap:8px}.logo-mark{width:30px;height:30px}.nav-cta{gap:6px}.nav-cta .btn-primary{padding:9px 10px;font-size:.8rem}}
+
+/* Hero */
+.hero{padding:70px 0 80px;background:radial-gradient(900px 420px at 85% 10%,color-mix(in srgb,var(--periwinkle) 22%,transparent),transparent 70%),radial-gradient(700px 380px at 5% 90%,color-mix(in srgb,var(--lilac) 26%,transparent),transparent 70%)}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center}
+.hero-grid>*{min-width:0}
+@media(max-width:960px){.hero-grid{grid-template-columns:1fr}}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:.85rem;font-weight:600;color:var(--ink-2);margin-bottom:20px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);flex-shrink:0}
+.hero h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;margin-bottom:18px}
+.hero h1 span{color:var(--brand)}
+.hero p.sub{font-size:1.1rem;color:var(--ink-2);margin-bottom:28px;max-width:560px}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:22px}
+.proof{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.88rem;color:var(--ink-2);margin-bottom:22px}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{padding:5px 12px;border-radius:999px;background:var(--accent-soft);font-size:.82rem;font-weight:600;color:var(--brand)}
+
+/* Mockup */
+.mock{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.mock-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.mock-bar i{width:10px;height:10px;border-radius:50%;background:var(--line);flex-shrink:0}
+.mock-bar span{margin-left:10px;font-size:.78rem;color:var(--ink-2);font-family:'JetBrains Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mock-body{padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.msg{padding:11px 14px;border-radius:12px;font-size:.9rem;max-width:92%;min-width:0}
+.msg.user{align-self:flex-end;background:var(--brand-fill);color:var(--on-brand);border-bottom-right-radius:4px}
+.msg.ai{background:var(--surface-2);border-bottom-left-radius:4px;align-self:stretch;max-width:100%}
+.msg code{overflow-wrap:anywhere;word-break:break-word}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:8px}
+.file{display:inline-flex;align-items:center;gap:8px;font-size:.82rem;padding:6px 10px;border:1px dashed var(--line);border-radius:8px;color:var(--ink-2);align-self:flex-end;max-width:100%;overflow-wrap:anywhere}
+table.t{width:100%;border-collapse:collapse;font-size:.84rem}
+table.t th,table.t td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+table.t thead th{color:var(--ink-2);font-weight:600;font-size:.76rem;text-transform:uppercase;letter-spacing:.04em}
+table.t tbody th{font-weight:400;white-space:normal;min-width:4.5em}
+table.t tr.tot th{font-weight:800;border-bottom:none}
+table.t th.n,table.t td.n{text-align:right;font-variant-numeric:tabular-nums}
+table.t td.n{font-family:'JetBrains Mono',monospace}
+table.t tr.tot td{font-weight:800;border-bottom:none}
+table.t td:first-child{white-space:normal;min-width:4.5em}
+@media(max-width:480px){.mock-body{padding:12px}.msg{padding:10px 11px}table.t{font-size:.74rem}table.t thead th{font-size:.64rem;letter-spacing:0;white-space:normal}table.t th,table.t td{padding:6px 4px}}
+@media(max-width:360px){.hero .mock-body{padding:10px}.hero .msg{padding:9px 8px}.hero table.t{font-size:.68rem}.hero table.t th,.hero table.t td{padding:5px 3px}}
+.up{color:var(--ok-strong)}.down{color:var(--bad)}
+
+/* Sector strip */
+.strip{padding:36px 0;border-block:1px solid var(--line);background:var(--surface)}
+.strip p{text-align:center;font-size:.85rem;color:var(--ink-2);font-weight:600;margin-bottom:18px}
+.marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.track{display:flex;width:max-content;animation:scroll 32s linear infinite}
+.track span{font-weight:800;font-size:1.05rem;color:var(--ink-2);white-space:nowrap;margin-right:44px}
+.marquee:hover .track,.marquee:focus-within .track,.marquee.paused .track{animation-play-state:paused}
+@keyframes scroll{to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){
+  .marquee{-webkit-mask-image:none;mask-image:none}
+  .track{animation:none;flex-wrap:wrap;justify-content:center;width:auto;row-gap:10px}
+  .track span{margin:0 22px}
+  .track .dup{display:none}
+  #mqToggle{display:none}
+}
+
+/* Guides */
+.guide{display:flex;flex-direction:column;gap:8px;transition:border-color .15s}
+.guide:hover{border-color:var(--brand)}
+.guide .k{font-size:.75rem;font-weight:700;color:var(--accent-text);text-transform:uppercase;letter-spacing:.08em}
+.quick{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:30px}
+.quick a{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:.88rem;font-weight:600}
+.quick a:hover{border-color:var(--brand);color:var(--brand)}
+
+/* Steps */
+.step .num{font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:500;color:var(--accent-text);margin-bottom:10px;display:block}
+
+/* Stats */
+.stats{background:linear-gradient(135deg,#7f4ea8,#6a3f91);color:var(--on-brand);border-radius:20px;padding:44px 24px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:center}
+.stats b{display:block;font-size:clamp(2rem,4vw,2.8rem);font-weight:800}
+.stats span{opacity:.9;font-size:.95rem}
+@media(max-width:600px){.stats{grid-template-columns:1fr}}
+
+/* Compare */
+.cmp{max-width:820px;margin:0 auto;overflow-x:auto}
+.cmp table{width:100%;border-collapse:separate;border-spacing:0;background:var(--surface);border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
+.cmp th,.cmp td{padding:14px 18px;border-bottom:1px solid var(--line);text-align:left;font-size:.95rem}
+.cmp tbody tr:last-child td,.cmp tbody tr:last-child th{border-bottom:none}
+.cmp thead th{background:var(--surface-2);font-weight:700}
+.cmp tbody th{font-weight:400;text-align:left}
+.cmp td:not(:first-child),.cmp th:not(:first-child){text-align:center;width:160px}
+.cmp th.hl{background:var(--accent-soft)}
+.cmp .hl{background:var(--accent-soft)}
+@media(max-width:600px){.cmp th,.cmp td{padding:12px 10px;font-size:.88rem}.cmp td:first-child,.cmp th:first-child{width:58%}.cmp td:not(:first-child),.cmp th:not(:first-child){width:21%}}
+.yes{color:var(--ok);font-weight:800}.no{color:var(--bad);font-weight:800}
+
+/* Stories */
+.quote p{color:var(--ink);font-size:.97rem;margin-bottom:16px}
+.who{display:flex;align-items:center;gap:12px}
+.av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:var(--on-brand-2);background:var(--brand-fill-2);font-size:.9rem;flex-shrink:0}
+.who b{display:block;font-size:.92rem}.who small{color:var(--ink-2)}
+.note{text-align:center;font-size:.8rem;color:var(--ink-2);margin-top:18px}
+
+/* Demos */
+.tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:26px}
+.tab{padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 .9rem Manrope,sans-serif;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--brand-fill);border-color:var(--brand-fill);color:var(--on-brand)}
+.panel{max-width:820px;margin:0 auto}
+.panel[hidden]{display:none}
+@media(max-width:480px){.panel.card{padding:16px}}
+.code{font-family:'JetBrains Mono',monospace;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:.86rem;overflow-x:auto;white-space:pre;margin:8px 0}
+.bars{display:flex;align-items:flex-end;gap:12px;height:200px;padding:24px 4px 0;border-bottom:1px solid var(--line);margin-top:10px}
+.bar{flex:1;background:var(--brand-2);border-radius:6px 6px 0 0;position:relative;min-width:0}
+.bar:last-child{background:var(--brand-fill)}
+.bar em{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-style:normal;font-size:.76rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar-labels{display:flex;gap:12px;padding:6px 4px 0}
+.bar-labels span{flex:1;text-align:center;font-size:.78rem;color:var(--ink-2)}
+@media(max-width:400px){.bars,.bar-labels{gap:6px}.bar em{font-size:.66rem}}
+
+/* Pricing */
+.toggle{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;margin-bottom:34px;font-weight:600}
+.switch{width:52px;height:28px;border-radius:999px;background:var(--switch-off,var(--ink-2));border:none;position:relative;cursor:pointer;flex-shrink:0}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .2s}
+.switch[aria-checked="true"]{background:var(--brand-fill)}
+.switch[aria-checked="true"]::after{left:27px}
+@media(prefers-reduced-motion:reduce){.switch::after,.btn{transition:none}}
+.save{background:var(--accent-soft);color:var(--accent-text);font-weight:700;padding:3px 9px;border-radius:999px;font-size:.78rem}
+.plan{display:flex;flex-direction:column;position:relative}
+.plan.rec{border:2px solid var(--accent)}
+.badge{position:absolute;top:-12px;left:24px;background:var(--accent);color:var(--accent-ink);font-size:.75rem;font-weight:800;padding:3px 10px;border-radius:999px}
+.price{font-size:2.4rem;font-weight:800;margin:10px 0 2px}
+.price small{font-size:.95rem;color:var(--ink-2);font-weight:600}
+.billed{font-size:.8rem;color:var(--ink-2);min-height:3.2em;margin-bottom:6px}
+.plan ul{list-style:none;margin:18px 0 24px;display:flex;flex-direction:column;gap:9px;flex:1}
+.plan li{font-size:.92rem;padding-left:24px;position:relative;color:var(--ink-2)}
+.plan li::before{content:"✓";content:"✓" / "";position:absolute;left:0;color:var(--ok);font-weight:800}
+.fine{text-align:center;font-size:.82rem;color:var(--ink-2);margin-top:20px}
+
+/* FAQ */
+.faq{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.faq details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 20px}
+.faq summary{cursor:pointer;padding:18px 0;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";content:"+" / "";font-size:1.3rem;color:var(--brand);line-height:1}
+.faq details[open] summary::after{content:"–";content:"–" / ""}
+.faq details p{padding:0 0 18px;color:var(--ink-2)}
+
+/* CTA – white background, black text, palette stripe */
+.cta{position:relative;overflow:hidden;background:#ffffff;color:#111111;border:1px solid var(--line);border-radius:22px;padding:64px 24px 60px;text-align:center;box-shadow:var(--shadow)}
+.cta::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,#7f4ea8,#ba8cbe,#c7a3d2,#9c93e5)}
+.cta h2{color:#111111}
+.cta-art{display:block;width:min(360px,100%);height:auto;margin:0 auto 18px;--ii:#111111;--iw:#ffffff}
+.cta p{color:#3d3747;margin-bottom:26px}
+.cta :focus-visible{outline-color:#7f4ea8}
+.cta .btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.cta .btn-ghost{background:#ffffff;color:#111111;border-color:#d9cde6}
+.cta small{display:block;margin-top:16px;color:#4a4458}
+
+/* Footer */
+footer{border-top:1px solid var(--line);padding:56px 0 30px;background:var(--surface)}
+.fgrid{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:30px}
+@media(max-width:800px){.fgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.fgrid{grid-template-columns:1fr}}
+footer h2.fh{font-size:.85rem;text-align:left;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;color:var(--ink-2);font-weight:700}
+footer ul{list-style:none;display:flex;flex-direction:column;gap:8px;font-size:.92rem}
+footer ul a:hover{color:var(--brand)}
+footer .about{color:var(--ink-2);font-size:.92rem;margin-top:12px;max-width:300px}
+.fbottom{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-top:40px;padding-top:20px;border-top:1px solid var(--line);font-size:.85rem;color:var(--ink-2)}
+.theme-btn{background:none;border:1px solid var(--line);border-radius:8px;padding:6px 10px;color:var(--ink);cursor:pointer;font:600 .82rem Manrope,sans-serif}
+
+/* ===== Excel visual language ===== */
+.mono{font-family:'JetBrains Mono',monospace}
+/* Hero: spreadsheet grid, column letters and row numbers */
+.hero{position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:24px 0 0 40px;background-image:linear-gradient(var(--gridline) 1px,transparent 1px),linear-gradient(90deg,var(--gridline) 1px,transparent 1px);background-size:112px 32px;pointer-events:none;-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent);mask-image:linear-gradient(180deg,#000 55%,transparent)}
+.hero>.wrap{position:relative;z-index:1}
+.sheet-cols,.sheet-rows{position:absolute;pointer-events:none;font:500 .7rem 'JetBrains Mono',monospace;color:var(--ink-2);opacity:.75;z-index:0}
+.sheet-cols{top:0;left:40px;right:0;height:24px;display:flex;overflow:hidden;background:var(--colhead);border-bottom:1px solid var(--line)}
+.sheet-cols span{flex:0 0 112px;text-align:center;line-height:24px;border-right:1px solid var(--line)}
+.sheet-rows{top:24px;left:0;width:40px;bottom:0;display:flex;flex-direction:column;overflow:hidden;background:var(--colhead);border-right:1px solid var(--line);-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent);mask-image:linear-gradient(180deg,#000 55%,transparent)}
+.sheet-rows span{flex:0 0 32px;line-height:32px;text-align:center;border-bottom:1px solid var(--line)}
+.sheet-corner{position:absolute;top:0;left:0;width:40px;height:24px;background:var(--colhead);border-right:1px solid var(--line);border-bottom:1px solid var(--line);z-index:0}
+.sheet-corner::after{content:"";position:absolute;right:3px;bottom:3px;border:5px solid transparent;border-right-color:var(--ink-2);border-bottom-color:var(--ink-2);opacity:.5}
+@media(max-width:1240px){.hero>.wrap{padding-left:56px}}
+@media(max-width:600px){.hero::before{left:0;background-size:80px 28px}.sheet-cols{left:0}.sheet-cols span{flex-basis:80px}.sheet-rows,.sheet-corner{display:none}.hero>.wrap{padding-left:16px}}
+/* Selected cell + fill handle */
+.cell-sel{position:relative;display:inline-block;padding:0 .14em;border:3px solid var(--brand-fill);background:color-mix(in srgb,var(--lilac) 20%,transparent);border-radius:2px;line-height:1.08}
+.cell-sel::after{content:"";position:absolute;right:-7px;bottom:-7px;width:10px;height:10px;background:var(--brand-fill);border:2px solid var(--bg)}
+/* Formula bar */
+.fbar{display:flex;align-items:stretch;border-bottom:1px solid var(--line);background:var(--surface);font:500 .8rem 'JetBrains Mono',monospace;font-variant-ligatures:none}
+.fbar .nb{flex:0 0 auto;padding:7px 12px;border-right:1px solid var(--line);color:var(--ink);min-width:52px;text-align:center}
+.fbar .fx{flex:0 0 auto;padding:7px 10px;border-right:1px solid var(--line);color:var(--brand);font-style:italic;font-weight:700;font-family:Georgia,'Times New Roman',serif}
+.fbar code{flex:1;min-width:0;padding:7px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+/* Sheet tabs */
+.sheettabs{display:flex;align-items:flex-end;gap:2px;padding:0 10px;background:var(--colhead);border-top:1px solid var(--line);font-size:.78rem;overflow:hidden}
+.sheettabs .nav{display:flex;gap:6px;padding:6px 8px 6px 0;color:var(--ink-2);font-size:.7rem}
+.sheettabs span,.sheettabs a{padding:6px 14px;color:var(--ink-2);border:1px solid transparent;border-top:none;border-radius:0 0 6px 6px;white-space:nowrap}
+.sheettabs .on{background:var(--surface);color:var(--brand);font-weight:800;border-color:var(--line);box-shadow:inset 0 -3px 0 var(--brand-fill)}
+.sheettabs .add{font-weight:800}
+/* Grid-style tables */
+table.t{border:1px solid var(--line)}
+table.t th,table.t td{border:1px solid var(--line)}
+table.t thead tr.cols td{background:var(--colhead);color:var(--ink-2);text-align:center;font:500 .68rem 'JetBrains Mono',monospace;padding:3px 4px;text-transform:none;letter-spacing:0}
+table.t .rn{background:var(--colhead);color:var(--ink-2);text-align:center;font:500 .68rem 'JetBrains Mono',monospace;width:26px;padding:3px 4px}
+table.t td.sel{position:relative;outline:2px solid var(--brand-fill);outline-offset:-2px;background:color-mix(in srgb,var(--lilac) 16%,transparent)}
+table.t td.sel::after{content:"";position:absolute;right:-1px;bottom:-1px;width:7px;height:7px;background:var(--brand-fill);border:1.5px solid var(--surface)}
+@media(max-width:480px){table.t .rn,table.t thead tr.cols{display:none}}
+/* Cell address badges */
+.eyebrow{display:flex;justify-content:center;align-items:center;gap:8px}
+.eyebrow .addr{font:600 .72rem 'JetBrains Mono',monospace;letter-spacing:0;text-transform:none;color:var(--brand);background:var(--surface);border:1.5px solid var(--brand-fill);border-radius:3px;padding:1px 7px;position:relative}
+.eyebrow .addr::after{content:"";position:absolute;right:-4px;bottom:-4px;width:6px;height:6px;background:var(--brand-fill);border:1px solid var(--bg)}
+/* Cards: selected cell on hover */
+#rehber .card,#ozellikler .card,.plan,.step{position:relative;transition:border-color .15s,box-shadow .15s}
+#rehber .card:hover,#ozellikler .card:hover,.plan:hover,.step:hover{border-color:var(--brand-fill);box-shadow:0 0 0 1px var(--brand-fill),var(--shadow)}
+#rehber .card:hover::after,#ozellikler .card:hover::after,.plan:hover::after,.step:hover::after{content:"";position:absolute;right:-6px;bottom:-6px;width:10px;height:10px;background:var(--brand-fill);border:2px solid var(--surface)}
+.step .num{display:inline-block;border:1.5px solid var(--line);background:var(--colhead);border-radius:3px;padding:1px 8px;color:var(--brand)}
+/* Stats band: row of cells */
+.stats{gap:0;padding:0;overflow:hidden}
+.stats>div{padding:34px 20px 30px;border-left:1px solid rgba(255,255,255,.22);position:relative}
+.stats>div:first-child{border-left:none}
+.stats .ref{position:absolute;top:10px;left:12px;font:500 .7rem 'JetBrains Mono',monospace;opacity:.75;font-style:normal}
+@media(max-width:600px){.stats>div{border-left:none;border-top:1px solid rgba(255,255,255,.22)}.stats>div:first-child{border-top:none}}
+/* Footer sheet tabs */
+.foot-tabs{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--colhead);padding:0}
+.foot-tabs .wrap{display:flex;align-items:flex-start;gap:2px;overflow-x:auto}
+.foot-tabs a,.foot-tabs span{padding:9px 16px;font-size:.86rem;color:var(--ink-2);white-space:nowrap;border:1px solid transparent;border-top:none;border-radius:0 0 8px 8px}
+.foot-tabs a:hover{color:var(--ink);background:var(--surface)}
+.foot-tabs .on{background:var(--surface);color:var(--brand);font-weight:800;border-color:var(--line);box-shadow:inset 0 -3px 0 var(--brand-fill)}
+.foot-tabs .arr{color:var(--ink-2);opacity:.6;padding:9px 6px;font-size:.75rem}
+/* CTA: faint grid on white */
+.cta{background-image:linear-gradient(rgba(127,78,168,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(127,78,168,.06) 1px,transparent 1px);background-size:112px 32px}
+@media(prefers-reduced-motion:reduce){#rehber .card,#ozellikler .card,.plan,.step{transition:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- SVG icon set -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-truck" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><rect x="4" y="12" width="23" height="17" rx="1.5" style="fill:var(--if1,#c7a3d2)"/><path d="M27 17h8l6 6v6H27z" style="fill:var(--if2,#9c93e5)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><rect x="4" y="12" width="23" height="17" rx="1.5"/><path d="M4 18h23M12 12v17M20 12v17"/><path d="M27 17h8l6 6v6H27z"/><path d="M31 17v6h10"/><circle cx="12" cy="32" r="4" style="fill:var(--iw,#fff)"/><circle cx="34" cy="32" r="4" style="fill:var(--iw,#fff)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M1 34h-0M2 39h7M37 39h8"/></g></symbol>
+    <symbol id="i-fx" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><rect x="5" y="8" width="36" height="30" rx="3" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><rect x="5" y="8" width="36" height="30" rx="3"/><path d="M16 31c2 0 3-1 3.5-4l2-11c.5-2.5 1.5-3.5 3.5-3.5M15 19h8"/><path d="M27 22l7 8M34 22l-7 8"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M44 4l-2 2M46 9h-3M40 2v3"/></g></symbol>
+    <symbol id="i-pivot" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M6 6h34v9H6z" style="fill:var(--if3,#7f4ea8)"/><path d="M6 15h10v25H6z" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><rect x="6" y="6" width="34" height="34" rx="2"/><path d="M6 15h34M6 23.5h34M6 32h34M16 6v34M28 6v34"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M42 44l3-1M45 39h1"/></g></symbol>
+    <symbol id="i-chart" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><rect x="10" y="26" width="7" height="13" style="fill:var(--if1,#c7a3d2)"/><rect x="20" y="19" width="7" height="20" style="fill:var(--if2,#9c93e5)"/><rect x="30" y="12" width="7" height="27" style="fill:var(--if3,#7f4ea8)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M5 5v35h38"/><rect x="10" y="26" width="7" height="13"/><rect x="20" y="19" width="7" height="20"/><rect x="30" y="12" width="7" height="27"/><path d="M9 20l9-8 7 4 12-11M31 5h6v6"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M44 16l2-1M44 21h2"/></g></symbol>
+    <symbol id="i-box" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M24 6l17 8v20l-17 8-17-8V14z" style="fill:var(--if1,#c7a3d2)"/><path d="M24 22l17-8v20l-17 8z" style="fill:var(--if2,#9c93e5)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M24 6l17 8v20l-17 8-17-8V14z"/><path d="M7 14l17 8 17-8M24 22v20M15.5 10l17 8v6"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M4 6l2 2M2 12h3"/></g></symbol>
+    <symbol id="i-code" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><rect x="4" y="8" width="40" height="32" rx="3" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><rect x="4" y="8" width="40" height="32" rx="3"/><path d="M4 15h40"/><path d="M18 22l-6 6 6 6M30 22l6 6-6 6M26 21l-4 14"/><circle cx="9" cy="11.5" r=".6"/><circle cx="13" cy="11.5" r=".6"/></g></symbol>
+    <symbol id="i-clean" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M27 21l6 6-15 15-6-6z" style="fill:var(--if2,#9c93e5)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M27 21l6 6-15 15-6-6z"/><path d="M30 24l9-9M37 9l3 3"/><path d="M14 33l4 4"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M10 8v6M7 11h6M38 30v5M35.5 32.5h5M22 6v3M20.5 7.5h3"/></g></symbol>
+    <symbol id="i-doc" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M10 4h19l9 9v31H10z" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M10 4h19l9 9v31H10z"/><path d="M29 4v9h9"/><path d="M16 22h16M16 28h16M16 34h10"/><path d="M16 16h7"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M42 30l3-1M43 36h3"/></g></symbol>
+    <symbol id="i-lock" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><rect x="9" y="20" width="30" height="22" rx="4" style="fill:var(--if3,#7f4ea8)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><rect x="9" y="20" width="30" height="22" rx="4"/><path d="M15 20v-6a9 9 0 0 1 18 0v6"/><circle cx="24" cy="30" r="3" style="fill:var(--iw,#fff)"/><path d="M24 33v4"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M42 10l2-2M43 15h3"/></g></symbol>
+    <symbol id="i-shield" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M24 4l16 6v12c0 11-7 18-16 21-9-3-16-10-16-21V10z" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M24 4l16 6v12c0 11-7 18-16 21-9-3-16-10-16-21V10z"/><path d="M16 23l6 6 11-12"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M4 6l2 2M2 12h3"/></g></symbol>
+    <symbol id="i-user" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><circle cx="24" cy="16" r="8" style="fill:var(--if1,#c7a3d2)"/><path d="M8 42c0-9 7-14 16-14s16 5 16 14z" style="fill:var(--if2,#9c93e5)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><circle cx="24" cy="16" r="8"/><path d="M8 42c0-9 7-14 16-14s16 5 16 14z"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M41 8l2-2M42 13h3"/></g></symbol>
+    <symbol id="i-trash" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M12 14h24l-2 28H14z" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M8 14h32M12 14l2 28h20l2-28M19 14V8h10v6M20 21v14M28 21v14"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M42 22l3-1M42 28h3"/></g></symbol>
+    <symbol id="i-eye" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M3 24s8-13 21-13 21 13 21 13-8 13-21 13S3 24 3 24z" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M3 24s8-13 21-13 21 13 21 13-8 13-21 13S3 24 3 24z"/><circle cx="24" cy="24" r="6" style="fill:var(--iw,#fff)"/><path d="M6 6l36 36"/></g></symbol>
+    <symbol id="i-globe" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><circle cx="24" cy="24" r="18" style="fill:var(--if2,#9c93e5)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c-6 6-6 30 0 36M24 6c6 6 6 30 0 36M9 15h30M9 33h30"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M44 6l2-2M45 11h2"/></g></symbol>
+    <symbol id="i-wh" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M4 18L24 6l20 12v24H4z" style="fill:var(--if1,#c7a3d2)"/><rect x="13" y="24" width="22" height="18" style="fill:var(--iw,#fff)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M4 18L24 6l20 12v24H4z"/><rect x="13" y="24" width="22" height="18"/><path d="M13 30h22M13 36h22M20.3 24v18M27.6 24v18"/></g></symbol>
+    <symbol id="i-cart" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M11 12h31l-4 17H14z" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M3 5h6l5 24h24l4-17H11"/><path d="M12 20.5h28M21 12v17M30 12v17"/><circle cx="17" cy="38" r="3" style="fill:var(--iw,#fff)"/><circle cx="35" cy="38" r="3" style="fill:var(--iw,#fff)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M2 14h4M1 19h3"/></g></symbol>
+    <symbol id="i-coin" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><ellipse cx="22" cy="34" rx="14" ry="5" style="fill:var(--if2,#9c93e5)"/><ellipse cx="22" cy="26" rx="14" ry="5" style="fill:var(--if1,#c7a3d2)"/><ellipse cx="26" cy="15" rx="14" ry="5" style="fill:var(--if3,#7f4ea8)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M8 26v8c0 3 6 5 14 5s14-2 14-5v-8"/><ellipse cx="22" cy="26" rx="14" ry="5"/><path d="M8 30c0 3 6 5 14 5s14-2 14-5"/><ellipse cx="26" cy="15" rx="14" ry="5"/><path d="M12 15v4c0 1.5 2 2.7 5 3.5M40 15v4c0 1-1 2-2.5 2.7"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M42 4l2-2M44 8h3"/></g></symbol>
+<symbol id="i-scene" viewBox="0 0 360 150">
+<g transform="translate(3 3)"><path d="M34 104c-12-14-18-24-18-32a18 18 0 0 1 36 0c0 8-6 18-18 32z" style="fill:#c7a3d2"/><path d="M326 104c-12-14-18-24-18-32a18 18 0 0 1 36 0c0 8-6 18-18 32z" style="fill:#9c93e5"/><rect x="104" y="40" width="124" height="66" rx="3" style="fill:#c7a3d2"/><path d="M230 64h28l18 20v24h-46z" style="fill:#9c93e5"/></g>
+<rect x="104" y="40" width="124" height="66" rx="3" style="fill:#fff"/>
+<path d="M104 40h124v13H104z" style="fill:#7f4ea8"/><path d="M104 53h22v53h-22z" style="fill:#c7a3d2"/>
+<g style="stroke:var(--ii,#111);fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round">
+ <path d="M8 128h344"/>
+ <path d="M34 104c-12-14-18-24-18-32a18 18 0 0 1 36 0c0 8-6 18-18 32z" style="fill:none"/><path d="M326 104c-12-14-18-24-18-32a18 18 0 0 1 36 0c0 8-6 18-18 32z" style="fill:none"/>
+ <path d="M58 118h48M262 118h38" stroke-dasharray="2 9"/>
+ <rect x="104" y="40" width="124" height="66" rx="3"/>
+ <path d="M104 53h124M104 70.6h124M104 88.3h124M126 40v66M160 40v66M194 40v66"/>
+ <path d="M134 98l16-12 14 6 22-20 14 6" style="stroke:#7f4ea8;stroke-width:3.4"/>
+ <path d="M230 64h28l18 20v24h-46z"/><path d="M240 64v20h36"/>
+ <path d="M104 106h172"/>
+ <circle cx="136" cy="116" r="11" style="fill:#fff"/><circle cx="196" cy="116" r="11" style="fill:#fff"/><circle cx="256" cy="116" r="11" style="fill:#fff"/>
+ <circle cx="136" cy="116" r="3"/><circle cx="196" cy="116" r="3"/><circle cx="256" cy="116" r="3"/>
+ <path d="M282 10h52a8 8 0 0 1 8 8v20a8 8 0 0 1-8 8h-30l-10 9v-9h-12a8 8 0 0 1-8-8V18a8 8 0 0 1 8-8z" style="fill:#fff"/>
+ <path d="M288 30l5 5 9-11"/><path d="M310 38l8-8 5 4 9-11M327 23h5v5"/>
+</g>
+<text x="34" y="78" text-anchor="middle" style="font:800 22px Manrope,sans-serif;fill:var(--ii,#111)">A</text>
+<text x="326" y="78" text-anchor="middle" style="font:800 22px Manrope,sans-serif;fill:var(--ii,#111)">B</text>
+<g style="stroke:var(--ii,#111);fill:none;stroke-width:2.4;stroke-linecap:round"><path d="M70 96h20M76 104h14M64 112h10"/><path d="M96 20l4 4M100 20l-4 4M248 28v8M244 32h8M62 36l3-3M58 44h5M352 60l-3 3M346 54h6"/></g>
+</symbol>
+    <symbol id="i-logo" viewBox="0 0 48 48">
+      <rect width="48" height="48" rx="12" fill="#7f4ea8"/>
+      <rect x="9" y="10" width="30" height="28" rx="4" fill="#fff"/>
+      <path d="M9 14a4 4 0 0 1 4-4h22a4 4 0 0 1 4 4v4H9z" fill="#c7a3d2"/>
+      <path d="M19 18v20M29 18v20M9 28h30" stroke="#e7def0" stroke-width="1.5"/>
+      <path d="M14 33l7-7 6 4 8-9" fill="none" stroke="#7f4ea8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M30 21h5v5" fill="none" stroke="#7f4ea8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="21" cy="26" r="2.2" fill="#9c93e5"/><circle cx="27" cy="30" r="2.2" fill="#9c93e5"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="wrap nav">
+    <a href="#" class="logo" aria-label="LojiXcel home">
+      <span class="logo-mark"><svg width="34" height="34" aria-hidden="true" focusable="false"><use href="#i-logo"/></svg></span>
+      <span>Loji<b>Xcel</b></span>
+    </a>
+    <nav class="menu" id="menu" aria-label="Main menu">
+      <a href="#ozellikler">Features</a>
+      <a href="#nasil">How it works</a>
+      <a href="#fiyat">Pricing</a>
+      <a href="#sss">FAQ</a>
+      <a href="#rehber">Guides</a>
+      <a href="#" class="menu-login">Log in</a>
+      <a href="index.html" class="menu-lang" hreflang="tr" lang="tr">Türkçe</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="lang" href="index.html" hreflang="tr" lang="tr" title="Türkçe"><b>TR</b><span aria-hidden="true">EN</span></a>
+      <a href="#" class="btn btn-ghost">Log in</a>
+      <a href="app.html?lang=en" class="btn btn-primary">Start free</a>
+      <button type="button" class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+        <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<!-- HERO -->
+<section class="hero">
+  <div class="sheet-corner" aria-hidden="true"></div><div class="sheet-cols" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>I</span><span>J</span><span>K</span><span>L</span><span>M</span><span>N</span><span>O</span><span>P</span></div><div class="sheet-rows" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span><span>29</span><span>30</span></div>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="pill"><span class="dot"></span>Built for logistics and supply-chain teams</span>
+      <h1><span class="cell-sel">Excel AI</span> for logistics: shipment, inventory and freight analysis in minutes</h1>
+      <p class="sub">Upload your shipment list, stock report or freight invoices and ask in plain English. LojiXcel builds the formulas, pivot tables, KPI dashboards, charts and management reports for you.</p>
+      <div class="hero-btns">
+        <a href="app.html?lang=en" class="btn btn-primary">Upload your spreadsheet free →</a>
+        <a href="app.html?demo=1&amp;lang=en" class="btn btn-ghost">Try with sample data</a>
+      </div>
+      <div class="proof">
+        <span><span aria-hidden="true">✓</span> English and localized Excel formulas</span>
+        <span>Free plan · No credit card required</span>
+      </div>
+      <div class="tags">
+        <span class="tag">OTIF</span><span class="tag">Inventory turnover</span><span class="tag">Freight</span>
+        <span class="tag">Customs / HS codes</span><span class="tag">Route cost</span><span class="tag">KPI report</span>
+      </div>
+    </div>
+
+    <div class="mock" role="group" aria-label="Sample chat screen">
+      <div class="mock-bar"><i></i><i></i><i></i><span>shipments_2026_Q3.xlsx · LojiXcel</span></div>
+      <div class="fbar"><span class="nb">D6</span><span class="fx" aria-hidden="true">fx</span><code>=SUMPRODUCT(B2:B5,D2:D5)/SUM(B2:B5)</code></div>
+      <div class="mock-body">
+        <span class="file"><span aria-hidden="true">📎</span> shipments_2026_Q3.xlsx · 12,480 rows</span>
+        <div class="msg user">Show total freight, shipment count and on-time delivery rate by carrier for Q3.</div>
+        <div class="msg ai">
+          Here’s the summary by carrier. On-time delivery is calculated as <b>Delivery Date ≤ Planned Date</b>.
+          <div class="tscroll"><table class="t"><caption class="sr-only">Q3 shipments, freight and on-time delivery summary by carrier</caption>
+            <thead><tr class="cols" aria-hidden="true"><td class="rn"></td><td>A</td><td>B</td><td>C</td><td>D</td></tr><tr><td class="rn" aria-hidden="true">1</td><th scope="col">Carrier</th><th scope="col" class="n">Shipments</th><th scope="col" class="n">Freight (₺)</th><th scope="col" class="n">OTD</th></tr></thead>
+            <tbody>
+              <tr><td class="rn" aria-hidden="true">2</td><th scope="row">Anadolu Cargo</th><td class="n">4,210</td><td class="n">3,842,500</td><td class="n up">96.1%</td></tr>
+              <tr><td class="rn" aria-hidden="true">3</td><th scope="row">Marmara Logistics</th><td class="n">3,655</td><td class="n">3,118,900</td><td class="n up">94.7%</td></tr>
+              <tr><td class="rn" aria-hidden="true">4</td><th scope="row">Aegean Freight</th><td class="n">2,904</td><td class="n">2,406,300</td><td class="n down">88.2%</td></tr>
+              <tr><td class="rn" aria-hidden="true">5</td><th scope="row">Black Sea Haulage</th><td class="n">1,711</td><td class="n">1,590,100</td><td class="n down">85.9%</td></tr>
+              <tr class="tot"><td class="rn" aria-hidden="true">6</td><th scope="row">Total</th><td class="n">12,480</td><td class="n">10,957,800</td><td class="n sel">92.5%</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="sheettabs" aria-hidden="true"><span class="nav">◀ ▶</span><span class="on">Summary</span><span>Shipments</span><span>Carriers</span><span class="add">+</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTOR STRIP -->
+<div class="strip">
+  <p>Used across every link of the logistics value chain</p>
+  <div class="marquee" aria-label="Industries served" role="region"><div class="track" id="track" role="list">
+    <span role="listitem">3PL Warehousing</span><span role="listitem">Road Freight</span><span role="listitem">Ocean &amp; Container</span><span role="listitem">Air Cargo</span><span role="listitem">Customs Brokerage</span><span role="listitem">E-commerce Fulfillment</span><span role="listitem">Cold Chain</span><span role="listitem">Retail Distribution</span><span role="listitem">Manufacturing Supply</span><span role="listitem">Last-Mile Delivery</span>
+  </div></div>
+  <div style="text-align:center;margin-top:14px"><button type="button" class="theme-btn" id="mqToggle" aria-pressed="false">Pause scrolling</button></div>
+</div>
+
+<!-- GUIDES -->
+<section id="rehber">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">A1</span>Guides</span>
+    <h2>Learn Excel AI for logistics by example</h2>
+    <p class="lead">Step-by-step guides for the spreadsheets you work with every day.</p>
+    <div class="grid g3">
+      <a href="#" class="card guide"><span class="k">KPI</span><h3>OTIF analysis: measuring on-time, in-full delivery</h3><p>Calculate your OTIF rate from order lines and find late customers and carriers in one click.</p></a>
+      <a href="#" class="card guide"><span class="k">Inventory</span><h3>ABC-XYZ inventory classification</h3><p>Classify SKUs by revenue contribution (ABC) and demand variability (XYZ), then plan warehouse slotting accordingly.</p></a>
+      <a href="#" class="card guide"><span class="k">Finance</span><h3>Freight invoice reconciliation</h3><p>Compare carrier invoices with contract rates and automatically flag overbilled lines.</p></a>
+      <a href="#" class="card guide"><span class="k">Planning</span><h3>Safety stock and reorder point</h3><p>Build formulas that calculate safety stock from target service level, lead time and the standard deviation of demand, and the reorder point as average daily demand × lead time + safety stock.</p></a>
+      <a href="#" class="card guide"><span class="k">Warehouse</span><h3>Warehouse utilization and pallet capacity report</h3><p>Utilization by location, empty pallet positions and a weekly trend chart.</p></a>
+      <a href="#" class="card guide"><span class="k">Customs</span><h3>HS code matching: XLOOKUP vs. VLOOKUP</h3><p>Match your product list against the HS code tariff table and pull in missing codes and duty rates with a single formula.</p></a>
+    </div>
+    <div class="quick">
+      <a href="#">Chat with your spreadsheet</a><a href="#">Generate logistics formulas</a><a href="#">Create pivot tables</a><a href="#">Turn a spreadsheet into slides</a><a href="app.html?lang=en">Upload Excel / CSV</a><a href="#">All guides</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="nasil" style="background:var(--surface)">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">B1</span>How it works</span>
+    <h2>From data to decisions in four steps</h2>
+    <p class="lead">Upload your ERP, WMS or TMS export as is; LojiXcel takes care of cleaning and merging.</p>
+    <div class="grid g4">
+      <div class="card step"><span class="num">01</span><h3>Upload your file</h3><p>Excel, CSV or Google Sheets: shipment, inventory, order or invoice lists.</p></div>
+      <div class="card step"><span class="num">02</span><h3>Ask in plain language</h3><p>Type everyday questions like “Which route’s unit cost went up last month?”</p></div>
+      <div class="card step"><span class="num">03</span><h3>Review the result</h3><p>Formulas, pivots, charts and explanations arrive together, so you can check every step.</p></div>
+      <div class="card step"><span class="num">04</span><h3>Download or paste</h3><p>Get the result as an .xlsx file, a presentation or a formula, and add it to your existing workbook.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section style="padding-top:60px;padding-bottom:20px">
+  <div class="wrap">
+    <div class="stats">
+      <div><i class="ref" aria-hidden="true">A1</i><b>70%</b><span>less time spent on weekly reporting*</span></div>
+      <div><i class="ref" aria-hidden="true">B1</i><b>2 min</b><span>average time to build a pivot and KPIs*</span></div>
+      <div><i class="ref" aria-hidden="true">C1</i><b>100 MB</b><span>maximum spreadsheet size per upload (Enterprise plan)</span></div>
+    </div>
+    <p class="note">* Estimated values based on sample scenarios; results vary with your data.</p>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="ozellikler">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">C1</span>Features</span>
+    <h2>One AI workspace for all your logistics spreadsheets</h2>
+    <p class="lead">From writing formulas to management presentations: the spreadsheet work your operations team does every day.</p>
+    <div class="grid g4">
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-fx"/></svg></div><h3>Formula generation</h3><p>Formulas for lead time, days late, freight cost per unit and days of inventory.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-pivot"/></svg></div><h3>Pivot tables</h3><p>Region × carrier, warehouse × SKU and customer × month breakdowns from a single sentence.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-chart"/></svg></div><h3>KPI charts</h3><p>Ready-made charts for OTIF, utilization, inventory turnover and cost trends.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-box"/></svg></div><h3>Inventory &amp; demand analysis</h3><p>ABC-XYZ, safety stock, reorder point and slow-mover detection.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-coin"/></svg></div><h3>Freight &amp; cost</h3><p>Invoice reconciliation, cost per km/ton, route and carrier comparison.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-clean"/></svg></div><h3>Data cleaning</h3><p>Standardize addresses and license plates, remove duplicate delivery notes and fix date formats.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-code"/></svg></div><h3>SQL, VBA &amp; Python</h3><p>Generate SQL queries for your WMS/ERP, VBA macros, Python scripts and Apps Script automations.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-doc"/></svg></div><h3>Reports &amp; presentations</h3><p>Weekly operations reports and customer QBR decks, prepared automatically.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section style="background:var(--surface)">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">D1</span>The difference</span>
+    <h2>Not just a formula bot</h2>
+    <p class="lead">Generic formula tools write formulas; LojiXcel understands your logistics data.</p>
+    <div class="cmp">
+      <table>
+        <thead><tr><th scope="col">Feature</th><th scope="col">Formula tools</th><th scope="col" class="hl">LojiXcel</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Formula generation</th><td class="yes"><span aria-hidden="true">✓</span><span class="sr-only">Yes</span></td><td class="hl yes"><span aria-hidden="true">✓</span><span class="sr-only">Yes</span></td></tr>
+          <tr><th scope="row">Chat with Excel / CSV files</th><td class="no"><span aria-hidden="true">✕</span><span class="sr-only">No</span></td><td class="hl yes"><span aria-hidden="true">✓</span><span class="sr-only">Yes</span></td></tr>
+          <tr><th scope="row">Real pivot tables</th><td class="no"><span aria-hidden="true">✕</span><span class="sr-only">No</span></td><td class="hl yes"><span aria-hidden="true">✓</span><span class="sr-only">Yes</span></td></tr>
+          <tr><th scope="row">Built-in logistics KPIs (OTIF, utilization, turnover)</th><td class="no"><span aria-hidden="true">✕</span><span class="sr-only">No</span></td><td class="hl yes"><span aria-hidden="true">✓</span><span class="sr-only">Yes</span></td></tr>
+          <tr><th scope="row">Freight invoice reconciliation</th><td class="no"><span aria-hidden="true">✕</span><span class="sr-only">No</span></td><td class="hl yes"><span aria-hidden="true">✓</span><span class="sr-only">Yes</span></td></tr>
+          <tr><th scope="row">Address, license plate and date cleanup</th><td class="no"><span aria-hidden="true">✕</span><span class="sr-only">No</span></td><td class="hl yes"><span aria-hidden="true">✓</span><span class="sr-only">Yes</span></td></tr>
+          <tr><th scope="row">VBA, Apps Script, Python, SQL</th><td class="no"><span aria-hidden="true">✕</span><span class="sr-only">No</span></td><td class="hl yes"><span aria-hidden="true">✓</span><span class="sr-only">Yes</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">E1</span>Use cases</span>
+    <h2>How teams on the ground use it</h2>
+    <p class="lead">Examples from a typical day with LojiXcel across different roles.</p>
+    <div class="grid g3">
+      <div class="card quote"><p>“The carrier performance report that used to take 3 hours every Monday now takes one question after we upload the WMS export.”</p><div class="who"><span class="av" aria-hidden="true">OM</span><div><b>Operations Manager</b><small>3PL warehouse operator</small></div></div></div>
+      <div class="card quote"><p>“We check freight invoices against the rate card and catch overbilled lines before month-end close.”</p><div class="who"><span class="av" aria-hidden="true">CC</span><div><b>Cost Control Specialist</b><small>Road freight</small></div></div></div>
+      <div class="card quote"><p>“We run our ABC-XYZ analysis in-house; we no longer need an outside consultant every quarter.”</p><div class="who"><span class="av" aria-hidden="true">SP</span><div><b>Supply Planning Lead</b><small>Retail distribution</small></div></div></div>
+      <div class="card quote"><p>“I prepare HS code matching and customs declaration checklists without knowing any formulas.”</p><div class="who"><span class="av" aria-hidden="true">TS</span><div><b>Foreign Trade Specialist</b><small>Customs brokerage</small></div></div></div>
+      <div class="card quote"><p>“Our utilization and pallet report by location is automatic now; we put it on screen at the start of every shift.”</p><div class="who"><span class="av" aria-hidden="true">WS</span><div><b>Warehouse Supervisor</b><small>E-commerce fulfillment</small></div></div></div>
+      <div class="card quote"><p>“We worked out cost per km for each route and rebuilt our fleet plan.”</p><div class="who"><span class="av" aria-hidden="true">FP</span><div><b>Fleet Planning Manager</b><small>Cold chain distribution</small></div></div></div>
+    </div>
+    <p class="note">Scenarios are representative and do not refer to real people or companies.</p>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section style="background:var(--surface)">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">F1</span>Who it’s for</span>
+    <h2>For logistics teams who live in spreadsheets</h2>
+    <p class="lead">From the office to the floor, from planning to finance.</p>
+    <div class="grid g3">
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-truck"/></svg></div><h3>Operations &amp; shipping</h3><p>Daily shipment tracking, delay analysis and carrier performance.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-cart"/></svg></div><h3>Procurement &amp; supply planning</h3><p>Demand forecasting, order quantities and supplier lead-time analysis.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-wh"/></svg></div><h3>Warehouse management</h3><p>Utilization, picking productivity, cycle-count variances and slotting optimization.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-globe"/></svg></div><h3>Customs &amp; foreign trade</h3><p>HS code matching, customs declaration checks, container and ETA tracking.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-coin"/></svg></div><h3>Finance &amp; cost control</h3><p>Freight reconciliation, profitability per service, budget vs. actual.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-user"/></svg></div><h3>Business owners &amp; executives</h3><p>One-page KPI summaries and presentations for the board.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section id="demo">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">G1</span>Demo</span>
+    <h2>Do more with your data</h2>
+    <p class="lead">Sample answers to real logistics questions.</p>
+    <div class="tabs" role="tablist" aria-label="Demo examples">
+      <button type="button" class="tab" role="tab" id="t1" aria-controls="p1" aria-selected="true" tabindex="0" data-t="p1">Ask a question</button>
+      <button type="button" class="tab" role="tab" id="t2" aria-controls="p2" aria-selected="false" tabindex="-1" data-t="p2">Generate a formula</button>
+      <button type="button" class="tab" role="tab" id="t3" aria-controls="p3" aria-selected="false" tabindex="-1" data-t="p3">Pivot table</button>
+      <button type="button" class="tab" role="tab" id="t4" aria-controls="p4" aria-selected="false" tabindex="-1" data-t="p4">Chart</button>
+    </div>
+
+    <div class="panel card" id="p1" role="tabpanel" aria-labelledby="t1" tabindex="0">
+      <div class="mock-body" style="padding:0">
+        <div class="msg user">How do October’s delayed shipments break down by cause?</div>
+        <div class="msg ai">In October, <b>318</b> shipments were delivered late (7.4% of 4,297 shipments). Total cost of delays: <b>₺147,700</b>.
+          <div class="tscroll" tabindex="0" role="region" aria-label="Delay causes table">
+          <table class="t">
+            <thead><tr><th scope="col">Delay cause</th><th scope="col" class="n">Count</th><th scope="col" class="n">Share</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Held at customs</th><td class="n">115</td><td class="n">36.2%</td></tr>
+              <tr><th scope="row">Vehicle breakdown / capacity</th><td class="n">87</td><td class="n">27.4%</td></tr>
+              <tr><th scope="row">Warehouse dispatch delay</th><td class="n">70</td><td class="n">22.0%</td></tr>
+              <tr><th scope="row">Consignee-related</th><td class="n">46</td><td class="n">14.5%</td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel card" id="p2" role="tabpanel" aria-labelledby="t2" tabindex="0" hidden>
+      <div class="mock-body" style="padding:0">
+        <div class="msg user">Calculate total freight for shipments from Istanbul to Ankara that were delivered on time in October.</div>
+        <div class="msg ai">Use this formula:
+          <div class="code" tabindex="0" role="region" aria-label="Excel formula">=SUMIFS(F:F, B:B, "Istanbul", C:C, "Ankara",
+    H:H, "&gt;="&amp;DATE(2026,10,1), H:H, "&lt;"&amp;DATE(2026,11,1),
+    J:J, "On time")</div>
+          <b>Explanation:</b> Sums the freight amounts in column F for rows where the origin city (B) is Istanbul, the destination city (C) is Ankara, the delivery date (H) is on or after October 1, 2026 and before November 1, 2026 (i.e. within October), and the delivery status (J) is “On time”. The dates in column H must be real date values, not text. If you don’t have column J, you can build it by comparing the delivery date (H) with the planned date (G): <code>=IF(H2="","",IF(INT(H2)&lt;=G2,"On time","Late"))</code>. <code>INT</code> drops the time portion of H so a same-day delivery isn’t counted as late, and rows with an empty H (not yet delivered) are left blank. Turkish Excel uses localized function names (<code>ÇOKETOPLA</code>, <code>TARİH</code>) and semicolons as separators; LojiXcel generates those versions too.
+        </div>
+      </div>
+    </div>
+
+    <div class="panel card" id="p3" role="tabpanel" aria-labelledby="t3" tabindex="0" hidden>
+      <div class="mock-body" style="padding:0">
+        <div class="msg user">Pivot inventory value and days of inventory by warehouse and product group.</div>
+        <div class="msg ai">
+          <div class="tscroll" tabindex="0" role="region" aria-label="Warehouse inventory pivot table">
+          <table class="t">
+            <thead><tr><th scope="col">Warehouse</th><th scope="col">Product group</th><th scope="col" class="n">Inventory value (₺)</th><th scope="col" class="n">Days of inventory</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Gebze</th><td>Electronics</td><td class="n">8,420,000</td><td class="n">24</td></tr>
+              <tr><th scope="row">Gebze</th><td>Food</td><td class="n">2,115,000</td><td class="n up">9</td></tr>
+              <tr><th scope="row">Izmir</th><td>Electronics</td><td class="n">3,760,000</td><td class="n down">41</td></tr>
+              <tr><th scope="row">Izmir</th><td>Textiles</td><td class="n">1,980,000</td><td class="n">28</td></tr>
+              <tr><th scope="row">Ankara</th><td>Food</td><td class="n">1,245,000</td><td class="n up">7</td></tr>
+              <tr class="tot"><th scope="row">Total</th><td></td><td class="n">17,520,000</td><td class="n">19</td></tr>
+            </tbody>
+          </table>
+          </div>
+          <p style="margin-top:8px;font-size:.88rem">Days of inventory = inventory value ÷ average daily cost of goods sold. The total row is not an average of the rows; it is total inventory value divided by total daily cost of goods sold. Izmir electronics stock (41 days) is above the 30-day target; a stock transfer or promotion is recommended.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel card" id="p4" role="tabpanel" aria-labelledby="t4" tabindex="0" hidden>
+      <div class="mock-body" style="padding:0">
+        <div class="msg user">Chart the monthly OTIF rate from May to October.</div>
+        <div class="msg ai" style="max-width:100%">
+          <b>Monthly OTIF (%)</b>: October reached 91.9%, the highest level in the period.
+          <div class="bars" role="img" aria-label="Monthly OTIF: May 88.4%, June 89.6%, July 89.1%, August 90.8%, September 91.7%, October 91.9%">
+            <div class="bar" style="height:50%"><em>88.4</em></div>
+            <div class="bar" style="height:58%"><em>89.6</em></div>
+            <div class="bar" style="height:55%"><em>89.1</em></div>
+            <div class="bar" style="height:65%"><em>90.8</em></div>
+            <div class="bar" style="height:70%"><em>91.7</em></div>
+            <div class="bar" style="height:71%"><em>91.9</em></div>
+          </div>
+          <div class="bar-labels" aria-hidden="true"><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span></div>
+          <p style="font-size:.75rem;color:var(--ink-2);margin-top:8px">Vertical axis starts at 80%.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section style="background:var(--surface)">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">H1</span>Security &amp; privacy</span>
+    <h2>Your operations data stays yours</h2>
+    <p class="lead">Your customer, pricing and rate data are trade secrets, and they are protected that way.</p>
+    <div class="grid g3">
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-lock"/></svg></div><h3>Encryption at rest and in transit</h3><p>Files are encrypted with AES-256 at rest and with TLS in transit.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-eye"/></svg></div><h3>No model training</h3><p>The spreadsheets you upload are never used to train AI models.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-shield"/></svg></div><h3>KVKK (Turkish data protection law) &amp; GDPR</h3><p>Personal data is processed in line with KVKK and GDPR requirements.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-user"/></svg></div><h3>Secure sign-in</h3><p>Passwordless sign-in with your Google or Microsoft account, or an email link.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-trash"/></svg></div><h3>Deletion on request</h3><p>Permanently delete your files and chat history whenever you want.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-doc"/></svg></div><h3>Private by default</h3><p>No one else can see your files unless you share them.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="fiyat">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">I1</span>Pricing</span>
+    <h2>Choose the right plan for your team</h2>
+    <p class="lead">Start free and upgrade as your needs grow.</p>
+    <div class="toggle">
+      <span>Monthly</span>
+      <button type="button" class="switch" id="billing" role="switch" aria-checked="false" aria-label="Yearly billing"></button>
+      <span>Yearly</span><span class="save">Save 30%</span>
+    </div>
+    <div class="grid g3">
+      <div class="card plan">
+        <h3>Free</h3>
+        <div class="price">₺0 <small>/ forever</small></div>
+        <p class="billed"></p>
+        <p>For trying it out and for small spreadsheets.</p>
+        <ul><li>50 credits per month</li><li>Fast model</li><li>Files up to 5 MB</li><li>Essential logistics formulas</li></ul>
+        <a href="app.html?lang=en" class="btn btn-ghost">Start free</a>
+      </div>
+      <div class="card plan rec">
+        <span class="badge">Recommended</span>
+        <h3>Pro</h3>
+        <div class="price"><span class="amt" data-m="349" data-y="244" data-yt="2,928">₺349</span> <small>/ month</small></div>
+        <p class="billed"></p>
+        <p>For operations and planning specialists.</p>
+        <ul><li>3,000 credits per month</li><li>Fast and Standard models</li><li>Files up to 50 MB</li><li>KPI templates and presentation generation</li><li>Freight reconciliation</li></ul>
+        <a href="#" class="btn btn-primary">Upgrade to Pro</a>
+      </div>
+      <div class="card plan">
+        <h3>Enterprise</h3>
+        <div class="price"><span class="amt" data-m="799" data-y="559" data-yt="6,708" data-yt-label="per user yearly">₺799</span> <small>/ user / month</small></div>
+        <p class="billed"></p>
+        <p>For logistics companies with multiple warehouses and branches.</p>
+        <ul><li>10,000 credits per month</li><li>Access to the Expert model</li><li>Files up to 100 MB</li><li>Team workspace and permissions</li><li>Priority support</li></ul>
+        <a href="#" class="btn btn-dark">Contact sales</a>
+      </div>
+    </div>
+    <p class="sr-only" id="billing-status" aria-live="polite"></p>
+    <p class="fine">Credits renew every month, including on yearly plans. Prices exclude VAT.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="sss" style="background:var(--surface)">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">J1</span>FAQ</span>
+    <h2>Frequently asked questions</h2>
+    <p class="lead">Can’t find what you’re looking for? Write to us.</p>
+    <div class="faq">
+      <details><summary>What is LojiXcel?</summary><p>An AI-powered Excel assistant for logistics and supply-chain teams. Upload your spreadsheet, ask questions in plain language, and get formulas, pivot tables, charts and reports.</p></details>
+      <details><summary>Which file formats are supported?</summary><p>.xlsx, .xls, .csv and Google Sheets. Exports from ERP, WMS and TMS systems can be used directly.</p></details>
+      <details><summary>Does it work with exports from ERPs such as SAP, Logo or Netsis?</summary><p>Yes. Just upload the Excel/CSV report from your system; column names and formats are recognized automatically.</p></details>
+      <details><summary>Does it support localized Excel (e.g. Turkish)?</summary><p>Yes. It writes formulas with English function names (SUMIFS, VLOOKUP, XLOOKUP) and with localized names, e.g. in Turkish Excel SUMIFS = ÇOKETOPLA, VLOOKUP = DÜŞEYARA and XLOOKUP = ÇAPRAZARA, using the argument separator your regional settings expect (comma or semicolon).</p></details>
+      <details><summary>Which logistics KPIs can it calculate?</summary><p>OTIF, on-time delivery (OTD), inventory turnover, days of inventory, warehouse utilization, picking productivity, cost per km/ton, order cycle time and more.</p></details>
+      <details><summary>Can it create presentations (PowerPoint)?</summary><p>Yes. It automatically builds your weekly operations report or customer QBR deck from your data.</p></details>
+      <details><summary>Do I need a credit card?</summary><p>No. The free plan does not require a credit card.</p></details>
+      <details><summary>Can I cancel at any time?</summary><p>Yes. You can cancel your subscription in one click from your account settings and keep using it until the end of the billing period.</p></details>
+      <details><summary>Do I need Excel installed on my computer?</summary><p>No. Everything runs in the browser; download the results as .xlsx and open them in any program you like.</p></details>
+      <details><summary>Is my data secure?</summary><p>Files are encrypted, never used for model training and can be deleted whenever you want. Data is processed in line with KVKK and GDPR.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="wrap">
+    <div class="cta">
+      <svg class="cta-art" viewBox="0 0 360 150" aria-hidden="true" focusable="false"><use href="#i-scene"/></svg>
+      <h2>Speed up your logistics reporting with AI</h2>
+      <p>Turn your shipment, inventory and freight spreadsheets into decisions in minutes.</p>
+      <div class="btns">
+        <a href="app.html?lang=en" class="btn btn-primary">Start free now</a>
+        <a href="#fiyat" class="btn btn-ghost">See pricing</a>
+      </div>
+      <small>No credit card required · Cancel anytime</small>
+    </div>
+  </div>
+</section>
+</main>
+
+<nav class="foot-tabs" aria-label="Page tabs">
+  <div class="wrap"><span class="arr" aria-hidden="true">◀ ▶</span><span class="on" aria-current="page">Home</span><a href="#ozellikler">Features</a><a href="#demo">Demo</a><a href="#fiyat">Pricing</a><a href="#sss">FAQ</a><a href="app.html?lang=en">App</a><span class="arr" aria-hidden="true">+</span></div>
+</nav>
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <a href="#" class="logo" aria-label="LojiXcel home"><span class="logo-mark"><svg width="34" height="34" aria-hidden="true" focusable="false"><use href="#i-logo"/></svg></span><span>Loji<b>Xcel</b></span></a>
+        <p class="about">AI-powered Excel assistant for logistics and supply-chain teams.</p>
+      </div>
+      <nav aria-label="Tools"><h2 class="fh">Tools</h2><ul><li><a href="#">Chat</a></li><li><a href="#">Pivot Builder</a></li><li><a href="#">KPI Dashboard</a></li><li><a href="#">Formula Generator</a></li><li><a href="#">Freight Reconciliation</a></li><li><a href="#">SQL &amp; VBA Generator</a></li></ul></nav>
+      <nav aria-label="Guides"><h2 class="fh">Guides</h2><ul><li><a href="#">OTIF analysis</a></li><li><a href="#">ABC-XYZ classification</a></li><li><a href="#">Safety stock</a></li><li><a href="#">HS code matching</a></li><li><a href="#">Data cleaning</a></li></ul></nav>
+      <nav aria-label="Company"><h2 class="fh">Company</h2><ul><li><a href="#">About us</a></li><li><a href="#">Contact</a></li><li><a href="#">Careers</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="#">KVKK Privacy Notice</a></li></ul></nav>
+    </div>
+    <div class="fbottom">
+      <span>© 2026 LojiXcel. All rights reserved.</span>
+      <button type="button" class="theme-btn" id="theme">Theme: Light</button>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Mobile menu
+  var burger=document.getElementById('burger'),menu=document.getElementById('menu');
+  function setMenu(open){
+    menu.classList.toggle('open',open);
+    burger.setAttribute('aria-expanded',String(open));
+    burger.setAttribute('aria-label',open?'Close menu':'Open menu');
+  }
+  burger.addEventListener('click',function(){
+    var o=!menu.classList.contains('open');setMenu(o);
+    if(o){var first=menu.querySelector('a');if(first)first.focus()}
+  });
+  menu.addEventListener('focusout',function(e){
+    if(!menu.classList.contains('open'))return;
+    var to=e.relatedTarget;if(to&&!menu.contains(to)&&to!==burger)setMenu(false);
+  });
+  menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){setMenu(false)})});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&menu.classList.contains('open')){setMenu(false);burger.focus()}});
+  document.addEventListener('click',function(e){if(menu.classList.contains('open')&&!menu.contains(e.target)&&!burger.contains(e.target))setMenu(false)});
+  var desk=window.matchMedia('(min-width:901px)');
+  var onDesk=function(){if(desk.matches)setMenu(false)};
+  if(desk.addEventListener)desk.addEventListener('change',onDesk);else if(desk.addListener)desk.addListener(onDesk);
+
+  // Sector strip: copy hidden from screen readers for seamless looping
+  var track=document.getElementById('track');
+  Array.prototype.slice.call(track.children).forEach(function(n){
+    var c=n.cloneNode(true);c.setAttribute('aria-hidden','true');c.removeAttribute('role');c.classList.add('dup');track.appendChild(c);
+  });
+
+  // Pause / resume scrolling
+  var mq=document.querySelector('.marquee'),mqb=document.getElementById('mqToggle');
+  mqb.addEventListener('click',function(){var p=mq.classList.toggle('paused');mqb.setAttribute('aria-pressed',String(p));mqb.textContent=p?'Resume scrolling':'Pause scrolling'});
+
+  // Demo tabs (WAI-ARIA tabs pattern)
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function select(t,focus){
+    tabs.forEach(function(x){
+      var on=x===t;
+      x.setAttribute('aria-selected',String(on));
+      x.tabIndex=on?0:-1;
+      document.getElementById(x.getAttribute('aria-controls')).hidden=!on;
+    });
+    if(focus)t.focus();
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){select(t,false)});
+    t.addEventListener('keydown',function(e){
+      var n=null;
+      if(e.key==='ArrowRight')n=tabs[(i+1)%tabs.length];
+      else if(e.key==='ArrowLeft')n=tabs[(i-1+tabs.length)%tabs.length];
+      else if(e.key==='Home')n=tabs[0];
+      else if(e.key==='End')n=tabs[tabs.length-1];
+      if(n){e.preventDefault();select(n,true)}
+    });
+  });
+
+  // Monthly / yearly pricing
+  var sw=document.getElementById('billing'),status=document.getElementById('billing-status');
+  sw.addEventListener('click',function(){
+    var y=sw.getAttribute('aria-checked')!=='true';
+    sw.setAttribute('aria-checked',String(y));
+    document.querySelectorAll('.price .amt').forEach(function(a){
+      a.textContent='₺'+(y?a.dataset.y:a.dataset.m);
+      var billed=a.closest('.plan').querySelector('.billed');
+      if(billed)billed.textContent=y?'Billed ₺'+a.dataset.yt+' '+(a.dataset.ytLabel||'yearly'):'';
+    });
+    status.textContent=y?'Showing yearly prices':'Showing monthly prices';
+  });
+
+  // Theme switcher
+  var tb=document.getElementById('theme'),modes=['light','dark','auto'],names={auto:'Auto',light:'Light',dark:'Dark'};
+  var m='light';
+  try{m=localStorage.getItem('lx-theme')||'light'}catch(e){}
+  if(modes.indexOf(m)<0)m='light';
+  function apply(){
+    if(m==='auto')document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme',m);
+    tb.textContent='Theme: '+names[m];
+  }
+  apply();
+  tb.addEventListener('click',function(){
+    m=modes[(modes.indexOf(m)+1)%modes.length];
+    try{localStorage.setItem('lx-theme',m)}catch(e){}
+    apply();
+  });
+})();
+</script>
+</body>
+</html>

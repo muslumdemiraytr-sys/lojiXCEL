@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="tr" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LojiXcel – Lojistik için Excel AI</title>
+<meta name="description" content="Lojistik ve tedarik zinciri ekipleri için yapay zekâ destekli Excel asistanı: sevkiyat, stok, navlun ve KPI analizleri.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#7f4ea8">
+<link rel="canonical" href="https://lojixcel.app/">
+<link rel="alternate" hreflang="tr" href="https://lojixcel.app/">
+<link rel="alternate" hreflang="en" href="https://lojixcel.app/en/">
+<link rel="alternate" hreflang="x-default" href="https://lojixcel.app/en/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:title" content="LojiXcel – Lojistik için Excel AI">
+<meta property="og:description" content="Lojistik ve tedarik zinciri ekipleri için yapay zekâ destekli Excel asistanı.">
+<meta property="og:url" content="https://lojixcel.app/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='11' fill='%237f4ea8'/%3E%3Crect x='8' y='9' width='32' height='30' rx='4' fill='%23fff'/%3E%3Cpath d='M8 13a4 4 0 0 1 4-4h24a4 4 0 0 1 4 4v4H8z' fill='%23c7a3d2'/%3E%3Cpath d='M13 34l8-8 6 4 9-10' fill='none' stroke='%237f4ea8' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('lx-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');else if(t==='auto')document.documentElement.removeAttribute('data-theme')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --surface-2:#f7f3fb; --ink:#111111; --ink-2:#4a4458; --line:#e7def0;
+  --brand:#7f4ea8; --brand-2:#9c93e5; --brand-fill:#7f4ea8; --brand-fill-2:#c7a3d2; --on-brand:#ffffff; --on-brand-2:#111111;
+  --accent:#7f4ea8; --accent-ink:#ffffff; --accent-text:#7f4ea8; --accent-soft:#f3ecf8; --lilac:#c7a3d2; --mauve:#ba8cbe; --periwinkle:#9c93e5;
+  --ok:#15803d; --ok-strong:#166534; --ok-soft:#dcf2e3; --bad:#b91c1c; --header-bg:rgba(255,255,255,.92);
+  --gridline:rgba(127,78,168,.09); --colhead:#f3eef8; --ii:#111111; --iw:#ffffff;
+  --radius:14px; --shadow:0 1px 2px rgba(17,17,17,.05),0 8px 24px rgba(127,78,168,.08);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#110d17; --surface:#18131f; --surface-2:#211a2b; --ink:#f3eff8; --ink-2:#b3a9c2; --line:#30263d;
+    --brand:#c7a3d2; --brand-2:#9c93e5; --brand-fill:#7f4ea8; --brand-fill-2:#ba8cbe; --on-brand:#ffffff; --on-brand-2:#111111;
+    --accent:#7f4ea8; --accent-ink:#ffffff; --accent-text:#c7a3d2; --accent-soft:#2a2038; --lilac:#c7a3d2; --mauve:#ba8cbe; --periwinkle:#9c93e5;
+    --gridline:rgba(199,163,210,.07); --colhead:#1e1828; --ii:#f3eff8; --iw:#18131f; --switch-off:#6b6180; --ok:#4ade80; --ok-strong:#4ade80; --ok-soft:#12301f; --bad:#f87171; --header-bg:rgba(17,13,23,.92);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#110d17; --surface:#18131f; --surface-2:#211a2b; --ink:#f3eff8; --ink-2:#b3a9c2; --line:#30263d;
+  --brand:#c7a3d2; --brand-2:#9c93e5; --brand-fill:#7f4ea8; --brand-fill-2:#ba8cbe; --on-brand:#ffffff; --on-brand-2:#111111;
+  --accent:#7f4ea8; --accent-ink:#ffffff; --accent-text:#c7a3d2; --accent-soft:#2a2038; --lilac:#c7a3d2; --mauve:#ba8cbe; --periwinkle:#9c93e5;
+  --gridline:rgba(199,163,210,.07); --colhead:#1e1828; --ii:#f3eff8; --iw:#18131f; --switch-off:#6b6180; --ok:#4ade80; --ok-strong:#4ade80; --ok-soft:#12301f; --bad:#f87171; --header-bg:rgba(17,13,23,.92);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-padding-top:76px}
+@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+code,.code,table.t td.n{font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0}
+body{font-family:Manrope,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:3px;border-radius:6px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;left:16px;top:-60px;z-index:100;background:var(--brand-fill);color:var(--on-brand);padding:10px 14px;border-radius:8px;font-weight:700}
+.skip:focus{top:10px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 16px}
+section{padding:84px 0}
+h1,h2,h3{line-height:1.2;letter-spacing:-.02em}
+h2{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:800;text-align:center;margin-bottom:12px}
+.lead{color:var(--ink-2);text-align:center;max-width:680px;margin:0 auto 44px;font-size:1.05rem}
+.eyebrow{display:block;text-align:center;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);margin-bottom:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:10px;font-weight:700;font-size:.95rem;border:1px solid transparent;cursor:pointer;transition:transform .15s,background .15s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-ghost{background:var(--surface);border-color:var(--line);color:var(--ink)}
+.btn-dark{background:var(--brand-fill);color:var(--on-brand)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.g2,.g3,.g4{grid-template-columns:1fr}section{padding:60px 0}}
+.ico{width:60px;height:60px;border-radius:14px;display:grid;place-items:center;background:var(--accent-soft);color:var(--brand);margin-bottom:14px}
+.ico svg{width:44px;height:44px}
+.card h3{font-size:1.08rem;margin-bottom:6px}
+.card p{color:var(--ink-2);font-size:.94rem}
+
+/* Header */
+header{position:sticky;top:0;z-index:50;background:var(--header-bg);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:66px;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.2rem;flex-shrink:0}
+.logo-mark{width:34px;height:34px;display:block;flex-shrink:0}.logo-mark svg{display:block;width:100%;height:100%}
+.logo b{color:var(--accent-text)}
+.menu{display:flex;gap:26px;font-weight:600;font-size:.94rem;color:var(--ink-2)}
+.menu a:hover{color:var(--ink)}
+.menu .menu-login,.menu .menu-lang{display:none}
+.nav-cta{display:flex;gap:10px;align-items:center;flex-shrink:0}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;font:700 .78rem 'JetBrains Mono',monospace;flex-shrink:0}
+.lang span,.lang b{padding:7px 8px;line-height:1}
+.lang span{background:var(--brand-fill);color:var(--on-brand)}
+.lang b{color:var(--ink-2);font-weight:700}
+.lang:hover b{color:var(--brand)}
+@media(max-width:600px){.nav-cta .lang{display:none}}
+.burger{display:none;background:none;border:1px solid var(--line);border-radius:8px;width:40px;height:40px;color:var(--ink);cursor:pointer;flex-shrink:0}
+@media(max-width:900px){.menu,.nav-cta .btn-ghost{display:none}.burger{display:grid;place-items:center}
+  .menu.open{display:flex;flex-direction:column;position:absolute;top:66px;left:0;right:0;max-height:calc(100vh - 66px);max-height:calc(100dvh - 66px);overflow-y:auto;overscroll-behavior:contain;background:var(--surface);padding:20px 16px;border-bottom:1px solid var(--line);gap:16px;box-shadow:var(--shadow)}
+  .menu .menu-login,.menu .menu-lang{display:block}}
+@media(max-width:420px){.nav-cta .btn-primary{padding:10px 12px;font-size:.85rem}}
+@media(max-width:350px){.logo{font-size:1.05rem;gap:8px}.logo-mark{width:30px;height:30px}.nav-cta{gap:6px}.nav-cta .btn-primary{padding:9px 10px;font-size:.8rem}}
+
+/* Hero */
+.hero{padding:70px 0 80px;background:radial-gradient(900px 420px at 85% 10%,color-mix(in srgb,var(--periwinkle) 22%,transparent),transparent 70%),radial-gradient(700px 380px at 5% 90%,color-mix(in srgb,var(--lilac) 26%,transparent),transparent 70%)}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center}
+.hero-grid>*{min-width:0}
+@media(max-width:960px){.hero-grid{grid-template-columns:1fr}}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:.85rem;font-weight:600;color:var(--ink-2);margin-bottom:20px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);flex-shrink:0}
+.hero h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;margin-bottom:18px}
+.hero h1 span{color:var(--brand)}
+.hero p.sub{font-size:1.1rem;color:var(--ink-2);margin-bottom:28px;max-width:560px}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:22px}
+.proof{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.88rem;color:var(--ink-2);margin-bottom:22px}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{padding:5px 12px;border-radius:999px;background:var(--accent-soft);font-size:.82rem;font-weight:600;color:var(--brand)}
+
+/* Mockup */
+.mock{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.mock-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.mock-bar i{width:10px;height:10px;border-radius:50%;background:var(--line);flex-shrink:0}
+.mock-bar span{margin-left:10px;font-size:.78rem;color:var(--ink-2);font-family:'JetBrains Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mock-body{padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.msg{padding:11px 14px;border-radius:12px;font-size:.9rem;max-width:92%;min-width:0}
+.msg.user{align-self:flex-end;background:var(--brand-fill);color:var(--on-brand);border-bottom-right-radius:4px}
+.msg.ai{background:var(--surface-2);border-bottom-left-radius:4px;align-self:stretch;max-width:100%}
+.msg code{overflow-wrap:anywhere;word-break:break-word}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:8px}
+.file{display:inline-flex;align-items:center;gap:8px;font-size:.82rem;padding:6px 10px;border:1px dashed var(--line);border-radius:8px;color:var(--ink-2);align-self:flex-end;max-width:100%;overflow-wrap:anywhere}
+table.t{width:100%;border-collapse:collapse;font-size:.84rem}
+table.t th,table.t td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+table.t thead th{color:var(--ink-2);font-weight:600;font-size:.76rem;text-transform:uppercase;letter-spacing:.04em}
+table.t tbody th{font-weight:400;white-space:normal;min-width:4.5em}
+table.t tr.tot th{font-weight:800;border-bottom:none}
+table.t th.n,table.t td.n{text-align:right;font-variant-numeric:tabular-nums}
+table.t td.n{font-family:'JetBrains Mono',monospace}
+table.t tr.tot td{font-weight:800;border-bottom:none}
+table.t td:first-child{white-space:normal;min-width:4.5em}
+@media(max-width:480px){.mock-body{padding:12px}.msg{padding:10px 11px}table.t{font-size:.74rem}table.t thead th{font-size:.64rem;letter-spacing:0;white-space:normal}table.t th,table.t td{padding:6px 4px}}
+@media(max-width:360px){.hero .mock-body{padding:10px}.hero .msg{padding:9px 8px}.hero table.t{font-size:.68rem}.hero table.t th,.hero table.t td{padding:5px 3px}}
+.up{color:var(--ok-strong)}.down{color:var(--bad)}
+
+/* Sector strip */
+.strip{padding:36px 0;border-block:1px solid var(--line);background:var(--surface)}
+.strip p{text-align:center;font-size:.85rem;color:var(--ink-2);font-weight:600;margin-bottom:18px}
+.marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.track{display:flex;width:max-content;animation:scroll 32s linear infinite}
+.track span{font-weight:800;font-size:1.05rem;color:var(--ink-2);white-space:nowrap;margin-right:44px}
+.marquee:hover .track,.marquee:focus-within .track,.marquee.paused .track{animation-play-state:paused}
+@keyframes scroll{to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){
+  .marquee{-webkit-mask-image:none;mask-image:none}
+  .track{animation:none;flex-wrap:wrap;justify-content:center;width:auto;row-gap:10px}
+  .track span{margin:0 22px}
+  .track .dup{display:none}
+  #mqToggle{display:none}
+}
+
+/* Guides */
+.guide{display:flex;flex-direction:column;gap:8px;transition:border-color .15s}
+.guide:hover{border-color:var(--brand)}
+.guide .k{font-size:.75rem;font-weight:700;color:var(--accent-text);text-transform:uppercase;letter-spacing:.08em}
+.quick{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:30px}
+.quick a{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:.88rem;font-weight:600}
+.quick a:hover{border-color:var(--brand);color:var(--brand)}
+
+/* Steps */
+.step .num{font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:500;color:var(--accent-text);margin-bottom:10px;display:block}
+
+/* Stats */
+.stats{background:linear-gradient(135deg,#7f4ea8,#6a3f91);color:var(--on-brand);border-radius:20px;padding:44px 24px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:center}
+.stats b{display:block;font-size:clamp(2rem,4vw,2.8rem);font-weight:800}
+.stats span{opacity:.9;font-size:.95rem}
+@media(max-width:600px){.stats{grid-template-columns:1fr}}
+
+/* Compare */
+.cmp{max-width:820px;margin:0 auto;overflow-x:auto}
+.cmp table{width:100%;border-collapse:separate;border-spacing:0;background:var(--surface);border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
+.cmp th,.cmp td{padding:14px 18px;border-bottom:1px solid var(--line);text-align:left;font-size:.95rem}
+.cmp tbody tr:last-child td,.cmp tbody tr:last-child th{border-bottom:none}
+.cmp thead th{background:var(--surface-2);font-weight:700}
+.cmp tbody th{font-weight:400;text-align:left}
+.cmp td:not(:first-child),.cmp th:not(:first-child){text-align:center;width:160px}
+.cmp th.hl{background:var(--accent-soft)}
+.cmp .hl{background:var(--accent-soft)}
+@media(max-width:600px){.cmp th,.cmp td{padding:12px 10px;font-size:.88rem}.cmp td:first-child,.cmp th:first-child{width:58%}.cmp td:not(:first-child),.cmp th:not(:first-child){width:21%}}
+.yes{color:var(--ok);font-weight:800}.no{color:var(--bad);font-weight:800}
+
+/* Stories */
+.quote p{color:var(--ink);font-size:.97rem;margin-bottom:16px}
+.who{display:flex;align-items:center;gap:12px}
+.av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:var(--on-brand-2);background:var(--brand-fill-2);font-size:.9rem;flex-shrink:0}
+.who b{display:block;font-size:.92rem}.who small{color:var(--ink-2)}
+.note{text-align:center;font-size:.8rem;color:var(--ink-2);margin-top:18px}
+
+/* Demos */
+.tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:26px}
+.tab{padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 .9rem Manrope,sans-serif;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--brand-fill);border-color:var(--brand-fill);color:var(--on-brand)}
+.panel{max-width:820px;margin:0 auto}
+.panel[hidden]{display:none}
+@media(max-width:480px){.panel.card{padding:16px}}
+.code{font-family:'JetBrains Mono',monospace;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:.86rem;overflow-x:auto;white-space:pre;margin:8px 0}
+.bars{display:flex;align-items:flex-end;gap:12px;height:200px;padding:24px 4px 0;border-bottom:1px solid var(--line);margin-top:10px}
+.bar{flex:1;background:var(--brand-2);border-radius:6px 6px 0 0;position:relative;min-width:0}
+.bar:last-child{background:var(--brand-fill)}
+.bar em{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-style:normal;font-size:.76rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar-labels{display:flex;gap:12px;padding:6px 4px 0}
+.bar-labels span{flex:1;text-align:center;font-size:.78rem;color:var(--ink-2)}
+@media(max-width:400px){.bars,.bar-labels{gap:6px}.bar em{font-size:.66rem}}
+
+/* Pricing */
+.toggle{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;margin-bottom:34px;font-weight:600}
+.switch{width:52px;height:28px;border-radius:999px;background:var(--switch-off,var(--ink-2));border:none;position:relative;cursor:pointer;flex-shrink:0}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .2s}
+.switch[aria-checked="true"]{background:var(--brand-fill)}
+.switch[aria-checked="true"]::after{left:27px}
+@media(prefers-reduced-motion:reduce){.switch::after,.btn{transition:none}}
+.save{background:var(--accent-soft);color:var(--accent-text);font-weight:700;padding:3px 9px;border-radius:999px;font-size:.78rem}
+.plan{display:flex;flex-direction:column;position:relative}
+.plan.rec{border:2px solid var(--accent)}
+.badge{position:absolute;top:-12px;left:24px;background:var(--accent);color:var(--accent-ink);font-size:.75rem;font-weight:800;padding:3px 10px;border-radius:999px}
+.price{font-size:2.4rem;font-weight:800;margin:10px 0 2px}
+.price small{font-size:.95rem;color:var(--ink-2);font-weight:600}
+.billed{font-size:.8rem;color:var(--ink-2);min-height:3.2em;margin-bottom:6px}
+.plan ul{list-style:none;margin:18px 0 24px;display:flex;flex-direction:column;gap:9px;flex:1}
+.plan li{font-size:.92rem;padding-left:24px;position:relative;color:var(--ink-2)}
+.plan li::before{content:"✓";content:"✓" / "";position:absolute;left:0;color:var(--ok);font-weight:800}
+.fine{text-align:center;font-size:.82rem;color:var(--ink-2);margin-top:20px}
+
+/* FAQ */
+.faq{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.faq details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 20px}
+.faq summary{cursor:pointer;padding:18px 0;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";content:"+" / "";font-size:1.3rem;color:var(--brand);line-height:1}
+.faq details[open] summary::after{content:"–";content:"–" / ""}
+.faq details p{padding:0 0 18px;color:var(--ink-2)}
+
+/* CTA – beyaz zemin, siyah yazı, palet şeridi */
+.cta{position:relative;overflow:hidden;background:#ffffff;color:#111111;border:1px solid var(--line);border-radius:22px;padding:64px 24px 60px;text-align:center;box-shadow:var(--shadow)}
+.cta::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,#7f4ea8,#ba8cbe,#c7a3d2,#9c93e5)}
+.cta h2{color:#111111}
+.cta-art{display:block;width:min(360px,100%);height:auto;margin:0 auto 18px;--ii:#111111;--iw:#ffffff}
+.cta p{color:#3d3747;margin-bottom:26px}
+.cta :focus-visible{outline-color:#7f4ea8}
+.cta .btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.cta .btn-ghost{background:#ffffff;color:#111111;border-color:#d9cde6}
+.cta small{display:block;margin-top:16px;color:#4a4458}
+
+/* Footer */
+footer{border-top:1px solid var(--line);padding:56px 0 30px;background:var(--surface)}
+.fgrid{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:30px}
+@media(max-width:800px){.fgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.fgrid{grid-template-columns:1fr}}
+footer h2.fh{font-size:.85rem;text-align:left;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;color:var(--ink-2);font-weight:700}
+footer ul{list-style:none;display:flex;flex-direction:column;gap:8px;font-size:.92rem}
+footer ul a:hover{color:var(--brand)}
+footer .about{color:var(--ink-2);font-size:.92rem;margin-top:12px;max-width:300px}
+.fbottom{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-top:40px;padding-top:20px;border-top:1px solid var(--line);font-size:.85rem;color:var(--ink-2)}
+.theme-btn{background:none;border:1px solid var(--line);border-radius:8px;padding:6px 10px;color:var(--ink);cursor:pointer;font:600 .82rem Manrope,sans-serif}
+
+/* ===== Excel görsel dili ===== */
+.mono{font-family:'JetBrains Mono',monospace}
+/* Hero: hesap tablosu ızgarası, sütun harfleri ve satır numaraları */
+.hero{position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:24px 0 0 40px;background-image:linear-gradient(var(--gridline) 1px,transparent 1px),linear-gradient(90deg,var(--gridline) 1px,transparent 1px);background-size:112px 32px;pointer-events:none;-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent);mask-image:linear-gradient(180deg,#000 55%,transparent)}
+.hero>.wrap{position:relative;z-index:1}
+.sheet-cols,.sheet-rows{position:absolute;pointer-events:none;font:500 .7rem 'JetBrains Mono',monospace;color:var(--ink-2);opacity:.75;z-index:0}
+.sheet-cols{top:0;left:40px;right:0;height:24px;display:flex;overflow:hidden;background:var(--colhead);border-bottom:1px solid var(--line)}
+.sheet-cols span{flex:0 0 112px;text-align:center;line-height:24px;border-right:1px solid var(--line)}
+.sheet-rows{top:24px;left:0;width:40px;bottom:0;display:flex;flex-direction:column;overflow:hidden;background:var(--colhead);border-right:1px solid var(--line);-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent);mask-image:linear-gradient(180deg,#000 55%,transparent)}
+.sheet-rows span{flex:0 0 32px;line-height:32px;text-align:center;border-bottom:1px solid var(--line)}
+.sheet-corner{position:absolute;top:0;left:0;width:40px;height:24px;background:var(--colhead);border-right:1px solid var(--line);border-bottom:1px solid var(--line);z-index:0}
+.sheet-corner::after{content:"";position:absolute;right:3px;bottom:3px;border:5px solid transparent;border-right-color:var(--ink-2);border-bottom-color:var(--ink-2);opacity:.5}
+@media(max-width:1240px){.hero>.wrap{padding-left:56px}}
+@media(max-width:600px){.hero::before{left:0;background-size:80px 28px}.sheet-cols{left:0}.sheet-cols span{flex-basis:80px}.sheet-rows,.sheet-corner{display:none}.hero>.wrap{padding-left:16px}}
+/* Seçili hücre + doldurma tutamacı */
+.cell-sel{position:relative;display:inline-block;padding:0 .14em;border:3px solid var(--brand-fill);background:color-mix(in srgb,var(--lilac) 20%,transparent);border-radius:2px;line-height:1.08}
+.cell-sel::after{content:"";position:absolute;right:-7px;bottom:-7px;width:10px;height:10px;background:var(--brand-fill);border:2px solid var(--bg)}
+/* Formül çubuğu */
+.fbar{display:flex;align-items:stretch;border-bottom:1px solid var(--line);background:var(--surface);font:500 .8rem 'JetBrains Mono',monospace;font-variant-ligatures:none}
+.fbar .nb{flex:0 0 auto;padding:7px 12px;border-right:1px solid var(--line);color:var(--ink);min-width:52px;text-align:center}
+.fbar .fx{flex:0 0 auto;padding:7px 10px;border-right:1px solid var(--line);color:var(--brand);font-style:italic;font-weight:700;font-family:Georgia,'Times New Roman',serif}
+.fbar code{flex:1;min-width:0;padding:7px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+/* Sayfa sekmeleri */
+.sheettabs{display:flex;align-items:flex-end;gap:2px;padding:0 10px;background:var(--colhead);border-top:1px solid var(--line);font-size:.78rem;overflow:hidden}
+.sheettabs .nav{display:flex;gap:6px;padding:6px 8px 6px 0;color:var(--ink-2);font-size:.7rem}
+.sheettabs span,.sheettabs a{padding:6px 14px;color:var(--ink-2);border:1px solid transparent;border-top:none;border-radius:0 0 6px 6px;white-space:nowrap}
+.sheettabs .on{background:var(--surface);color:var(--brand);font-weight:800;border-color:var(--line);box-shadow:inset 0 -3px 0 var(--brand-fill)}
+.sheettabs .add{font-weight:800}
+/* Izgara görünümlü tablolar */
+table.t{border:1px solid var(--line)}
+table.t th,table.t td{border:1px solid var(--line)}
+table.t thead tr.cols td{background:var(--colhead);color:var(--ink-2);text-align:center;font:500 .68rem 'JetBrains Mono',monospace;padding:3px 4px;text-transform:none;letter-spacing:0}
+table.t .rn{background:var(--colhead);color:var(--ink-2);text-align:center;font:500 .68rem 'JetBrains Mono',monospace;width:26px;padding:3px 4px}
+table.t td.sel{position:relative;outline:2px solid var(--brand-fill);outline-offset:-2px;background:color-mix(in srgb,var(--lilac) 16%,transparent)}
+table.t td.sel::after{content:"";position:absolute;right:-1px;bottom:-1px;width:7px;height:7px;background:var(--brand-fill);border:1.5px solid var(--surface)}
+@media(max-width:480px){table.t .rn,table.t thead tr.cols{display:none}}
+/* Hücre adresi rozetleri */
+.eyebrow{display:flex;justify-content:center;align-items:center;gap:8px}
+.eyebrow .addr{font:600 .72rem 'JetBrains Mono',monospace;letter-spacing:0;text-transform:none;color:var(--brand);background:var(--surface);border:1.5px solid var(--brand-fill);border-radius:3px;padding:1px 7px;position:relative}
+.eyebrow .addr::after{content:"";position:absolute;right:-4px;bottom:-4px;width:6px;height:6px;background:var(--brand-fill);border:1px solid var(--bg)}
+/* Kartlar: üzerine gelince seçili hücre */
+#rehber .card,#ozellikler .card,.plan,.step{position:relative;transition:border-color .15s,box-shadow .15s}
+#rehber .card:hover,#ozellikler .card:hover,.plan:hover,.step:hover{border-color:var(--brand-fill);box-shadow:0 0 0 1px var(--brand-fill),var(--shadow)}
+#rehber .card:hover::after,#ozellikler .card:hover::after,.plan:hover::after,.step:hover::after{content:"";position:absolute;right:-6px;bottom:-6px;width:10px;height:10px;background:var(--brand-fill);border:2px solid var(--surface)}
+.step .num{display:inline-block;border:1.5px solid var(--line);background:var(--colhead);border-radius:3px;padding:1px 8px;color:var(--brand)}
+/* İstatistik bandı: hücre satırı */
+.stats{gap:0;padding:0;overflow:hidden}
+.stats>div{padding:34px 20px 30px;border-left:1px solid rgba(255,255,255,.22);position:relative}
+.stats>div:first-child{border-left:none}
+.stats .ref{position:absolute;top:10px;left:12px;font:500 .7rem 'JetBrains Mono',monospace;opacity:.75;font-style:normal}
+@media(max-width:600px){.stats>div{border-left:none;border-top:1px solid rgba(255,255,255,.22)}.stats>div:first-child{border-top:none}}
+/* Alt sayfa sekmeleri */
+.foot-tabs{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--colhead);padding:0}
+.foot-tabs .wrap{display:flex;align-items:flex-start;gap:2px;overflow-x:auto}
+.foot-tabs a,.foot-tabs span{padding:9px 16px;font-size:.86rem;color:var(--ink-2);white-space:nowrap;border:1px solid transparent;border-top:none;border-radius:0 0 8px 8px}
+.foot-tabs a:hover{color:var(--ink);background:var(--surface)}
+.foot-tabs .on{background:var(--surface);color:var(--brand);font-weight:800;border-color:var(--line);box-shadow:inset 0 -3px 0 var(--brand-fill)}
+.foot-tabs .arr{color:var(--ink-2);opacity:.6;padding:9px 6px;font-size:.75rem}
+/* CTA: beyaz zeminde soluk ızgara */
+.cta{background-image:linear-gradient(rgba(127,78,168,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(127,78,168,.06) 1px,transparent 1px);background-size:112px 32px}
+@media(prefers-reduced-motion:reduce){#rehber .card,#ozellikler .card,.plan,.step{transition:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">İçeriğe geç</a>
+
+<!-- SVG ikon seti -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-truck" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><rect x="4" y="12" width="23" height="17" rx="1.5" style="fill:var(--if1,#c7a3d2)"/><path d="M27 17h8l6 6v6H27z" style="fill:var(--if2,#9c93e5)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><rect x="4" y="12" width="23" height="17" rx="1.5"/><path d="M4 18h23M12 12v17M20 12v17"/><path d="M27 17h8l6 6v6H27z"/><path d="M31 17v6h10"/><circle cx="12" cy="32" r="4" style="fill:var(--iw,#fff)"/><circle cx="34" cy="32" r="4" style="fill:var(--iw,#fff)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M1 34h-0M2 39h7M37 39h8"/></g></symbol>
+    <symbol id="i-fx" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><rect x="5" y="8" width="36" height="30" rx="3" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><rect x="5" y="8" width="36" height="30" rx="3"/><path d="M16 31c2 0 3-1 3.5-4l2-11c.5-2.5 1.5-3.5 3.5-3.5M15 19h8"/><path d="M27 22l7 8M34 22l-7 8"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M44 4l-2 2M46 9h-3M40 2v3"/></g></symbol>
+    <symbol id="i-pivot" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M6 6h34v9H6z" style="fill:var(--if3,#7f4ea8)"/><path d="M6 15h10v25H6z" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><rect x="6" y="6" width="34" height="34" rx="2"/><path d="M6 15h34M6 23.5h34M6 32h34M16 6v34M28 6v34"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M42 44l3-1M45 39h1"/></g></symbol>
+    <symbol id="i-chart" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><rect x="10" y="26" width="7" height="13" style="fill:var(--if1,#c7a3d2)"/><rect x="20" y="19" width="7" height="20" style="fill:var(--if2,#9c93e5)"/><rect x="30" y="12" width="7" height="27" style="fill:var(--if3,#7f4ea8)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M5 5v35h38"/><rect x="10" y="26" width="7" height="13"/><rect x="20" y="19" width="7" height="20"/><rect x="30" y="12" width="7" height="27"/><path d="M9 20l9-8 7 4 12-11M31 5h6v6"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M44 16l2-1M44 21h2"/></g></symbol>
+    <symbol id="i-box" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M24 6l17 8v20l-17 8-17-8V14z" style="fill:var(--if1,#c7a3d2)"/><path d="M24 22l17-8v20l-17 8z" style="fill:var(--if2,#9c93e5)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M24 6l17 8v20l-17 8-17-8V14z"/><path d="M7 14l17 8 17-8M24 22v20M15.5 10l17 8v6"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M4 6l2 2M2 12h3"/></g></symbol>
+    <symbol id="i-code" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><rect x="4" y="8" width="40" height="32" rx="3" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><rect x="4" y="8" width="40" height="32" rx="3"/><path d="M4 15h40"/><path d="M18 22l-6 6 6 6M30 22l6 6-6 6M26 21l-4 14"/><circle cx="9" cy="11.5" r=".6"/><circle cx="13" cy="11.5" r=".6"/></g></symbol>
+    <symbol id="i-clean" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M27 21l6 6-15 15-6-6z" style="fill:var(--if2,#9c93e5)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M27 21l6 6-15 15-6-6z"/><path d="M30 24l9-9M37 9l3 3"/><path d="M14 33l4 4"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M10 8v6M7 11h6M38 30v5M35.5 32.5h5M22 6v3M20.5 7.5h3"/></g></symbol>
+    <symbol id="i-doc" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M10 4h19l9 9v31H10z" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M10 4h19l9 9v31H10z"/><path d="M29 4v9h9"/><path d="M16 22h16M16 28h16M16 34h10"/><path d="M16 16h7"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M42 30l3-1M43 36h3"/></g></symbol>
+    <symbol id="i-lock" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><rect x="9" y="20" width="30" height="22" rx="4" style="fill:var(--if3,#7f4ea8)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><rect x="9" y="20" width="30" height="22" rx="4"/><path d="M15 20v-6a9 9 0 0 1 18 0v6"/><circle cx="24" cy="30" r="3" style="fill:var(--iw,#fff)"/><path d="M24 33v4"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M42 10l2-2M43 15h3"/></g></symbol>
+    <symbol id="i-shield" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M24 4l16 6v12c0 11-7 18-16 21-9-3-16-10-16-21V10z" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M24 4l16 6v12c0 11-7 18-16 21-9-3-16-10-16-21V10z"/><path d="M16 23l6 6 11-12"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M4 6l2 2M2 12h3"/></g></symbol>
+    <symbol id="i-user" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><circle cx="24" cy="16" r="8" style="fill:var(--if1,#c7a3d2)"/><path d="M8 42c0-9 7-14 16-14s16 5 16 14z" style="fill:var(--if2,#9c93e5)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><circle cx="24" cy="16" r="8"/><path d="M8 42c0-9 7-14 16-14s16 5 16 14z"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M41 8l2-2M42 13h3"/></g></symbol>
+    <symbol id="i-trash" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M12 14h24l-2 28H14z" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M8 14h32M12 14l2 28h20l2-28M19 14V8h10v6M20 21v14M28 21v14"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M42 22l3-1M42 28h3"/></g></symbol>
+    <symbol id="i-eye" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M3 24s8-13 21-13 21 13 21 13-8 13-21 13S3 24 3 24z" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M3 24s8-13 21-13 21 13 21 13-8 13-21 13S3 24 3 24z"/><circle cx="24" cy="24" r="6" style="fill:var(--iw,#fff)"/><path d="M6 6l36 36"/></g></symbol>
+    <symbol id="i-globe" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><circle cx="24" cy="24" r="18" style="fill:var(--if2,#9c93e5)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c-6 6-6 30 0 36M24 6c6 6 6 30 0 36M9 15h30M9 33h30"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M44 6l2-2M45 11h2"/></g></symbol>
+    <symbol id="i-wh" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M4 18L24 6l20 12v24H4z" style="fill:var(--if1,#c7a3d2)"/><rect x="13" y="24" width="22" height="18" style="fill:var(--iw,#fff)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M4 18L24 6l20 12v24H4z"/><rect x="13" y="24" width="22" height="18"/><path d="M13 30h22M13 36h22M20.3 24v18M27.6 24v18"/></g></symbol>
+    <symbol id="i-cart" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><path d="M11 12h31l-4 17H14z" style="fill:var(--if1,#c7a3d2)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M3 5h6l5 24h24l4-17H11"/><path d="M12 20.5h28M21 12v17M30 12v17"/><circle cx="17" cy="38" r="3" style="fill:var(--iw,#fff)"/><circle cx="35" cy="38" r="3" style="fill:var(--iw,#fff)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M2 14h4M1 19h3"/></g></symbol>
+    <symbol id="i-coin" viewBox="0 0 48 48"><g transform="translate(1.8 1.8)"><ellipse cx="22" cy="34" rx="14" ry="5" style="fill:var(--if2,#9c93e5)"/><ellipse cx="22" cy="26" rx="14" ry="5" style="fill:var(--if1,#c7a3d2)"/><ellipse cx="26" cy="15" rx="14" ry="5" style="fill:var(--if3,#7f4ea8)"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path d="M8 26v8c0 3 6 5 14 5s14-2 14-5v-8"/><ellipse cx="22" cy="26" rx="14" ry="5"/><path d="M8 30c0 3 6 5 14 5s14-2 14-5"/><ellipse cx="26" cy="15" rx="14" ry="5"/><path d="M12 15v4c0 1.5 2 2.7 5 3.5M40 15v4c0 1-1 2-2.5 2.7"/></g><g style="stroke:var(--ii,#111);fill:none;stroke-width:2;stroke-linecap:round"><path d="M42 4l2-2M44 8h3"/></g></symbol>
+<symbol id="i-scene" viewBox="0 0 360 150">
+<g transform="translate(3 3)"><path d="M34 104c-12-14-18-24-18-32a18 18 0 0 1 36 0c0 8-6 18-18 32z" style="fill:#c7a3d2"/><path d="M326 104c-12-14-18-24-18-32a18 18 0 0 1 36 0c0 8-6 18-18 32z" style="fill:#9c93e5"/><rect x="104" y="40" width="124" height="66" rx="3" style="fill:#c7a3d2"/><path d="M230 64h28l18 20v24h-46z" style="fill:#9c93e5"/></g>
+<rect x="104" y="40" width="124" height="66" rx="3" style="fill:#fff"/>
+<path d="M104 40h124v13H104z" style="fill:#7f4ea8"/><path d="M104 53h22v53h-22z" style="fill:#c7a3d2"/>
+<g style="stroke:var(--ii,#111);fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round">
+ <path d="M8 128h344"/>
+ <path d="M34 104c-12-14-18-24-18-32a18 18 0 0 1 36 0c0 8-6 18-18 32z" style="fill:none"/><path d="M326 104c-12-14-18-24-18-32a18 18 0 0 1 36 0c0 8-6 18-18 32z" style="fill:none"/>
+ <path d="M58 118h48M262 118h38" stroke-dasharray="2 9"/>
+ <rect x="104" y="40" width="124" height="66" rx="3"/>
+ <path d="M104 53h124M104 70.6h124M104 88.3h124M126 40v66M160 40v66M194 40v66"/>
+ <path d="M134 98l16-12 14 6 22-20 14 6" style="stroke:#7f4ea8;stroke-width:3.4"/>
+ <path d="M230 64h28l18 20v24h-46z"/><path d="M240 64v20h36"/>
+ <path d="M104 106h172"/>
+ <circle cx="136" cy="116" r="11" style="fill:#fff"/><circle cx="196" cy="116" r="11" style="fill:#fff"/><circle cx="256" cy="116" r="11" style="fill:#fff"/>
+ <circle cx="136" cy="116" r="3"/><circle cx="196" cy="116" r="3"/><circle cx="256" cy="116" r="3"/>
+ <path d="M282 10h52a8 8 0 0 1 8 8v20a8 8 0 0 1-8 8h-30l-10 9v-9h-12a8 8 0 0 1-8-8V18a8 8 0 0 1 8-8z" style="fill:#fff"/>
+ <path d="M288 30l5 5 9-11"/><path d="M310 38l8-8 5 4 9-11M327 23h5v5"/>
+</g>
+<text x="34" y="78" text-anchor="middle" style="font:800 22px Manrope,sans-serif;fill:var(--ii,#111)">A</text>
+<text x="326" y="78" text-anchor="middle" style="font:800 22px Manrope,sans-serif;fill:var(--ii,#111)">B</text>
+<g style="stroke:var(--ii,#111);fill:none;stroke-width:2.4;stroke-linecap:round"><path d="M70 96h20M76 104h14M64 112h10"/><path d="M96 20l4 4M100 20l-4 4M248 28v8M244 32h8M62 36l3-3M58 44h5M352 60l-3 3M346 54h6"/></g>
+</symbol>
+    <symbol id="i-logo" viewBox="0 0 48 48">
+      <rect width="48" height="48" rx="12" fill="#7f4ea8"/>
+      <rect x="9" y="10" width="30" height="28" rx="4" fill="#fff"/>
+      <path d="M9 14a4 4 0 0 1 4-4h22a4 4 0 0 1 4 4v4H9z" fill="#c7a3d2"/>
+      <path d="M19 18v20M29 18v20M9 28h30" stroke="#e7def0" stroke-width="1.5"/>
+      <path d="M14 33l7-7 6 4 8-9" fill="none" stroke="#7f4ea8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M30 21h5v5" fill="none" stroke="#7f4ea8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="21" cy="26" r="2.2" fill="#9c93e5"/><circle cx="27" cy="30" r="2.2" fill="#9c93e5"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="wrap nav">
+    <a href="#" class="logo" aria-label="LojiXcel ana sayfa">
+      <span class="logo-mark"><svg width="34" height="34" aria-hidden="true" focusable="false"><use href="#i-logo"/></svg></span>
+      <span>Loji<b>Xcel</b></span>
+    </a>
+    <nav class="menu" id="menu" aria-label="Ana menü">
+      <a href="#ozellikler">Özellikler</a>
+      <a href="#nasil">Nasıl çalışır</a>
+      <a href="#fiyat">Fiyatlar</a>
+      <a href="#sss">SSS</a>
+      <a href="#rehber">Rehberler</a>
+      <a href="#" class="menu-login">Giriş yap</a>
+      <a href="en.html" class="menu-lang" hreflang="en" lang="en">English</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="lang" href="en.html" hreflang="en" lang="en" title="English"><span aria-hidden="true">TR</span><b>EN</b></a>
+      <a href="#" class="btn btn-ghost">Giriş yap</a>
+      <a href="app.html" class="btn btn-primary">Ücretsiz başla</a>
+      <button type="button" class="burger" id="burger" aria-label="Menüyü aç" aria-expanded="false" aria-controls="menu">
+        <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<!-- HERO -->
+<section class="hero">
+  <div class="sheet-corner" aria-hidden="true"></div><div class="sheet-cols" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>I</span><span>J</span><span>K</span><span>L</span><span>M</span><span>N</span><span>O</span><span>P</span></div><div class="sheet-rows" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span><span>29</span><span>30</span></div>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="pill"><span class="dot"></span>Lojistik ve tedarik zinciri ekipleri için tasarlandı</span>
+      <h1>Lojistik için <span class="cell-sel">Excel AI</span>: sevkiyat, stok ve navlun analizi dakikalar içinde</h1>
+      <p class="sub">Sevkiyat listenizi, stok raporunuzu veya navlun faturalarınızı yükleyin, Türkçe sorun. LojiXcel size formül, pivot tablo, KPI panosu, grafik ve yönetim raporu hazırlar.</p>
+      <div class="hero-btns">
+        <a href="app.html" class="btn btn-primary">Tabloyu ücretsiz yükle →</a>
+        <a href="app.html?demo=1" class="btn btn-ghost">Örnek veriyle dene</a>
+      </div>
+      <div class="proof">
+        <span><span aria-hidden="true">✓</span> Türkçe ve İngilizce formül desteği</span>
+        <span>Ücretsiz plan · Kredi kartı gerekmez</span>
+      </div>
+      <div class="tags">
+        <span class="tag">OTIF</span><span class="tag">Stok devir hızı</span><span class="tag">Navlun</span>
+        <span class="tag">Gümrük / GTİP</span><span class="tag">Rota maliyeti</span><span class="tag">KPI raporu</span>
+      </div>
+    </div>
+
+    <div class="mock" role="group" aria-label="Örnek sohbet ekranı">
+      <div class="mock-bar"><i></i><i></i><i></i><span>sevkiyatlar_2026_Q3.xlsx · LojiXcel</span></div>
+      <div class="fbar"><span class="nb">D6</span><span class="fx" aria-hidden="true">fx</span><code>=TOPLA.ÇARPIM(B2:B5;D2:D5)/TOPLA(B2:B5)</code></div>
+      <div class="mock-body">
+        <span class="file"><span aria-hidden="true">📎</span> sevkiyatlar_2026_Q3.xlsx · 12.480 satır</span>
+        <div class="msg user">Q3 için taşıyıcı bazında toplam navlun, sevkiyat sayısı ve zamanında teslim oranını göster.</div>
+        <div class="msg ai">
+          İşte taşıyıcı bazında özet. Zamanında teslim, <b>Teslim Tarihi ≤ Planlanan Tarih</b> olarak hesaplandı.
+          <div class="tscroll"><table class="t"><caption class="sr-only">Q3 taşıyıcı bazında sevkiyat, navlun ve zamanında teslim özeti</caption>
+            <thead><tr class="cols" aria-hidden="true"><td class="rn"></td><td>A</td><td>B</td><td>C</td><td>D</td></tr><tr><td class="rn" aria-hidden="true">1</td><th scope="col">Taşıyıcı</th><th scope="col" class="n">Sevkiyat</th><th scope="col" class="n">Navlun (₺)</th><th scope="col" class="n">OTD</th></tr></thead>
+            <tbody>
+              <tr><td class="rn" aria-hidden="true">2</td><th scope="row">Anadolu Kargo</th><td class="n">4.210</td><td class="n">3.842.500</td><td class="n up">%96,1</td></tr>
+              <tr><td class="rn" aria-hidden="true">3</td><th scope="row">Marmara Lojistik</th><td class="n">3.655</td><td class="n">3.118.900</td><td class="n up">%94,7</td></tr>
+              <tr><td class="rn" aria-hidden="true">4</td><th scope="row">Ege Nakliyat</th><td class="n">2.904</td><td class="n">2.406.300</td><td class="n down">%88,2</td></tr>
+              <tr><td class="rn" aria-hidden="true">5</td><th scope="row">Karadeniz Taşıma</th><td class="n">1.711</td><td class="n">1.590.100</td><td class="n down">%85,9</td></tr>
+              <tr class="tot"><td class="rn" aria-hidden="true">6</td><th scope="row">Toplam</th><td class="n">12.480</td><td class="n">10.957.800</td><td class="n sel">%92,5</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="sheettabs" aria-hidden="true"><span class="nav">◀ ▶</span><span class="on">Özet</span><span>Sevkiyatlar</span><span>Taşıyıcılar</span><span class="add">+</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SEKTÖR ŞERİDİ -->
+<div class="strip">
+  <p>Lojistik değer zincirinin her halkasında kullanılır</p>
+  <div class="marquee" aria-label="Hizmet verilen sektörler" role="region"><div class="track" id="track" role="list">
+    <span role="listitem">3PL Depolama</span><span role="listitem">Karayolu Taşımacılığı</span><span role="listitem">Deniz & Konteyner</span><span role="listitem">Hava Kargo</span><span role="listitem">Gümrük Müşavirliği</span><span role="listitem">E-ticaret Fulfillment</span><span role="listitem">Soğuk Zincir</span><span role="listitem">Perakende Dağıtım</span><span role="listitem">Üretim Tedariki</span><span role="listitem">Son Mil Teslimat</span>
+  </div></div>
+  <div style="text-align:center;margin-top:14px"><button type="button" class="theme-btn" id="mqToggle" aria-pressed="false">Kaydırmayı durdur</button></div>
+</div>
+
+<!-- REHBERLER -->
+<section id="rehber">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">A1</span>Rehberler</span>
+    <h2>Lojistikte Excel AI’ı örneklerle öğrenin</h2>
+    <p class="lead">Her gün karşılaştığınız tablolar için adım adım rehberler.</p>
+    <div class="grid g3">
+      <a href="#" class="card guide"><span class="k">KPI</span><h3>OTIF analizi: Zamanında ve eksiksiz teslimatı ölçmek</h3><p>Sipariş satırlarından OTIF oranını hesaplayın, geciken müşteri ve taşıyıcıları tek tıkla bulun.</p></a>
+      <a href="#" class="card guide"><span class="k">Stok</span><h3>ABC-XYZ stok sınıflandırması</h3><p>Ciro katkısı ve talep değişkenliğine göre SKU’ları sınıflayın, depo yerleşimini buna göre planlayın.</p></a>
+      <a href="#" class="card guide"><span class="k">Finans</span><h3>Navlun faturası mutabakatı</h3><p>Taşıyıcı faturalarını sözleşme tarifesiyle karşılaştırın, fazla faturalanan satırları otomatik işaretleyin.</p></a>
+      <a href="#" class="card guide"><span class="k">Planlama</span><h3>Emniyet stoğu ve yeniden sipariş noktası</h3><p>Hedef hizmet seviyesi, tedarik süresi ve talebin standart sapmasından emniyet stoğunu; ortalama günlük talep × tedarik süresi + emniyet stoğu ile yeniden sipariş noktasını hesaplayan formülleri kurun.</p></a>
+      <a href="#" class="card guide"><span class="k">Depo</span><h3>Depo doluluk ve palet kapasite raporu</h3><p>Lokasyon bazında doluluk oranı, boş palet adresleri ve haftalık trend grafiği.</p></a>
+      <a href="#" class="card guide"><span class="k">Gümrük</span><h3>GTİP eşleştirme: ÇAPRAZARA mı, DÜŞEYARA mı?</h3><p>Ürün listesini GTİP tablosuyla eşleştirin, eksik kodları ve vergi oranlarını tek formülle getirin.</p></a>
+    </div>
+    <div class="quick">
+      <a href="#">Tablonuzla sohbet edin</a><a href="#">Lojistik formülleri üretin</a><a href="#">Pivot tablo oluşturun</a><a href="#">Tabloyu sunuma çevirin</a><a href="app.html">Excel / CSV yükleyin</a><a href="#">Tüm rehberler</a>
+    </div>
+  </div>
+</section>
+
+<!-- NASIL ÇALIŞIR -->
+<section id="nasil" style="background:var(--surface)">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">B1</span>Nasıl çalışır</span>
+    <h2>Dört adımda veriden karara</h2>
+    <p class="lead">ERP, WMS veya TMS çıktınızı olduğu gibi yükleyin; temizleme ve birleştirmeyi LojiXcel yapsın.</p>
+    <div class="grid g4">
+      <div class="card step"><span class="num">01</span><h3>Dosyanızı yükleyin</h3><p>Excel, CSV veya Google Sheets: sevkiyat, stok, sipariş ya da fatura listesi.</p></div>
+      <div class="card step"><span class="num">02</span><h3>Türkçe sorun</h3><p>“Geçen ay hangi rotada birim maliyet arttı?” gibi gündelik dille yazın.</p></div>
+      <div class="card step"><span class="num">03</span><h3>Sonucu inceleyin</h3><p>Formül, pivot, grafik ve açıklama birlikte gelir; her adımı kontrol edebilirsiniz.</p></div>
+      <div class="card step"><span class="num">04</span><h3>İndirin veya yapıştırın</h3><p>Sonucu .xlsx, sunum ya da formül olarak alın; mevcut dosyanıza ekleyin.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- İSTATİSTİK -->
+<section style="padding-top:60px;padding-bottom:20px">
+  <div class="wrap">
+    <div class="stats">
+      <div><i class="ref" aria-hidden="true">A1</i><b>%70</b><span>daha kısa haftalık raporlama süresi*</span></div>
+      <div><i class="ref" aria-hidden="true">B1</i><b>2 dk</b><span>ortalama pivot ve KPI hazırlama süresi*</span></div>
+      <div><i class="ref" aria-hidden="true">C1</i><b>100 MB</b><span>tek seferde yüklenebilen tablo boyutu (Kurumsal plan)</span></div>
+    </div>
+    <p class="note">* Örnek senaryolara dayalı tahmini değerlerdir; sonuçlar verinize göre değişir.</p>
+  </div>
+</section>
+
+<!-- ÖZELLİKLER -->
+<section id="ozellikler">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">C1</span>Özellikler</span>
+    <h2>Lojistik tablolarınız için tek AI çalışma alanı</h2>
+    <p class="lead">Formül yazmaktan yönetim sunumuna kadar, operasyon ekibinin her gün yaptığı tablo işleri.</p>
+    <div class="grid g4">
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-fx"/></svg></div><h3>Formül üretimi</h3><p>Teslim süresi, gecikme günü, birim navlun ve stok gün sayısı formülleri.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-pivot"/></svg></div><h3>Pivot tablolar</h3><p>Bölge × taşıyıcı, depo × SKU, müşteri × ay kırılımları tek cümleyle.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-chart"/></svg></div><h3>KPI grafikleri</h3><p>OTIF, doluluk, stok devir hızı ve maliyet trendleri için hazır grafikler.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-box"/></svg></div><h3>Stok & talep analizi</h3><p>ABC-XYZ, emniyet stoğu, yeniden sipariş noktası ve yavaş dönen ürün tespiti.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-coin"/></svg></div><h3>Navlun & maliyet</h3><p>Fatura mutabakatı, km/ton başı maliyet, rota ve taşıyıcı karşılaştırması.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-clean"/></svg></div><h3>Veri temizleme</h3><p>Adres ve plaka standardizasyonu, yinelenen irsaliyeleri silme, tarih formatı düzeltme.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-code"/></svg></div><h3>SQL, VBA & Python</h3><p>WMS/ERP için SQL sorguları, VBA makroları, Python betikleri ve Apps Script otomasyonları üretin.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-doc"/></svg></div><h3>Rapor & sunum</h3><p>Haftalık operasyon raporu ve müşteri QBR sunumu otomatik hazırlanır.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- KARŞILAŞTIRMA -->
+<section style="background:var(--surface)">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">D1</span>Fark</span>
+    <h2>Sadece bir formül botu değil</h2>
+    <p class="lead">Genel formül araçları formülü yazar; LojiXcel lojistik verinizi anlar.</p>
+    <div class="cmp">
+      <table>
+        <thead><tr><th scope="col">Özellik</th><th scope="col">Formül araçları</th><th scope="col" class="hl">LojiXcel</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Formül üretimi</th><td class="yes"><span aria-hidden="true">✓</span><span class="sr-only">Var</span></td><td class="hl yes"><span aria-hidden="true">✓</span><span class="sr-only">Var</span></td></tr>
+          <tr><th scope="row">Excel / CSV dosyasıyla sohbet</th><td class="no"><span aria-hidden="true">✕</span><span class="sr-only">Yok</span></td><td class="hl yes"><span aria-hidden="true">✓</span><span class="sr-only">Var</span></td></tr>
+          <tr><th scope="row">Gerçek pivot tablolar</th><td class="no"><span aria-hidden="true">✕</span><span class="sr-only">Yok</span></td><td class="hl yes"><span aria-hidden="true">✓</span><span class="sr-only">Var</span></td></tr>
+          <tr><th scope="row">Hazır lojistik KPI’ları (OTIF, doluluk, devir)</th><td class="no"><span aria-hidden="true">✕</span><span class="sr-only">Yok</span></td><td class="hl yes"><span aria-hidden="true">✓</span><span class="sr-only">Var</span></td></tr>
+          <tr><th scope="row">Navlun fatura mutabakatı</th><td class="no"><span aria-hidden="true">✕</span><span class="sr-only">Yok</span></td><td class="hl yes"><span aria-hidden="true">✓</span><span class="sr-only">Var</span></td></tr>
+          <tr><th scope="row">Adres, plaka ve tarih temizleme</th><td class="no"><span aria-hidden="true">✕</span><span class="sr-only">Yok</span></td><td class="hl yes"><span aria-hidden="true">✓</span><span class="sr-only">Var</span></td></tr>
+          <tr><th scope="row">VBA, Apps Script, Python, SQL</th><td class="no"><span aria-hidden="true">✕</span><span class="sr-only">Yok</span></td><td class="hl yes"><span aria-hidden="true">✓</span><span class="sr-only">Var</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- KULLANIM SENARYOLARI -->
+<section>
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">E1</span>Kullanım senaryoları</span>
+    <h2>Sahadaki ekipler nasıl kullanıyor?</h2>
+    <p class="lead">Farklı rollerin LojiXcel ile tipik bir gününden örnekler.</p>
+    <div class="grid g3">
+      <div class="card quote"><p>“Her pazartesi 3 saat süren taşıyıcı performans raporunu, WMS çıktısını yükleyip tek soruyla hazırlıyoruz.”</p><div class="who"><span class="av" aria-hidden="true">OM</span><div><b>Operasyon Müdürü</b><small>3PL depo işletmesi</small></div></div></div>
+      <div class="card quote"><p>“Navlun faturalarını tarifeyle karşılaştırıp fazla kesilen satırları ay sonu kapanışından önce yakalıyoruz.”</p><div class="who"><span class="av" aria-hidden="true">MK</span><div><b>Maliyet Kontrol Uzmanı</b><small>Karayolu taşımacılığı</small></div></div></div>
+      <div class="card quote"><p>“ABC-XYZ analizini kendimiz yapıyoruz; artık her çeyrek dış danışmana ihtiyacımız yok.”</p><div class="who"><span class="av" aria-hidden="true">TP</span><div><b>Tedarik Planlama Sorumlusu</b><small>Perakende dağıtım</small></div></div></div>
+      <div class="card quote"><p>“GTİP eşleştirme ve beyanname kontrol listelerini formül bilmeden hazırlıyorum.”</p><div class="who"><span class="av" aria-hidden="true">DT</span><div><b>Dış Ticaret Uzmanı</b><small>Gümrük müşavirliği</small></div></div></div>
+      <div class="card quote"><p>“Lokasyon bazında doluluk ve palet raporu artık otomatik; vardiya başında ekrana yansıtıyoruz.”</p><div class="who"><span class="av" aria-hidden="true">DŞ</span><div><b>Depo Şefi</b><small>E-ticaret fulfillment</small></div></div></div>
+      <div class="card quote"><p>“Rota bazında km başı maliyeti çıkarıp filo planımızı yeniden kurduk.”</p><div class="who"><span class="av" aria-hidden="true">FP</span><div><b>Filo Planlama Yöneticisi</b><small>Soğuk zincir dağıtımı</small></div></div></div>
+    </div>
+    <p class="note">Senaryolar temsilîdir; gerçek kişi veya kurumlara ait değildir.</p>
+  </div>
+</section>
+
+<!-- KİMLER İÇİN -->
+<section style="background:var(--surface)">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">F1</span>Kimler için</span>
+    <h2>Tablolarla yaşayan lojistik ekipleri için</h2>
+    <p class="lead">Ofisten sahaya, planlamadan finansa.</p>
+    <div class="grid g3">
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-truck"/></svg></div><h3>Operasyon & sevkiyat</h3><p>Günlük sevkiyat takibi, gecikme analizi ve taşıyıcı performansı.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-cart"/></svg></div><h3>Satın alma & tedarik planlama</h3><p>Talep tahmini, sipariş miktarı, tedarikçi teslim süresi analizi.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-wh"/></svg></div><h3>Depo yönetimi</h3><p>Doluluk, toplama verimliliği, sayım farkları ve lokasyon optimizasyonu.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-globe"/></svg></div><h3>Gümrük & dış ticaret</h3><p>GTİP eşleştirme, beyanname kontrolü, konteyner ve ETA takibi.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-coin"/></svg></div><h3>Finans & maliyet kontrol</h3><p>Navlun mutabakatı, hizmet başı kârlılık, bütçe–gerçekleşen.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-user"/></svg></div><h3>Firma sahipleri & yöneticiler</h3><p>Yönetim kurulu için tek sayfalık KPI özeti ve sunumlar.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section id="demo">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">G1</span>Demo</span>
+    <h2>Verinizle daha fazlasını yapın</h2>
+    <p class="lead">Gerçek lojistik sorularına verilen örnek cevaplar.</p>
+    <div class="tabs" role="tablist" aria-label="Demo örnekleri">
+      <button type="button" class="tab" role="tab" id="t1" aria-controls="p1" aria-selected="true" tabindex="0" data-t="p1">Soru sor</button>
+      <button type="button" class="tab" role="tab" id="t2" aria-controls="p2" aria-selected="false" tabindex="-1" data-t="p2">Formül üret</button>
+      <button type="button" class="tab" role="tab" id="t3" aria-controls="p3" aria-selected="false" tabindex="-1" data-t="p3">Pivot tablo</button>
+      <button type="button" class="tab" role="tab" id="t4" aria-controls="p4" aria-selected="false" tabindex="-1" data-t="p4">Grafik</button>
+    </div>
+
+    <div class="panel card" id="p1" role="tabpanel" aria-labelledby="t1" tabindex="0">
+      <div class="mock-body" style="padding:0">
+        <div class="msg user">Ekim ayında geciken sevkiyatların nedenlere göre dağılımı nedir?</div>
+        <div class="msg ai">Ekim’de <b>318</b> sevkiyat geç teslim edildi (4.297 sevkiyatın %7,4’ü). Toplam gecikme maliyeti <b>₺147.700</b>.
+          <div class="tscroll" tabindex="0" role="region" aria-label="Gecikme nedenleri tablosu">
+          <table class="t">
+            <thead><tr><th scope="col">Gecikme nedeni</th><th scope="col" class="n">Adet</th><th scope="col" class="n">Pay</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Gümrükte bekleme</th><td class="n">115</td><td class="n">%36,2</td></tr>
+              <tr><th scope="row">Araç arızası / kapasite</th><td class="n">87</td><td class="n">%27,4</td></tr>
+              <tr><th scope="row">Depo çıkış gecikmesi</th><td class="n">70</td><td class="n">%22,0</td></tr>
+              <tr><th scope="row">Alıcı kaynaklı</th><td class="n">46</td><td class="n">%14,5</td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel card" id="p2" role="tabpanel" aria-labelledby="t2" tabindex="0" hidden>
+      <div class="mock-body" style="padding:0">
+        <div class="msg user">İstanbul çıkışlı ve Ankara varışlı, Ekim’de zamanında teslim edilen sevkiyatların toplam navlununu hesapla.</div>
+        <div class="msg ai">Bu formülü kullanın:
+          <div class="code" tabindex="0" role="region" aria-label="Excel formülü">=ÇOKETOPLA(F:F; B:B; "İstanbul"; C:C; "Ankara";
+    H:H; "&gt;="&amp;TARİH(2026;10;1); H:H; "&lt;"&amp;TARİH(2026;11;1);
+    J:J; "Zamanında")</div>
+          <b>Açıklama:</b> F sütunundaki navlun tutarlarını; çıkış ili (B) İstanbul, varış ili (C) Ankara, teslim tarihi (H) 1 Ekim 2026 ve sonrası ile 1 Kasım 2026’dan önce (yani Ekim içinde) ve teslim durumu (J) “Zamanında” olan satırlar için toplar. H sütunundaki tarihler metin değil gerçek tarih değeri olmalıdır. J sütunu yoksa <code>=EĞER(H2="";"";EĞER(TAMSAYI(H2)&lt;=G2;"Zamanında";"Gecikmeli"))</code> ile teslim tarihi (H) planlanan tarihle (G) karşılaştırılarak üretilebilir; <code>TAMSAYI</code>, H’deki saat kısmını atar ve aynı gün yapılan teslimatın gecikmiş sayılmasını önler; boş H (henüz teslim edilmemiş) satırları ise boş bırakılır. İngilizce Excel’de aynı formül <code>SUMIFS</code> ve <code>DATE</code> ile yazılır; ABD gibi bölge ayarlarında ayırıcı noktalı virgül yerine virgüldür.
+        </div>
+      </div>
+    </div>
+
+    <div class="panel card" id="p3" role="tabpanel" aria-labelledby="t3" tabindex="0" hidden>
+      <div class="mock-body" style="padding:0">
+        <div class="msg user">Depo ve ürün grubu bazında stok değeri ile stok gün sayısını pivotla.</div>
+        <div class="msg ai">
+          <div class="tscroll" tabindex="0" role="region" aria-label="Depo stok pivot tablosu">
+          <table class="t">
+            <thead><tr><th scope="col">Depo</th><th scope="col">Ürün grubu</th><th scope="col" class="n">Stok değeri (₺)</th><th scope="col" class="n">Stok günü</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Gebze</th><td>Elektronik</td><td class="n">8.420.000</td><td class="n">24</td></tr>
+              <tr><th scope="row">Gebze</th><td>Gıda</td><td class="n">2.115.000</td><td class="n up">9</td></tr>
+              <tr><th scope="row">İzmir</th><td>Elektronik</td><td class="n">3.760.000</td><td class="n down">41</td></tr>
+              <tr><th scope="row">İzmir</th><td>Tekstil</td><td class="n">1.980.000</td><td class="n">28</td></tr>
+              <tr><th scope="row">Ankara</th><td>Gıda</td><td class="n">1.245.000</td><td class="n up">7</td></tr>
+              <tr class="tot"><th scope="row">Toplam</th><td></td><td class="n">17.520.000</td><td class="n">19</td></tr>
+            </tbody>
+          </table>
+          </div>
+          <p style="margin-top:8px;font-size:.88rem">Stok günü = stok değeri ÷ ortalama günlük satılan malın maliyeti. Toplam satırı, satırların ortalaması değil, toplam stok değerinin toplam günlük maliyete bölümüdür. İzmir elektronik stoğu (41 gün) hedef olan 30 günün üzerinde; transfer veya kampanya önerilir.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel card" id="p4" role="tabpanel" aria-labelledby="t4" tabindex="0" hidden>
+      <div class="mock-body" style="padding:0">
+        <div class="msg user">Mayıs–Ekim arası aylık OTIF oranını grafikle göster.</div>
+        <div class="msg ai" style="max-width:100%">
+          <b>Aylık OTIF (%)</b>: Ekim’de %91,9 ile dönemin en yüksek seviyesi.
+          <div class="bars" role="img" aria-label="Aylık OTIF: Mayıs %88,4, Haziran %89,6, Temmuz %89,1, Ağustos %90,8, Eylül %91,7, Ekim %91,9">
+            <div class="bar" style="height:50%"><em>88,4</em></div>
+            <div class="bar" style="height:58%"><em>89,6</em></div>
+            <div class="bar" style="height:55%"><em>89,1</em></div>
+            <div class="bar" style="height:65%"><em>90,8</em></div>
+            <div class="bar" style="height:70%"><em>91,7</em></div>
+            <div class="bar" style="height:71%"><em>91,9</em></div>
+          </div>
+          <div class="bar-labels" aria-hidden="true"><span>May</span><span>Haz</span><span>Tem</span><span>Ağu</span><span>Eyl</span><span>Eki</span></div>
+          <p style="font-size:.75rem;color:var(--ink-2);margin-top:8px">Dikey eksen %80’den başlar.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GÜVENLİK -->
+<section style="background:var(--surface)">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">H1</span>Güvenlik & gizlilik</span>
+    <h2>Operasyon verileriniz sizde kalır</h2>
+    <p class="lead">Müşteri, fiyat ve tarife bilgileriniz ticari sırdır; ona göre korunur.</p>
+    <div class="grid g3">
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-lock"/></svg></div><h3>Depolamada ve aktarımda şifreleme</h3><p>Dosyalar depolamada AES-256, aktarımda TLS ile şifrelenir.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-eye"/></svg></div><h3>Model eğitimi yok</h3><p>Yüklediğiniz tablolar yapay zekâ modellerini eğitmek için kullanılmaz.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-shield"/></svg></div><h3>KVKK & GDPR uyumu</h3><p>Kişisel veriler KVKK ve GDPR gerekliliklerine uygun işlenir.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-user"/></svg></div><h3>Güvenli giriş</h3><p>Google, Microsoft hesabı veya e-posta bağlantısıyla parolasız giriş.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-trash"/></svg></div><h3>İstek üzerine silme</h3><p>Dosyalarınızı ve sohbet geçmişinizi dilediğiniz an kalıcı olarak silin.</p></div>
+      <div class="card"><div class="ico"><svg aria-hidden="true" focusable="false"><use href="#i-doc"/></svg></div><h3>Varsayılan olarak gizli</h3><p>Paylaşmadığınız sürece hiçbir dosya başkası tarafından görülmez.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FİYAT -->
+<section id="fiyat">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">I1</span>Fiyatlandırma</span>
+    <h2>Ekibinize uygun planı seçin</h2>
+    <p class="lead">Ücretsiz başlayın, ihtiyacınız arttıkça yükseltin.</p>
+    <div class="toggle">
+      <span>Aylık</span>
+      <button type="button" class="switch" id="billing" role="switch" aria-checked="false" aria-label="Yıllık faturalandırma"></button>
+      <span>Yıllık</span><span class="save">%30 tasarruf</span>
+    </div>
+    <div class="grid g3">
+      <div class="card plan">
+        <h3>Ücretsiz</h3>
+        <div class="price">₺0 <small>/ sonsuza dek</small></div>
+        <p class="billed"></p>
+        <p>Denemek ve küçük tablolar için.</p>
+        <ul><li>Ayda 50 kredi</li><li>Hızlı model</li><li>5 MB’a kadar dosya</li><li>Temel lojistik formülleri</li></ul>
+        <a href="app.html" class="btn btn-ghost">Ücretsiz başla</a>
+      </div>
+      <div class="card plan rec">
+        <span class="badge">Önerilen</span>
+        <h3>Pro</h3>
+        <div class="price"><span class="amt" data-m="349" data-y="244" data-yt="2.928">₺349</span> <small>/ ay</small></div>
+        <p class="billed"></p>
+        <p>Operasyon ve planlama uzmanları için.</p>
+        <ul><li>Ayda 3.000 kredi</li><li>Hızlı ve Standart model</li><li>50 MB’a kadar dosya</li><li>KPI şablonları ve sunum üretimi</li><li>Navlun mutabakatı</li></ul>
+        <a href="#" class="btn btn-primary">Pro’ya geç</a>
+      </div>
+      <div class="card plan">
+        <h3>Kurumsal</h3>
+        <div class="price"><span class="amt" data-m="799" data-y="559" data-yt="6.708" data-yt-label="Kullanıcı başına yıllık">₺799</span> <small>/ kullanıcı / ay</small></div>
+        <p class="billed"></p>
+        <p>Çok depolu ve çok şubeli lojistik firmaları için.</p>
+        <ul><li>Ayda 10.000 kredi</li><li>Uzman model erişimi</li><li>100 MB’a kadar dosya</li><li>Ekip çalışma alanı ve yetkilendirme</li><li>Öncelikli destek</li></ul>
+        <a href="#" class="btn btn-dark">Satışla görüş</a>
+      </div>
+    </div>
+    <p class="sr-only" id="billing-status" aria-live="polite"></p>
+    <p class="fine">Krediler her ay yenilenir; yıllık planlarda da aylık olarak tanımlanır. Fiyatlara KDV dahil değildir.</p>
+  </div>
+</section>
+
+<!-- SSS -->
+<section id="sss" style="background:var(--surface)">
+  <div class="wrap">
+    <span class="eyebrow"><span class="addr" aria-hidden="true">J1</span>SSS</span>
+    <h2>Sıkça sorulan sorular</h2>
+    <p class="lead">Aradığınızı bulamazsanız bize yazın.</p>
+    <div class="faq">
+      <details><summary>LojiXcel nedir?</summary><p>Lojistik ve tedarik zinciri ekipleri için yapay zekâ destekli bir Excel asistanıdır. Tablonuzu yükleyip Türkçe soru sorarsınız; formül, pivot, grafik ve rapor alırsınız.</p></details>
+      <details><summary>Hangi dosya formatlarını destekliyor?</summary><p>.xlsx, .xls, .csv ve Google Sheets. ERP, WMS ve TMS sistemlerinden alınan dışa aktarımlar doğrudan kullanılabilir.</p></details>
+      <details><summary>SAP, Logo, Netsis gibi ERP çıktılarıyla çalışır mı?</summary><p>Evet. Sistemden aldığınız Excel/CSV raporunu yüklemeniz yeterli; sütun adlarını ve formatları otomatik tanır.</p></details>
+      <details><summary>Türkçe Excel formülleri üretiyor mu?</summary><p>Evet. Formülleri hem Türkçe (ÇOKETOPLA, DÜŞEYARA, ÇAPRAZARA) hem İngilizce (SUMIFS, VLOOKUP, XLOOKUP) olarak verir.</p></details>
+      <details><summary>Hangi lojistik KPI’larını hesaplayabilir?</summary><p>OTIF, zamanında teslim (OTD), stok devir hızı, stok gün sayısı, depo doluluk oranı, toplama verimliliği, km/ton başı maliyet, sipariş döngü süresi ve daha fazlası.</p></details>
+      <details><summary>Sunum (PowerPoint) hazırlayabilir mi?</summary><p>Evet. Haftalık operasyon raporu veya müşteri QBR sunumunu verilerinizden otomatik oluşturur.</p></details>
+      <details><summary>Kredi kartı gerekiyor mu?</summary><p>Hayır. Ücretsiz plan için kredi kartı gerekmez.</p></details>
+      <details><summary>İstediğim zaman iptal edebilir miyim?</summary><p>Evet. Aboneliğinizi hesap ayarlarından tek tıkla iptal edebilirsiniz; dönem sonuna kadar kullanmaya devam edersiniz.</p></details>
+      <details><summary>Bilgisayarımda Excel kurulu olmak zorunda mı?</summary><p>Hayır. Her şey tarayıcıda çalışır; sonuçları .xlsx olarak indirip istediğiniz programda açabilirsiniz.</p></details>
+      <details><summary>Verilerim güvende mi?</summary><p>Dosyalar şifrelenir, model eğitiminde kullanılmaz ve istediğiniz an silinebilir. KVKK ve GDPR’ye uygun işlenir.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="wrap">
+    <div class="cta">
+      <svg class="cta-art" viewBox="0 0 360 150" aria-hidden="true" focusable="false"><use href="#i-scene"/></svg>
+      <h2>Lojistik raporlarınızı yapay zekâ ile hızlandırın</h2>
+      <p>Sevkiyat, stok ve navlun tablolarınızdan dakikalar içinde karar alın.</p>
+      <div class="btns">
+        <a href="app.html" class="btn btn-primary">Hemen ücretsiz başla</a>
+        <a href="#fiyat" class="btn btn-ghost">Fiyatları gör</a>
+      </div>
+      <small>Kredi kartı gerekmez · İstediğiniz zaman iptal</small>
+    </div>
+  </div>
+</section>
+</main>
+
+<nav class="foot-tabs" aria-label="Sayfa sekmeleri">
+  <div class="wrap"><span class="arr" aria-hidden="true">◀ ▶</span><span class="on" aria-current="page">Ana sayfa</span><a href="#ozellikler">Özellikler</a><a href="#demo">Demo</a><a href="#fiyat">Fiyatlar</a><a href="#sss">SSS</a><a href="app.html">Uygulama</a><span class="arr" aria-hidden="true">+</span></div>
+</nav>
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <a href="#" class="logo" aria-label="LojiXcel ana sayfa"><span class="logo-mark"><svg width="34" height="34" aria-hidden="true" focusable="false"><use href="#i-logo"/></svg></span><span>Loji<b>Xcel</b></span></a>
+        <p class="about">Lojistik ve tedarik zinciri ekipleri için yapay zekâ destekli Excel asistanı.</p>
+      </div>
+      <nav aria-label="Araçlar"><h2 class="fh">Araçlar</h2><ul><li><a href="#">Sohbet</a></li><li><a href="#">Pivot Oluşturucu</a></li><li><a href="#">KPI Panosu</a></li><li><a href="#">Formül Üretici</a></li><li><a href="#">Navlun Mutabakatı</a></li><li><a href="#">SQL & VBA Üretici</a></li></ul></nav>
+      <nav aria-label="Rehberler"><h2 class="fh">Rehberler</h2><ul><li><a href="#">OTIF analizi</a></li><li><a href="#">ABC-XYZ sınıflandırma</a></li><li><a href="#">Emniyet stoğu</a></li><li><a href="#">GTİP eşleştirme</a></li><li><a href="#">Veri temizleme</a></li></ul></nav>
+      <nav aria-label="Şirket"><h2 class="fh">Şirket</h2><ul><li><a href="#">Hakkımızda</a></li><li><a href="#">İletişim</a></li><li><a href="#">Kariyer</a></li><li><a href="#">Gizlilik Politikası</a></li><li><a href="#">Kullanım Koşulları</a></li><li><a href="#">KVKK Aydınlatma Metni</a></li></ul></nav>
+    </div>
+    <div class="fbottom">
+      <span>© 2026 LojiXcel. Tüm hakları saklıdır.</span>
+      <button type="button" class="theme-btn" id="theme">Tema: Açık</button>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Mobil menü
+  var burger=document.getElementById('burger'),menu=document.getElementById('menu');
+  function setMenu(open){
+    menu.classList.toggle('open',open);
+    burger.setAttribute('aria-expanded',String(open));
+    burger.setAttribute('aria-label',open?'Menüyü kapat':'Menüyü aç');
+  }
+  burger.addEventListener('click',function(){
+    var o=!menu.classList.contains('open');setMenu(o);
+    if(o){var first=menu.querySelector('a');if(first)first.focus()}
+  });
+  menu.addEventListener('focusout',function(e){
+    if(!menu.classList.contains('open'))return;
+    var to=e.relatedTarget;if(to&&!menu.contains(to)&&to!==burger)setMenu(false);
+  });
+  menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){setMenu(false)})});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&menu.classList.contains('open')){setMenu(false);burger.focus()}});
+  document.addEventListener('click',function(e){if(menu.classList.contains('open')&&!menu.contains(e.target)&&!burger.contains(e.target))setMenu(false)});
+  var desk=window.matchMedia('(min-width:901px)');
+  var onDesk=function(){if(desk.matches)setMenu(false)};
+  if(desk.addEventListener)desk.addEventListener('change',onDesk);else if(desk.addListener)desk.addListener(onDesk);
+
+  // Sektör şeridi: sonsuz kaydırma için ekran okuyuculardan gizli kopya
+  var track=document.getElementById('track');
+  Array.prototype.slice.call(track.children).forEach(function(n){
+    var c=n.cloneNode(true);c.setAttribute('aria-hidden','true');c.removeAttribute('role');c.classList.add('dup');track.appendChild(c);
+  });
+
+  // Kaydırmayı durdur / sürdür
+  var mq=document.querySelector('.marquee'),mqb=document.getElementById('mqToggle');
+  mqb.addEventListener('click',function(){var p=mq.classList.toggle('paused');mqb.setAttribute('aria-pressed',String(p));mqb.textContent=p?'Kaydırmayı sürdür':'Kaydırmayı durdur'});
+
+  // Demo sekmeleri (WAI-ARIA tabs deseni)
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function select(t,focus){
+    tabs.forEach(function(x){
+      var on=x===t;
+      x.setAttribute('aria-selected',String(on));
+      x.tabIndex=on?0:-1;
+      document.getElementById(x.getAttribute('aria-controls')).hidden=!on;
+    });
+    if(focus)t.focus();
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){select(t,false)});
+    t.addEventListener('keydown',function(e){
+      var n=null;
+      if(e.key==='ArrowRight')n=tabs[(i+1)%tabs.length];
+      else if(e.key==='ArrowLeft')n=tabs[(i-1+tabs.length)%tabs.length];
+      else if(e.key==='Home')n=tabs[0];
+      else if(e.key==='End')n=tabs[tabs.length-1];
+      if(n){e.preventDefault();select(n,true)}
+    });
+  });
+
+  // Aylık / yıllık fiyat
+  var sw=document.getElementById('billing'),status=document.getElementById('billing-status');
+  sw.addEventListener('click',function(){
+    var y=sw.getAttribute('aria-checked')!=='true';
+    sw.setAttribute('aria-checked',String(y));
+    document.querySelectorAll('.price .amt').forEach(function(a){
+      a.textContent='₺'+(y?a.dataset.y:a.dataset.m);
+      var billed=a.closest('.plan').querySelector('.billed');
+      if(billed)billed.textContent=y?(a.dataset.ytLabel||'Yıllık')+' ₺'+a.dataset.yt+' olarak faturalandırılır':'';
+    });
+    status.textContent=y?'Yıllık fiyatlar gösteriliyor':'Aylık fiyatlar gösteriliyor';
+  });
+
+  // Tema değiştirici
+  var tb=document.getElementById('theme'),modes=['light','dark','auto'],names={auto:'Otomatik',light:'Açık',dark:'Koyu'};
+  var m='light';
+  try{m=localStorage.getItem('lx-theme')||'light'}catch(e){}
+  if(modes.indexOf(m)<0)m='light';
+  function apply(){
+    if(m==='auto')document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme',m);
+    tb.textContent='Tema: '+names[m];
+  }
+  apply();
+  tb.addEventListener('click',function(){
+    m=modes[(modes.indexOf(m)+1)%modes.length];
+    try{localStorage.setItem('lx-theme',m)}catch(e){}
+    apply();
+  });
+})();
+</script>
+</body>
+</html>

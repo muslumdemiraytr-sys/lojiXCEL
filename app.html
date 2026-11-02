@@ -1,0 +1,1016 @@
+<!doctype html>
+<html lang="tr" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LojiXcel Uygulama – Sevkiyat Analizi</title>
+<meta name="description" content="Sevkiyat Excel/CSV dosyanızı yükleyin; OTD, OTIF, taşıyıcı ve rota analizi, Türkçe Excel formülleri ve rapor tarayıcınızda hazırlansın.">
+<meta name="theme-color" content="#7f4ea8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='11' fill='%237f4ea8'/%3E%3Crect x='8' y='9' width='32' height='30' rx='4' fill='%23fff'/%3E%3Cpath d='M8 13a4 4 0 0 1 4-4h24a4 4 0 0 1 4 4v4H8z' fill='%23c7a3d2'/%3E%3Cpath d='M13 34l8-8 6 4 9-10' fill='none' stroke='%237f4ea8' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script>try{var m=location.search.match(/[?&]lang=(en|tr)\b/),l=m?m[1]:null;if(!l){try{l=localStorage.getItem('lx-lang')}catch(e){}}if(l==='en')document.documentElement.lang='en'}catch(e){}
+try{var t=localStorage.getItem('lx-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');else if(t==='auto')document.documentElement.removeAttribute('data-theme')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
+<style>
+:root{
+  --bg:#faf8fc; --surface:#ffffff; --surface-2:#f7f3fb; --ink:#111111; --ink-2:#4a4458; --line:#e7def0;
+  --brand:#7f4ea8; --brand-fill:#7f4ea8; --on-brand:#fff; --soft:#f3ecf8; --peri:#9c93e5; --lilac:#c7a3d2; --mauve:#ba8cbe;
+  --ii:#111111; --iw:#ffffff; --ok:#166534; --ok-soft:#dcf2e3; --bad:#b91c1c; --bad-soft:#fde4e4; --warn:#92400e; --warn-soft:#fdf0d9;
+  --radius:14px; --shadow:0 1px 2px rgba(17,17,17,.05),0 8px 24px rgba(127,78,168,.08); color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#110d17; --surface:#18131f; --surface-2:#211a2b; --ink:#f3eff8; --ink-2:#b3a9c2; --line:#30263d;
+  --brand:#c7a3d2; --soft:#2a2038; --ii:#f3eff8; --iw:#18131f; --ok:#4ade80; --ok-soft:#12301f; --bad:#f87171; --bad-soft:#3a1717; --warn:#fbbf24; --warn-soft:#33270f;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#110d17; --surface:#18131f; --surface-2:#211a2b; --ink:#f3eff8; --ink-2:#b3a9c2; --line:#30263d;
+  --brand:#c7a3d2; --soft:#2a2038; --ii:#f3eff8; --iw:#18131f; --ok:#4ade80; --ok-soft:#12301f; --bad:#f87171; --bad-soft:#3a1717; --warn:#fbbf24; --warn-soft:#33270f;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark;}
+*{box-sizing:border-box;margin:0;padding:0}
+code,td.n,.code{font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0}
+body{font-family:Manrope,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--brand-fill);outline-offset:2px;border-radius:6px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+header{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem;text-decoration:none}
+.logo svg{width:32px;height:32px;display:block}
+.logo b{color:var(--brand)}
+.nav-r{display:flex;align-items:center;gap:10px}
+.badge-priv{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;color:var(--ok);background:var(--ok-soft);padding:5px 10px;border-radius:999px}
+@media(max-width:640px){.badge-priv span.long{display:none}.badge-priv{padding:5px 8px}}
+@media(max-width:480px){.badge-priv .txt{display:none}.nav .btn{padding:9px 11px;font-size:.84rem}.logo{font-size:1.05rem}}
+.lang-sw{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex-shrink:0}
+.lang-sw button{background:var(--surface);color:var(--ink-2);border:0;padding:7px 8px;line-height:1;font:700 .78rem 'JetBrains Mono',monospace;cursor:pointer}
+.lang-sw button+button{border-left:1px solid var(--line)}
+.lang-sw button:hover{color:var(--brand)}
+.lang-sw button[aria-pressed="true"]{background:var(--brand-fill);color:var(--on-brand);cursor:default}
+.lang-sw button:focus-visible{outline-offset:-3px}
+@media(max-width:400px){.nav{gap:8px}.nav-r{gap:6px}.logo{gap:7px;font-size:.98rem}.logo svg{width:28px;height:28px}.badge-priv{padding:5px 6px}.nav .btn{padding:8px 9px;font-size:.8rem}.lang-sw button{padding:7px 6px}}
+@media(max-width:350px){.badge-priv{display:none}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:10px;font:700 .92rem Manrope,sans-serif;border:1px solid transparent;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn-primary{background:var(--brand-fill);color:var(--on-brand)}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn-ghost{background:var(--surface);border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--brand)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+main{padding:28px 0 60px}
+h1{font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-.02em;margin-bottom:6px}
+h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:12px}
+.muted{color:var(--ink-2)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.stack{display:flex;flex-direction:column;gap:20px}
+main>h1{margin-bottom:-8px}
+
+/* Upload */
+.drop{border:2px dashed var(--lilac);border-radius:16px;background:var(--surface);padding:36px 20px;text-align:center;transition:background .15s,border-color .15s}
+.drop.over{background:var(--soft);border-color:var(--brand-fill)}
+.drop svg.big{width:min(300px,90%);height:auto;margin:0 auto 14px;display:block}
+.drop strong{display:block}
+.drop p{margin:6px 0 16px}
+.drop .acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.hint{font-size:.85rem;color:var(--ink-2);margin-top:14px}
+.err{background:var(--bad-soft);color:var(--bad);padding:12px 14px;border-radius:10px;font-weight:600;margin-top:14px}
+.err[hidden]{display:none}
+
+/* Toolbar */
+.toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between}
+.filters{display:flex;flex-wrap:wrap;gap:12px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.78rem;font-weight:700;color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em}
+select,input[type=text],input[type=number]{font:500 .92rem Manrope,sans-serif;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:8px 10px;min-width:150px}
+.file-meta{font-size:.88rem;color:var(--ink-2)}
+.file-meta b{color:var(--ink)}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi .l{font-size:.75rem;font-weight:700;color:var(--ink-2);text-transform:uppercase;letter-spacing:.05em}
+.kpi .v{font-size:1.55rem;font-weight:800;font-variant-numeric:tabular-nums;margin-top:4px;line-height:1.15}
+.kpi .s{font-size:.78rem;color:var(--ink-2);margin-top:2px}
+.kpi.hl{background:var(--brand-fill);border-color:var(--brand-fill);color:#fff}
+.kpi.hl .l,.kpi.hl .s{color:#f1e8f7}
+
+/* Tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.tab{background:none;border:none;border-bottom:3px solid transparent;padding:10px 14px;font:700 .92rem Manrope,sans-serif;color:var(--ink-2);cursor:pointer;margin-bottom:-1px}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--brand-fill)}
+.tab .cnt{display:inline-block;min-width:20px;padding:0 6px;border-radius:999px;background:var(--warn-soft);color:var(--warn);font-size:.75rem;margin-left:4px}
+[role=tabpanel][hidden]{display:none}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid2>*,.fgrid>*,.stack>*{min-width:0}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+
+/* Tables */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+thead th{font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-2);background:var(--surface-2);position:sticky;top:0}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.n{font-family:'JetBrains Mono',monospace;font-size:.84rem}
+tbody tr:hover{background:var(--surface-2)}
+tr.tot td{font-weight:800;border-top:2px solid var(--line)}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.78rem;font-weight:700}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}.pill.bad{background:var(--bad-soft);color:var(--bad)}.pill.open{background:var(--soft);color:var(--brand)}
+.good{color:var(--ok)}.poor{color:var(--bad)}
+
+/* Chart */
+.chart{display:flex;align-items:flex-end;gap:10px;height:220px;padding:26px 4px 0;border-bottom:1px solid var(--line);position:relative}
+.chart .b{flex:1;min-width:0;background:var(--peri);border-radius:6px 6px 0 0;position:relative}
+.chart .b.last{background:var(--brand-fill)}
+.chart .b em{position:absolute;top:-21px;left:50%;transform:translateX(-50%);font-style:normal;font-size:.75rem;font-weight:800;white-space:nowrap}
+.chart-l{display:flex;gap:10px;padding:6px 4px 0}
+.chart-l span{flex:1;min-width:0;text-align:center;font-size:.75rem;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.axis-note{font-size:.75rem;color:var(--ink-2);margin-top:8px}
+.bar-h{height:8px;border-radius:4px;background:var(--soft);overflow:hidden;min-width:80px}
+.bar-h i{display:block;height:100%;background:var(--mauve)}
+
+/* Mapping */
+details.map summary{cursor:pointer;font-weight:800;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+details.map summary::-webkit-details-marker{display:none}
+details.map summary::after{white-space:nowrap;flex-shrink:0;content:attr(data-edit) " ▾";font-size:.82rem;color:var(--brand);font-weight:700}
+details.map[open] summary::after{content:attr(data-close) " ▴"}
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:16px}
+.req{color:var(--bad)}
+
+/* Formulas */
+.fgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:900px){.fgrid{grid-template-columns:1fr}}
+.fcard h3{font-size:1rem;margin-bottom:4px}
+.fcard p{font-size:.88rem;color:var(--ink-2);margin-bottom:10px}
+.code{display:flex;gap:8px;align-items:flex-start;margin-top:8px}
+.code code{flex:1;min-width:0;display:block;font-family:'JetBrains Mono',monospace;font-size:.82rem;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:9px 10px;overflow-x:auto;white-space:pre}
+.code .lang{font-size:.7rem;font-weight:800;color:var(--ink-2);width:24px;flex-shrink:0;padding-top:10px;line-height:1.2}
+.code .lang.wide{width:52px}
+.code .lang small{display:block;font-size:.62rem;font-weight:700}
+.copy{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font:700 .78rem Manrope,sans-serif;color:var(--ink);cursor:pointer}
+.copy:hover{border-color:var(--brand)}
+.finputs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:6px}
+.finputs select,.finputs input{min-width:0;width:auto}
+
+/* Quality */
+.q-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+.q-item:last-child{border-bottom:none}
+.q-ico{flex-shrink:0;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-weight:800}
+.q-ico.ok{background:var(--ok-soft);color:var(--ok)}.q-ico.w{background:var(--warn-soft);color:var(--warn)}
+.q-item small{color:var(--ink-2)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;font-size:.9rem;z-index:50;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+footer{border-top:1px solid var(--line);padding:22px 0;font-size:.85rem;color:var(--ink-2)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+[hidden]{display:none !important}
+@media(prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+<symbol id="i-scene" viewBox="0 0 360 150">
+<g transform="translate(3 3)"><path d="M34 104c-12-14-18-24-18-32a18 18 0 0 1 36 0c0 8-6 18-18 32z" style="fill:#c7a3d2"/><path d="M326 104c-12-14-18-24-18-32a18 18 0 0 1 36 0c0 8-6 18-18 32z" style="fill:#9c93e5"/><rect x="104" y="40" width="124" height="66" rx="3" style="fill:#c7a3d2"/><path d="M230 64h28l18 20v24h-46z" style="fill:#9c93e5"/></g>
+<rect x="104" y="40" width="124" height="66" rx="3" style="fill:#fff"/>
+<path d="M104 40h124v13H104z" style="fill:#7f4ea8"/><path d="M104 53h22v53h-22z" style="fill:#c7a3d2"/>
+<g style="stroke:var(--ii,#111);fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round">
+ <path d="M8 128h344"/>
+ <path d="M34 104c-12-14-18-24-18-32a18 18 0 0 1 36 0c0 8-6 18-18 32z" style="fill:none"/><path d="M326 104c-12-14-18-24-18-32a18 18 0 0 1 36 0c0 8-6 18-18 32z" style="fill:none"/>
+ <path d="M58 118h48M262 118h38" stroke-dasharray="2 9"/>
+ <rect x="104" y="40" width="124" height="66" rx="3"/>
+ <path d="M104 53h124M104 70.6h124M104 88.3h124M126 40v66M160 40v66M194 40v66"/>
+ <path d="M134 98l16-12 14 6 22-20 14 6" style="stroke:#7f4ea8;stroke-width:3.4"/>
+ <path d="M230 64h28l18 20v24h-46z"/><path d="M240 64v20h36"/>
+ <path d="M104 106h172"/>
+ <circle cx="136" cy="116" r="11" style="fill:#fff"/><circle cx="196" cy="116" r="11" style="fill:#fff"/><circle cx="256" cy="116" r="11" style="fill:#fff"/>
+ <circle cx="136" cy="116" r="3"/><circle cx="196" cy="116" r="3"/><circle cx="256" cy="116" r="3"/>
+ <path d="M282 10h52a8 8 0 0 1 8 8v20a8 8 0 0 1-8 8h-30l-10 9v-9h-12a8 8 0 0 1-8-8V18a8 8 0 0 1 8-8z" style="fill:#fff"/>
+ <path d="M288 30l5 5 9-11"/><path d="M310 38l8-8 5 4 9-11M327 23h5v5"/>
+</g>
+<text x="34" y="78" text-anchor="middle" style="font:800 22px Manrope,sans-serif;fill:var(--ii,#111)">A</text>
+<text x="326" y="78" text-anchor="middle" style="font:800 22px Manrope,sans-serif;fill:var(--ii,#111)">B</text>
+<g style="stroke:var(--ii,#111);fill:none;stroke-width:2.4;stroke-linecap:round"><path d="M70 96h20M76 104h14M64 112h10"/><path d="M96 20l4 4M100 20l-4 4M248 28v8M244 32h8M62 36l3-3M58 44h5M352 60l-3 3M346 54h6"/></g>
+</symbol>
+    <symbol id="i-logo" viewBox="0 0 48 48">
+      <rect width="48" height="48" rx="12" fill="#7f4ea8"/>
+      <rect x="9" y="10" width="30" height="28" rx="4" fill="#fff"/>
+      <path d="M9 14a4 4 0 0 1 4-4h22a4 4 0 0 1 4 4v4H9z" fill="#c7a3d2"/>
+      <path d="M19 18v20M29 18v20M9 28h30" stroke="#e7def0" stroke-width="1.5"/>
+      <path d="M14 33l7-7 6 4 8-9" fill="none" stroke="#7f4ea8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M30 21h5v5" fill="none" stroke="#7f4ea8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="21" cy="26" r="2.2" fill="#9c93e5"/><circle cx="27" cy="30" r="2.2" fill="#9c93e5"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="index.html" id="homeLogo" data-i18n-aria="logoAria" aria-label="LojiXcel ana sayfa"><svg aria-hidden="true" focusable="false"><use href="#i-logo"/></svg><span>Loji<b>Xcel</b></span></a>
+    <div class="nav-r">
+      <span class="badge-priv" data-i18n-title="privTitle" title="Dosyanız hiçbir sunucuya gönderilmez; tüm hesaplama tarayıcınızda yapılır."><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span class="txt" data-i18n="privTxt">Veri cihazınızda kalır</span><span class="long" data-i18n="privLong">&nbsp;· KVKK dostu</span></span>
+      <div class="lang-sw" role="group" id="langSw" data-i18n-aria="langGroup" aria-label="Dil"><button type="button" data-lang="tr" lang="tr" aria-label="TR – Türkçe" aria-pressed="true">TR</button><button type="button" data-lang="en" lang="en" aria-label="EN – English" aria-pressed="false">EN</button></div>
+      <button type="button" class="btn btn-primary" id="btnExport" data-i18n="export" hidden>Excel’e aktar</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap stack" id="main">
+  <!-- 1. YÜKLEME -->
+  <h1 id="h-up" data-i18n="h1">Sevkiyat analizi</h1>
+  <section id="uploadSec" data-i18n-aria="uploadAria" aria-label="Dosya yükleme">
+    <p class="muted" style="margin-bottom:18px" data-i18n="intro">Sevkiyat listenizi yükleyin; zamanında teslim (OTD), OTIF, taşıyıcı ve rota performansı, veri kalitesi raporu ve dosyanıza özel Türkçe Excel formülleri saniyeler içinde hazırlansın.</p>
+    <div class="drop" id="drop">
+      <svg class="big" viewBox="0 0 360 150" aria-hidden="true" focusable="false"><use href="#i-scene"/></svg>
+      <strong style="font-size:1.1rem" data-i18n="dropTitle">Excel veya CSV dosyanızı buraya sürükleyin</strong>
+      <p class="muted" data-i18n="dropSub">.xlsx, .xls, .csv · doğru sayfa ve başlık satırı otomatik bulunur</p>
+      <div class="acts">
+        <label class="btn btn-primary" for="file" data-i18n="chooseFile">Dosya seç</label>
+        <input type="file" id="file" class="sr-only" accept=".xlsx,.xls,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
+        <button type="button" class="btn btn-ghost" id="btnSample" data-i18n="trySample">Örnek veriyle dene</button>
+        <button type="button" class="btn btn-ghost" id="btnSampleDl" data-i18n="dlSample">Örnek dosyayı indir</button>
+      </div>
+      <p class="hint" data-i18n="expectedCols">Beklenen sütunlar (adları serbest, otomatik eşleşir): Taşıyıcı, Çıkış, Varış, Planlanan Teslim, Teslim Tarihi, Navlun · isteğe bağlı: Sipariş/Teslim Adet, Gecikme Nedeni, İrsaliye No, Ağırlık</p>
+    </div>
+    <p class="hint" id="busy" role="status" hidden><b data-i18n="busyB">İşleniyor…</b> <span data-i18n="busyT">Büyük dosyalarda birkaç saniye sürebilir.</span></p>
+    <div class="err" id="err" role="alert" hidden></div>
+  </section>
+
+  <!-- 2. SONUÇLAR -->
+  <section id="results" hidden aria-labelledby="h-res" class="stack">
+    <h2 id="h-res" class="sr-only" data-i18n="hRes">Analiz sonuçları</h2>
+    <div class="card">
+      <div class="toolbar">
+        <div class="file-meta" id="fileMeta"></div>
+        <div class="filters">
+          <label class="f" id="sheetWrap" hidden><span data-i18n="lblSheet">Sayfa</span><select id="fSheet"></select></label>
+          <label class="f"><span data-i18n="lblCarrier">Taşıyıcı</span><select id="fCarrier"><option value="" data-i18n="all">Tümü</option></select></label>
+          <label class="f"><span data-i18n="lblMonth">Ay (planlanan)</span><select id="fMonth"><option value="" data-i18n="all">Tümü</option></select></label>
+          <button type="button" class="btn btn-ghost" id="btnNew" style="align-self:flex-end" data-i18n="newFile">Yeni dosya</button>
+        </div>
+      </div>
+    </div>
+
+    <details class="card map" id="mapBox">
+      <summary id="mapSum" data-edit="Düzenle" data-close="Kapat"><span><span data-i18n="mapTitle">Sütun eşleştirme</span> <span class="muted" id="mapSummary" style="font-weight:600"></span></span></summary>
+      <div class="mapgrid"><label class="f"><span data-i18n="lblHdr">Başlık satırı</span><select id="fHdr"></select></label></div>
+      <div class="mapgrid" id="mapGrid"></div>
+    </details>
+
+    <div class="kpis" id="kpis" aria-live="polite"></div>
+
+    <div>
+      <div class="tabs" role="tablist" data-i18n-aria="tabsAria" aria-label="Analiz bölümleri">
+        <button type="button" class="tab" role="tab" id="t-panel" aria-controls="p-panel" aria-selected="true" data-i18n="tabPanel">Panel</button>
+        <button type="button" class="tab" role="tab" id="t-formul" aria-controls="p-formul" aria-selected="false" tabindex="-1" data-i18n="tabFormul">Formüller</button>
+        <button type="button" class="tab" role="tab" id="t-kalite" aria-controls="p-kalite" aria-selected="false" tabindex="-1"><span data-i18n="tabQuality">Veri kalitesi</span> <span class="cnt" id="qCnt" hidden></span></button>
+        <button type="button" class="tab" role="tab" id="t-veri" aria-controls="p-veri" aria-selected="false" tabindex="-1" data-i18n="tabRows">Sevkiyatlar</button>
+      </div>
+
+      <div role="tabpanel" id="p-panel" aria-labelledby="t-panel" class="stack">
+        <div class="grid2">
+          <div class="card"><h2 data-i18n="hChart">Aylık zamanında teslim (OTD)</h2><div id="chart"></div></div>
+          <div class="card"><h2 data-i18n="hReasons">Gecikme nedenleri</h2><div class="tw" id="tReasons" tabindex="0" role="region" data-i18n-aria="reasonsAria" aria-label="Gecikme nedenleri tablosu"></div></div>
+        </div>
+        <div class="card"><h2 data-i18n="hCarriers">Taşıyıcı performansı</h2><div class="tw" id="tCarriers" tabindex="0" role="region" data-i18n-aria="carriersAria" aria-label="Taşıyıcı performansı tablosu"></div></div>
+        <div class="card"><h2 data-i18n="hRoutes">En yoğun 10 rota</h2><div class="tw" id="tRoutes" tabindex="0" role="region" data-i18n-aria="routesAria" aria-label="Rota tablosu"></div></div>
+      </div>
+
+      <div role="tabpanel" id="p-formul" aria-labelledby="t-formul" hidden>
+        <p class="muted" style="margin-bottom:14px" data-i18n="formIntro">Formüller dosyanızdaki sütun harflerine göre hazırlandı (başlık 1. satırda, veri 2. satırdan itibaren varsayılır). Türkçe Excel’de noktalı virgül, İngilizce/ABD bölge ayarlarında virgül kullanılır.</p>
+        <div class="fgrid" id="formulas"></div>
+      </div>
+
+      <div role="tabpanel" id="p-kalite" aria-labelledby="t-kalite" hidden>
+        <div class="card" id="quality"></div>
+      </div>
+
+      <div role="tabpanel" id="p-veri" aria-labelledby="t-veri" hidden>
+        <div class="card"><p class="muted" style="margin-bottom:10px" id="rowsNote"></p><div class="tw" id="tRows" style="max-height:520px;overflow:auto" tabindex="0" role="region" data-i18n-aria="rowsAria" aria-label="Sevkiyat satırları"></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span><span translate="no">© 2026 LojiXcel</span> · <span data-i18n="footTxt">Hesaplamalar tarayıcınızda yapılır, dosyanız yüklenmez.</span></span><a href="index.html" id="homeLink" data-i18n="home">Ana sayfa</a></div></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+var DAY=864e5;
+
+/* ---------- Dil / Language ---------- */
+var I18N={
+tr:{
+  locale:'tr-TR',title:'LojiXcel Uygulama – Sevkiyat Analizi',
+  metaDesc:'Sevkiyat Excel/CSV dosyanızı yükleyin; OTD, OTIF, taşıyıcı ve rota analizi, Türkçe Excel formülleri ve rapor tarayıcınızda hazırlansın.',
+  home:'Ana sayfa',homeHref:'index.html',logoAria:'LojiXcel ana sayfa',langGroup:'Dil',
+  privTitle:'Dosyanız hiçbir sunucuya gönderilmez; tüm hesaplama tarayıcınızda yapılır.',privTxt:'Veri cihazınızda kalır',privLong:'\u00a0· KVKK dostu',
+  export:'Excel’e aktar',h1:'Sevkiyat analizi',uploadAria:'Dosya yükleme',
+  intro:'Sevkiyat listenizi yükleyin; zamanında teslim (OTD), OTIF, taşıyıcı ve rota performansı, veri kalitesi raporu ve dosyanıza özel Türkçe Excel formülleri saniyeler içinde hazırlansın.',
+  dropTitle:'Excel veya CSV dosyanızı buraya sürükleyin',dropSub:'.xlsx, .xls, .csv · doğru sayfa ve başlık satırı otomatik bulunur',
+  chooseFile:'Dosya seç',trySample:'Örnek veriyle dene',dlSample:'Örnek dosyayı indir',
+  expectedCols:'Beklenen sütunlar (adları serbest, otomatik eşleşir): Taşıyıcı, Çıkış, Varış, Planlanan Teslim, Teslim Tarihi, Navlun · isteğe bağlı: Sipariş/Teslim Adet, Gecikme Nedeni, İrsaliye No, Ağırlık',
+  busyB:'İşleniyor…',busyT:'Büyük dosyalarda birkaç saniye sürebilir.',hRes:'Analiz sonuçları',
+  lblSheet:'Sayfa',lblCarrier:'Taşıyıcı',lblMonth:'Ay (planlanan)',all:'Tümü',newFile:'Yeni dosya',
+  mapTitle:'Sütun eşleştirme',mapEdit:'Düzenle',mapClose:'Kapat',lblHdr:'Başlık satırı',
+  tabsAria:'Analiz bölümleri',tabPanel:'Panel',tabFormul:'Formüller',tabQuality:'Veri kalitesi',tabRows:'Sevkiyatlar',
+  hChart:'Aylık zamanında teslim (OTD)',hReasons:'Gecikme nedenleri',reasonsAria:'Gecikme nedenleri tablosu',
+  hCarriers:'Taşıyıcı performansı',carriersAria:'Taşıyıcı performansı tablosu',hRoutes:'En yoğun 10 rota',routesAria:'Rota tablosu',
+  formIntro:'Formüller dosyanızdaki sütun harflerine göre hazırlandı (başlık 1. satırda, veri 2. satırdan itibaren varsayılır). Türkçe Excel’de noktalı virgül, İngilizce/ABD bölge ayarlarında virgül kullanılır.',
+  rowsAria:'Sevkiyat satırları',footTxt:'Hesaplamalar tarayıcınızda yapılır, dosyanız yüklenmez.',
+  months:['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'],
+  // alanlar
+  f_carrier:'Taşıyıcı',f_origin:'Çıkış',f_dest:'Varış',f_planned:'Planlanan teslim tarihi',f_delivered:'Gerçekleşen teslim tarihi',f_freight:'Navlun tutarı',
+  f_qo:'Sipariş adedi',f_qd:'Teslim edilen adet',f_reason:'Gecikme nedeni',f_id:'İrsaliye / sevkiyat no',f_weight:'Ağırlık (kg)',
+  colDefault:'Sütun {c}',emptyCarrier:'(Boş)',unspecified:'(Belirtilmemiş)',
+  // hatalar
+  eEmpty:'Dosya boş.',eNoData:'Başlık satırının altında veri bulunamadı.',eNoCols:'Tanınan sütun bulunamadı. Dosyanızda Taşıyıcı, Planlanan Teslim ve Teslim Tarihi gibi başlıklar olduğundan emin olun.',
+  eTooBig:'Dosya 100 MB sınırını aşıyor.',eType:'Desteklenmeyen dosya türü. Lütfen .xlsx, .xls veya .csv yükleyin.',eRead:'Dosya okunamadı.',
+  eCsvIsXl:'Bu dosya CSV değil, bir Excel dosyası gibi görünüyor. Uzantısını .xlsx olarak değiştirip tekrar deneyin.',
+  eNotXl:'Bu dosya geçerli bir Excel dosyası değil. Excel’de açıp .xlsx olarak yeniden kaydedin.',
+  eNoLib:'Excel okuyucu yüklenemedi (internet bağlantısını kontrol edin). Dosyayı CSV olarak kaydedip tekrar deneyebilirsiniz.',eGeneric:'Dosya işlenemedi.',
+  // bildirimler
+  tMissing:'Bazı zorunlu sütunlar bulunamadı; eşleştirmeyi kontrol edin.',tCopied:'Formül kopyalandı',tNoLib:'Excel kütüphanesi yüklenemedi',tDownloaded:'Rapor indirildi',
+  // dosya bilgisi
+  metaSheet:' · sayfa: {s}',metaRows:' · {n} satır',metaFiltered:' · filtrelenen: <b>{n}</b>',
+  // KPI
+  kShip:'Sevkiyat',kShipS:'{c} teslim · {o} açık',kShipInv:' · {n} tarih hatalı',kOtd:'Zamanında teslim (OTD)',kOtdS:'{a} / {b} teslim',
+  kOtif:'OTIF',kOtifS:'zamanında ve eksiksiz',kNeedQty:'adet sütunları gerekli',kLate:'Geciken sevkiyat',kLateS:'ort. {d} gün gecikme',kNoLate:'gecikme yok',
+  kFr:'Toplam navlun',kFrS:'ort. {v} / sevkiyat',kNeedFr:'navlun sütunu gerekli',kInFull:'Eksiksiz teslim',kInFullS:'teslim adedi ≥ sipariş',
+  // tablolar
+  thCarrier:'Taşıyıcı',thShip:'Sevkiyat',thFr:'Navlun',thAvgFr:'Ort. navlun',thLate:'Geciken',thAvgDelay:'Ort. gecikme (gün)',total:'Toplam',
+  thRoute:'Rota',noRoute:'Rota analizi için Çıkış ve Varış sütunlarını eşleştirin.',noLate:'Seçili kapsamda geciken sevkiyat yok.',
+  thReason:'Neden',thCount:'Adet',thShare:'Pay',thBar:'Oran çubuğu',
+  noPlanned:'Planlanan tarih bulunamadı.',chartAria:'Aylık OTD: {list}',axisNote:'Dikey eksen %0–%100. Yalnızca teslim edilmiş sevkiyatlar hesaba katılır; ay, planlanan teslim tarihine göredir.',
+  rowsFirst:'İlk 500 satır gösteriliyor (toplam {n}). Tamamı Excel raporunda.',rowsN:'{n} satır.',
+  thRow:'Satır',thId:'İrsaliye',thPlanned:'Planlanan',thDelivered:'Teslim',thStatus:'Durum',thDelay:'Gecikme (gün)',
+  stOpen:'Açık',stOn:'Zamanında',stLate:'Gecikmeli',stErr:'Tarih hatası',
+  // veri kalitesi
+  qTitle:'Veri kalitesi raporu',qInfo:'Bilgi',qNone:'Sorun bulunamadı',qNoneD:'Tarihler, tutarlar ve irsaliye numaraları tutarlı.',qRows:' Excel satırları: {r}',qCount:'{t} ({n} satır)',
+  qReq:'Zorunlu sütun eşleşmedi: {f}',qReqD:'“Sütun eşleştirme” bölümünden ilgili sütunu seçin.',
+  qSame:'Aynı sütun birden fazla alana eşlendi: {c} → {f}',qSameD:'Her alan farklı bir sütuna eşlenmelidir; aksi halde OTD gibi göstergeler anlamsızlaşır.',
+  qPBad:'Planlanan tarih okunamadı',qPBadD:'Tarihi GG.AA.YYYY biçiminde girin veya hücreyi tarih biçimine çevirin. Bu satırlar “Tarih hatası” sayılır.',
+  qPEmpty:'Teslim edilmiş ama planlanan tarihi boş',qPEmptyD:'Bu satırlar OTD hesabına katılmaz.',
+  qDBad:'Teslim tarihi okunamadı',qDBadD:'Bu satırlar “Tarih hatası” sayılır; açık sevkiyatsa hücreyi boş bırakın.',
+  qLabP:'Planlanan',qLabD:'Teslim',
+  qMdy:'{l} tarihleri AA/GG/YYYY (ay/gün) olarak okundu',qMdyD:'Sütunda ikinci bölümü 12’den büyük tarihler var (ör. 10/13/2026); bu yüzden ABD biçimi varsayıldı.',
+  qAmb:'{l} tarihlerinde gün/ay sırası belirsiz',qAmbD:'“/” ile yazılmış tarihlerin hepsinde iki bölüm de 12 veya küçük. GG/AA/YYYY (gün/ay) varsayıldı; dosya ABD biçimindeyse tarihleri GG.AA.YYYY olarak düzeltin.',
+  qText:'Metin olarak girilmiş tarih',qTextD:'LojiXcel bunları okudu. Excel’de ÇOKETOPLA/ÇOKEĞERSAY tarih ölçütleri metin tarihleri yok sayar; “Metni Sütunlara Dönüştür” ile gerçek tarihe çevirmeniz önerilir.',
+  qFrEmpty:'Navlun tutarı boş',qFrEmptyD:'Toplam navlun eksik hesaplanır.',qFrBad:'Navlun sayıya çevrilemedi',qFrBadD:'“1.250,50” veya 1250,5 biçiminde girin.',
+  qFrNeg:'Negatif navlun',qFrNegD:'İade/iptal satırları ayrı tutulmalı.',qDup:'Yinelenen irsaliye numarası',qDupD:'Aynı sevkiyat iki kez sayılıyor olabilir.',
+  qLong:'60 günden uzun gecikme',qEarly:'Plandan 60 günden fazla erken teslim',qDateTypo:'Olası tarih giriş hatası (ör. yıl veya gün/ay sırası yanlış).',
+  qOver:'Teslim adedi siparişten fazla',qOverD:'Fazla teslimat veya veri hatası.',
+  qSkip:'Toplam satırı atlandı ({n})',qSkipD:'“Toplam / Total” ile başlayan satırlar sevkiyat sayılmadı.',
+  // formüller
+  fc1:'1 · Durum sütunu ({on} / {late})',fc1d:'{cell} hücresine yazıp aşağı doldurun. TAMSAYI saati atar; teslim edilmemiş satırlar boş kalır, planlanan tarihi boş veya geçersiz satırlar “{err}” yazar.',
+  fc2:'2 · Gecikme gün sayısı',fc2d:'{cell} hücresine yazın. İlk satır takvim günü, ikinci satır iş günü (hafta sonu hariç) gecikmesidir; erken teslimde 0 döner.',
+  fc3:'3 · Taşıyıcı bazında OTD oranı',fc3d:'Önce 1 numaralı durum sütununu oluşturun. Açık ve hatalı satırlar paydaya girmez.',
+  fc4:'4 · Aylık navlun toplamı ({m})',fc4d:'Planlanan teslim tarihine göre ayın navlununu toplar. TARİH({y};{m1};1) Aralık’ta bile bir sonraki ayın ilk gününe doğru taşar. Tarihler gerçek Excel tarihi olmalıdır.',
+  fc5:'5 · OTIF (zamanında ve eksiksiz)',fc5d:'Satır bazında 1/0 üretir; sütunun ortalaması OTIF oranıdır.',
+  fc6:'6 · Kg başına navlun',fc6d:'Ağırlık boş veya sıfırsa boş döner.',
+  fc7:'Emniyet stoğu ve yeniden sipariş noktası',fc7d:'Günlük talep A2:A91 (son 90 gün), tedarik süresi (gün) E1; emniyet stoğu formülünü E2’ye yazın. %95 hizmet düzeyi için z = 1,65 (%90: 1,28 · %98: 2,05 · %99: 2,33).',
+  fc8:'GTİP / ürün kodu eşleştirme',fc8d:'Ürün kodu A2’de, GTİP tablosu “GTIP” sayfasının A:B sütunlarında. ÇAPRAZARA Excel 2021 / Microsoft 365 gerektirir; eski sürümler için ikinci satırı kullanın.',
+  notFound:'Bulunamadı',fWarn:'Bazı sütunlar eşleşmediği için formüllerde “?” görünüyor. Sütun eşleştirmeyi tamamlayın.',
+  copy:'Kopyala',copyAria:'{t} {l} formülü kopyala',lTr:'Türkçe',lEn:'İngilizce',trLocal:'',
+  // eşleştirme
+  none:'— yok —',hdrRow:'Satır {n}',hdrEmpty:' (boş)',mapSum:'· {n}/{t} sütun eşleşti',mapMiss:' · {n} zorunlu eksik',
+  // dışa aktarma
+  xTitle:'LojiXcel sevkiyat raporu',xFile:'Dosya',xCreated:'Oluşturma',xFCarrier:'Filtre – taşıyıcı',xFMonth:'Filtre – ay',xMetric:'Gösterge',xValue:'Değer',
+  xShip:'Sevkiyat',xDelivered:'Teslim edilen',xOpen:'Açık',xOn:'Zamanında',xLate:'Geciken',xAvgDelay:'Ort. gecikme (gün)',xTotalFr:'Toplam navlun (TL)',
+  xFr:'Navlun (TL)',xAvgFr:'Ort. navlun (TL)',xMonth:'Ay',xDel:'Teslim',
+  shSummary:'Özet',shCarriers:'Taşıyıcılar',shRoutes:'Rotalar',shMonthly:'Aylık',shRows:'Sevkiyatlar',xPrefix:'LojiXcel_rapor_',xDateFmt:'dd.mm.yyyy hh:mm',
+  // örnek veri
+  sampleFile:'ornek_sevkiyatlar.xlsx',sampleSheet:'Sevkiyatlar',
+  sampleHead:['İrsaliye No','Taşıyıcı','Çıkış İli','Varış İli','Planlanan Teslim','Teslim Tarihi','Sipariş Adet','Teslim Adet','Navlun (TL)','Ağırlık (kg)','Gecikme Nedeni'],
+  sampleReasons:['Gümrükte bekleme','Araç arızası / kapasite','Depo çıkış gecikmesi','Alıcı kaynaklı','Hava / yol koşulları'],sampleBadFr:'bilinmiyor'
+},
+en:{
+  locale:'en-US',title:'LojiXcel App – Shipment Analysis',
+  metaDesc:'Upload your shipment Excel/CSV file; OTD, OTIF, carrier and route analysis, Excel formulas and a report are prepared right in your browser.',
+  home:'Home',homeHref:'en.html',logoAria:'LojiXcel home',langGroup:'Language',
+  privTitle:'Your file is never sent to any server; all calculations run in your browser.',privTxt:'Data stays on your device',privLong:'\u00a0· privacy-friendly',
+  export:'Export to Excel',h1:'Shipment analysis',uploadAria:'File upload',
+  intro:'Upload your shipment list; on-time delivery (OTD), OTIF, carrier and route performance, a data-quality report and Excel formulas tailored to your file are ready in seconds.',
+  dropTitle:'Drag your Excel or CSV file here',dropSub:'.xlsx, .xls, .csv · the right sheet and header row are detected automatically',
+  chooseFile:'Choose file',trySample:'Try with sample data',dlSample:'Download sample file',
+  expectedCols:'Expected columns (any names, matched automatically): Carrier, Origin, Destination, Planned Delivery, Delivery Date, Freight · optional: Ordered/Delivered Qty, Delay Reason, Waybill No, Weight',
+  busyB:'Processing…',busyT:'Large files may take a few seconds.',hRes:'Analysis results',
+  lblSheet:'Sheet',lblCarrier:'Carrier',lblMonth:'Month (planned)',all:'All',newFile:'New file',
+  mapTitle:'Column mapping',mapEdit:'Edit',mapClose:'Close',lblHdr:'Header row',
+  tabsAria:'Analysis sections',tabPanel:'Dashboard',tabFormul:'Formulas',tabQuality:'Data quality',tabRows:'Shipments',
+  hChart:'Monthly on-time delivery (OTD)',hReasons:'Delay reasons',reasonsAria:'Delay reasons table',
+  hCarriers:'Carrier performance',carriersAria:'Carrier performance table',hRoutes:'Top 10 routes',routesAria:'Routes table',
+  formIntro:'Formulas are built from the column letters in your file (header assumed in row 1, data from row 2). English/US regional settings use commas; Turkish Excel uses semicolons.',
+  rowsAria:'Shipment rows',footTxt:'Calculations run in your browser; your file is never uploaded.',
+  months:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+  f_carrier:'Carrier',f_origin:'Origin',f_dest:'Destination',f_planned:'Planned delivery date',f_delivered:'Actual delivery date',f_freight:'Freight amount',
+  f_qo:'Ordered quantity',f_qd:'Delivered quantity',f_reason:'Delay reason',f_id:'Waybill / shipment no',f_weight:'Weight (kg)',
+  colDefault:'Column {c}',emptyCarrier:'(Blank)',unspecified:'(Not specified)',
+  eEmpty:'The file is empty.',eNoData:'No data found below the header row.',eNoCols:'No recognised columns found. Make sure your file has headers such as Carrier, Planned Delivery and Delivery Date.',
+  eTooBig:'The file exceeds the 100 MB limit.',eType:'Unsupported file type. Please upload .xlsx, .xls or .csv.',eRead:'The file could not be read.',
+  eCsvIsXl:'This file is not a CSV; it looks like an Excel file. Change its extension to .xlsx and try again.',
+  eNotXl:'This is not a valid Excel file. Open it in Excel and save it again as .xlsx.',
+  eNoLib:'The Excel reader could not be loaded (check your internet connection). You can save the file as CSV and try again.',eGeneric:'The file could not be processed.',
+  tMissing:'Some required columns were not found; please check the mapping.',tCopied:'Formula copied',tNoLib:'Excel library could not be loaded',tDownloaded:'Report downloaded',
+  metaSheet:' · sheet: {s}',metaRows:' · {n} row{s}',metaFiltered:' · filtered: <b>{n}</b>',
+  kShip:'Shipments',kShipS:'{c} delivered · {o} open',kShipInv:' · {n} with date errors',kOtd:'On-time delivery (OTD)',kOtdS:'{a} / {b} delivered',
+  kOtif:'OTIF',kOtifS:'on time and in full',kNeedQty:'quantity columns required',kLate:'Late shipments',kLateS:'avg. {d} days late',kNoLate:'no delays',
+  kFr:'Total freight',kFrS:'avg. {v} / shipment',kNeedFr:'freight column required',kInFull:'Delivered in full',kInFullS:'delivered qty ≥ ordered',
+  thCarrier:'Carrier',thShip:'Shipments',thFr:'Freight',thAvgFr:'Avg. freight',thLate:'Late',thAvgDelay:'Avg. delay (days)',total:'Total',
+  thRoute:'Route',noRoute:'Map the Origin and Destination columns for route analysis.',noLate:'No late shipments in the current selection.',
+  thReason:'Reason',thCount:'Count',thShare:'Share',thBar:'Share bar',
+  noPlanned:'No planned dates found.',chartAria:'Monthly OTD: {list}',axisNote:'Vertical axis 0–100%. Only delivered shipments are counted; month is based on the planned delivery date.',
+  rowsFirst:'Showing the first 500 rows (total {n}). All rows are in the Excel report.',rowsN:'{n} row{s}.',
+  thRow:'Row',thId:'Waybill',thPlanned:'Planned',thDelivered:'Delivered',thStatus:'Status',thDelay:'Delay (days)',
+  stOpen:'Open',stOn:'On time',stLate:'Late',stErr:'Date error',
+  qTitle:'Data quality report',qInfo:'Info',qNone:'No issues found',qNoneD:'Dates, amounts and waybill numbers are consistent.',qRows:' Excel rows: {r}',qCount:'{t} ({n} row{s})',
+  qReq:'Required column not mapped: {f}',qReqD:'Select the matching column in the “Column mapping” section.',
+  qSame:'Same column mapped to several fields: {c} → {f}',qSameD:'Each field must map to a different column; otherwise metrics such as OTD become meaningless.',
+  qPBad:'Planned date could not be read',qPBadD:'Enter the date as DD.MM.YYYY or convert the cell to a date format. These rows count as “Date error”.',
+  qPEmpty:'Delivered but planned date is empty',qPEmptyD:'These rows are excluded from OTD.',
+  qDBad:'Delivery date could not be read',qDBadD:'These rows count as “Date error”; leave the cell empty if the shipment is still open.',
+  qLabP:'Planned',qLabD:'Delivery',
+  qMdy:'{l} dates were read as MM/DD/YYYY (month/day)',qMdyD:'The column contains dates whose second part is greater than 12 (e.g. 10/13/2026), so the US format was assumed.',
+  qAmb:'{l} dates have an ambiguous day/month order',qAmbD:'In every date written with “/”, both parts are 12 or less. DD/MM/YYYY (day/month) was assumed; if the file uses the US format, rewrite the dates as DD.MM.YYYY.',
+  qText:'Dates entered as text',qTextD:'LojiXcel read them. In Excel, SUMIFS/COUNTIFS date criteria ignore text dates; converting them to real dates with “Text to Columns” is recommended.',
+  qFrEmpty:'Freight amount is empty',qFrEmptyD:'Total freight will be understated.',qFrBad:'Freight could not be converted to a number',qFrBadD:'Enter it as “1,250.50”, “1.250,50” or 1250.5.',
+  qFrNeg:'Negative freight',qFrNegD:'Keep refund/cancellation rows separate.',qDup:'Duplicate waybill number',qDupD:'The same shipment may be counted twice.',
+  qLong:'Delay longer than 60 days',qEarly:'Delivered more than 60 days ahead of plan',qDateTypo:'Possible date entry error (e.g. wrong year or day/month order).',
+  qOver:'Delivered quantity exceeds ordered',qOverD:'Over-delivery or data error.',
+  qSkip:'Total row skipped ({n})',qSkipD:'Rows starting with “Total” or “Subtotal” were not counted as shipments.',
+  fc1:'1 · Status column ({on} / {late})',fc1d:'Enter in cell {cell} and fill down. INT drops the time; undelivered rows stay blank, rows with an empty or invalid planned date show “{err}”.',
+  fc2:'2 · Delay in days',fc2d:'Enter in cell {cell}. The first line gives calendar-day delay, the second working-day delay (weekends excluded); early deliveries return 0.',
+  fc3:'3 · OTD rate by carrier',fc3d:'Create the status column (formula 1) first. Open and invalid rows are excluded from the denominator.',
+  fc4:'4 · Monthly freight total ({m})',fc4d:'Sums the month’s freight by planned delivery date. DATE({y},{m1},1) rolls over correctly to the first day of the next month, even in December. Dates must be real Excel dates.',
+  fc5:'5 · OTIF (on time and in full)',fc5d:'Returns 1/0 per row; the column average is the OTIF rate.',
+  fc6:'6 · Freight per kg',fc6d:'Returns blank if the weight is empty or zero.',
+  fc7:'Safety stock and reorder point',fc7d:'Daily demand in A2:A91 (last 90 days), lead time (days) in E1; enter the safety stock formula in E2. For a 95% service level z = 1.65 (90%: 1.28 · 98%: 2.05 · 99%: 2.33).',
+  fc8:'HS code / product code lookup',fc8d:'Product code in A2, HS code table in columns A:B of the “GTIP” sheet. XLOOKUP needs Excel 2021 / Microsoft 365; use the second line for older versions.',
+  notFound:'Not found',fWarn:'Some columns are not mapped, so “?” appears in the formulas. Complete the column mapping.',
+  copy:'Copy',copyAria:'Copy {t} {l} formula',lTr:'Turkish',lEn:'English',trLocal:'(localized)',
+  none:'— none —',hdrRow:'Row {n}',hdrEmpty:' (empty)',mapSum:'· {n}/{t} columns mapped',mapMiss:' · {n} required missing',
+  xTitle:'LojiXcel shipment report',xFile:'File',xCreated:'Created',xFCarrier:'Filter – carrier',xFMonth:'Filter – month',xMetric:'Metric',xValue:'Value',
+  xShip:'Shipments',xDelivered:'Delivered',xOpen:'Open',xOn:'On time',xLate:'Late',xAvgDelay:'Avg. delay (days)',xTotalFr:'Total freight (TRY)',
+  xFr:'Freight (TRY)',xAvgFr:'Avg. freight (TRY)',xMonth:'Month',xDel:'Delivered',
+  shSummary:'Summary',shCarriers:'Carriers',shRoutes:'Routes',shMonthly:'Monthly',shRows:'Shipments',xPrefix:'LojiXcel_report_',xDateFmt:'yyyy-mm-dd hh:mm',
+  sampleFile:'sample_shipments.xlsx',sampleSheet:'Shipments',
+  sampleHead:['Waybill No','Carrier','Origin City','Destination City','Planned Delivery','Delivery Date','Ordered Qty','Delivered Qty','Freight (TRY)','Weight (kg)','Delay Reason'],
+  sampleReasons:['Customs hold','Vehicle breakdown / capacity','Warehouse dispatch delay','Consignee-related','Weather / road conditions'],sampleBadFr:'unknown'
+}};
+var LANG='tr';
+(function(){var m=location.search.match(/[?&]lang=(en|tr)\b/i),l=m?m[1].toLowerCase():null;if(!l){try{l=localStorage.getItem('lx-lang')}catch(e){}}if(l==='en'||l==='tr')LANG=l})();
+function t(key,vars){var d=I18N[LANG],v=d[key];if(v==null)v=I18N.tr[key];if(v==null)return key;if(typeof v!=='string'||!vars)return v;
+  return v.replace(/\{(\w+)\}/g,function(m,k){return vars[k]!=null?vars[k]:m})}
+var cnt=function(n){return {n:fmtInt(n),s:n===1?'':'s'}};
+var loc=function(){return t('locale')};
+var fmtInt=function(n){return Math.round(n).toLocaleString(loc())};
+var fmtMoney=function(n){return '₺'+Math.round(n).toLocaleString(loc())};
+var fmt1=function(n){return n==null||isNaN(n)?'–':n.toLocaleString(loc(),{minimumFractionDigits:1,maximumFractionDigits:1})};
+var fmtPct=function(n){return n==null||isNaN(n)?'–':LANG==='tr'?'%'+fmt1(n):fmt1(n)+'%'};
+var monthLabel=function(k){var p=k.split('-');return t('months')[+p[1]-1]+' '+p[0]};
+var EMPTY_CARRIER='(Boş)';     // dile bağlı olmayan iç anahtar / language-independent internal key
+var carrierLabel=function(c){return c===EMPTY_CARRIER?t('emptyCarrier'):c};
+var hdr=function(i){return S.headers[i]||t('colDefault',{c:colLetter(i)})};
+function Err(key){var e=new Error(t(key));e.key=key;return e}
+function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove('on')},2200)}
+function colLetter(i){var s='';i++;while(i>0){var m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s}
+
+/* ---------- Ayrıştırma ---------- */
+// Sayılar: Türkçe (1.250,50) ve ABD (1,250.50) biçimleri; us=true ise tek virgüllü "1,250" binlik sayılır
+function parseNum(v,us){
+  if(typeof v==='number')return isFinite(v)?v:null;
+  if(v==null)return null;
+  var s=String(v).replace(/[−–]/g,'-').replace(/₺|TL|TRY|USD|EUR|€|\$|\s| /gi,'');
+  if(!s)return null;
+  var neg=/^\(.*\)$/.test(s);s=s.replace(/[()]/g,'');
+  var lc=s.lastIndexOf(','),ld=s.lastIndexOf('.');
+  if(lc>-1&&ld>-1){ if(lc>ld)s=s.replace(/\./g,'').replace(',','.'); else s=s.replace(/,/g,''); }
+  else if(lc>-1){ if(/^-?\d{1,3}(,\d{3}){2,}$/.test(s)||(us&&/^-?\d{1,3}(,\d{3})+$/.test(s)))s=s.replace(/,/g,''); else s=s.replace(/\./g,'').replace(',','.'); }
+  else if(ld>-1&&/^-?\d{1,3}(\.\d{3})+$/.test(s)){ s=s.replace(/\./g,''); }
+  if(!/^-?\d*\.?\d+$/.test(s))return null;
+  var n=parseFloat(s);if(isNaN(n))return null;
+  return neg?-n:n;
+}
+// Tarihler: saat dilimi kullanılmadan "duvar saati" olarak UTC milisaniyede tutulur.
+// Excel tarih hücreleri seri sayı olarak okunur (cellDates kullanılmaz; SheetJS'in yerel saat dilimi kaymasını önler).
+function serialToT(n){return Math.round((n-25569)*DAY/1000)*1000}
+function mk(y,mo,d,h,mi,se){
+  if(y<100)y+=2000;
+  if(mo<1||mo>12||d<1||d>31||h>23||mi>59||se>59)return {bad:true};
+  var t=Date.UTC(y,mo-1,d,h,mi,se);var x=new Date(t);
+  if(x.getUTCDate()!==d||x.getUTCMonth()!==mo-1)return {bad:true};
+  return {t:t,text:true};
+}
+function parseDate(v,order){
+  if(v==null||v==='')return {empty:true};
+  if(typeof v==='number'){ if(v>20000&&v<80000)return {t:serialToT(v)}; return {bad:true}; }
+  if(v instanceof Date&&!isNaN(v))return {t:Date.UTC(v.getFullYear(),v.getMonth(),v.getDate(),v.getHours(),v.getMinutes(),v.getSeconds())};
+  var s=String(v).trim();if(!s)return {empty:true};
+  var m=s.match(/^(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{4}|\d{2})(?:[ T,]+(\d{1,2})[:.](\d{2})(?:[:.](\d{2}))?)?$/);
+  if(m){var a=+m[1],b=+m[2];var d=order==='mdy'?b:a,mo=order==='mdy'?a:b;return mk(+m[3],mo,d,+(m[4]||0),+(m[5]||0),+(m[6]||0))}
+  m=s.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+  if(m)return mk(+m[1],+m[2],+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0));
+  var n=parseNum(s);if(n!=null&&n>20000&&n<80000)return {t:serialToT(n)};
+  return {bad:true};
+}
+// Bir sütundaki metin tarihlerden gün/ay sırasını belirle
+function detectOrder(vals){
+  var dmy=0,mdy=0,slash=0,amb=0;
+  vals.forEach(function(v){if(typeof v!=='string')return;var m=v.trim().match(/^(\d{1,2})([.\/-])(\d{1,2})\2(\d{2}|\d{4})/);if(!m)return;
+    var a=+m[1],b=+m[3];if(m[2]==='/')slash++;if(a>12&&b<=12)dmy++;else if(b>12&&a<=12)mdy++;else if(a<=12&&b<=12&&a!==b)amb++});
+  return {order:mdy>0&&dmy===0?'mdy':'dmy',mdy:mdy,dmy:dmy,ambiguous:dmy===0&&mdy===0&&amb>0&&slash>0};
+}
+var dayOf=function(t){return Math.floor(t/DAY)};
+var monthKey=function(t){var d=new Date(t);return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')};
+var fmtDate=function(t){if(t==null)return '';var d=new Date(t);var p=function(x){return String(x).padStart(2,'0')};var s=LANG==='en'?d.getUTCFullYear()+'-'+p(d.getUTCMonth()+1)+'-'+p(d.getUTCDate()):p(d.getUTCDate())+'.'+p(d.getUTCMonth()+1)+'.'+d.getUTCFullYear();if(d.getUTCHours()||d.getUTCMinutes())s+=' '+p(d.getUTCHours())+':'+p(d.getUTCMinutes());return s};
+
+function parseCSV(text){
+  text=text.replace(/^﻿/,'');
+  var first=text.split(/\r?\n/).slice(0,5).join('\n');
+  var cands=[';',',','\t'],delim=';',best=-1;
+  cands.forEach(function(c){var n=first.split(c).length;if(n>best){best=n;delim=c}});
+  var rows=[],row=[],f='',q=false,quoted=false;
+  for(var i=0;i<text.length;i++){var ch=text[i];
+    if(q){ if(ch==='"'){ if(text[i+1]==='"'){f+='"';i++} else q=false } else f+=ch; }
+    else if(ch==='"'&&f===''&&!quoted){q=true;quoted=true}   // tırnak yalnızca alan başında açılır
+    else if(ch===delim){row.push(f);f='';quoted=false}
+    else if(ch==='\n'||ch==='\r'){ if(ch==='\r'&&text[i+1]==='\n')i++; row.push(f);rows.push(row);row=[];f='';quoted=false; }
+    else f+=ch;
+  }
+  if(f!==''||row.length){row.push(f);rows.push(row)}
+  rows.delim=delim;
+  return rows;
+}
+function decodeText(buf){
+  var t=new TextDecoder('utf-8').decode(buf);
+  if(t.indexOf('�')>-1){try{t=new TextDecoder('windows-1254').decode(buf)}catch(e){}}
+  return t;
+}
+
+/* ---------- Sütun eşleştirme ---------- */
+var FIELDS=[
+  {k:'carrier',req:true},{k:'origin',req:false},{k:'dest',req:false},{k:'planned',req:true},{k:'delivered',req:true},
+  {k:'freight',req:false},{k:'qo',req:false},{k:'qd',req:false},{k:'reason',req:false},{k:'id',req:false},{k:'weight',req:false}
+];
+var fl=function(f){return t('f_'+f.k)};
+// Başlığı ASCII'ye indir: "TAŞIYICI", "Taşıyıcı", "TASIYICI" hepsi "tasiyici" olur
+function fold(h){return String(h==null?'':h).toLocaleLowerCase('tr-TR').replace(/ı/g,'i').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ş/g,'s').replace(/ö/g,'o').replace(/ç/g,'c').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[_\-\/.:()#]+/g,' ').replace(/\s+/g,' ').trim()}
+function fieldScores(h){
+  var s=' '+fold(h)+' ',sc={};
+  if(s.trim()==='')return sc;
+  var dateW=/tarih|\bdate\b|zaman|\btime\b|\bsaat\b/.test(s);
+  var qtyW=/miktar|adet|\bqty\b|quantity|\bkoli\b|\bpalet\b|\bpcs\b/.test(s);
+  var planW=/planlan|\bplan\b|planned|hedef|taahhut|\bdue\b|\beta\b|\bsla\b|beklenen|requested|promised|scheduled|target|termin/.test(s);
+  var delW=/teslim|deliver|gerceklesen|actual|\bpod\b|varis|arrival|ulasma/.test(s);
+  var addrW=/\balan\b|durum|status|adres|address|yeri|\bil\b|\bili\b|sehir|city|kisi|person/.test(s);
+  if(qtyW){
+    if(/siparis|order|istenen|talep|requested|planlan/.test(s))sc.qo=5;
+    else if(/teslim|gonder|ship|deliver|sevk|actual|gerceklesen/.test(s))sc.qd=5;
+    return sc;
+  }
+  if(planW)sc.planned=3+(dateW?2:0)+(delW?1:0);
+  if(delW&&!planW&&!addrW)sc.delivered=2+(dateW?2:0);
+  if(!dateW&&!/gerceklesen|actual|planlan|planned/.test(s)&&/varis|destination|\bdest\b|alici il|teslimat il|teslim yeri|\bto\b|consignee city|ship to/.test(s))sc.dest=4;
+  if(!dateW&&/cikis|origin|yukleme|kalkis|\bfrom\b|gonderen il|ship from/.test(s))sc.origin=4;
+  if(/tasiyici|carrier|nakliyeci|nakliye firma|forwarder|kargo firma|lojistik firma|\bkargo\b|\bfirma\b/.test(s)&&!/alici|musteri|customer|consignee|gonderen|takip|tracking|\bno\b|numara|\bid\b/.test(s))
+    sc.carrier=(/\bfirma\b/.test(s)&&!/tasiyici|nakliye|kargo|lojistik|carrier/.test(s))?1:4;
+  if(/navlun|freight|ucret|tutar|maliyet|\bcost\b|bedel|fiyat|price|amount/.test(s)&&!/\bkdv\b|vergi|\btax\b|\bvat\b|oran/.test(s))sc.freight=/navlun|freight/.test(s)?5:3;
+  if(/neden|sebep|sebeb|reason|aciklama|cause/.test(s))sc.reason=3+(/gecikme|delay/.test(s)?1:0);
+  if(!dateW&&/irsaliye|sevkiyat no|shipment no|shipment id|takip|tracking|\bawb\b|konsimento|waybill|^ id $|^ no $| no $/.test(s))sc.id=3;
+  if(/\bkg\b|agirlik|desi|weight|tonaj/.test(s))sc.weight=3;
+  return sc;
+}
+function guessField(h){var sc=fieldScores(h),best=null,bv=0;for(var k in sc)if(sc[k]>bv){bv=sc[k];best=k}return best}
+function dateRate(rows,ci){var n=0,ok=0;for(var i=0;i<rows.length&&n<60;i++){var v=rows[i][ci];if(v===''||v==null)continue;n++;if(parseDate(v,'dmy').t!=null||parseDate(v,'mdy').t!=null)ok++}return n<3?1:ok/n}
+function autoMap(headers,rows){
+  var cand=[];
+  headers.forEach(function(h,ci){var sc=fieldScores(h);for(var k in sc)if(sc[k]>0)cand.push({k:k,ci:ci,s:sc[k]})});
+  cand.sort(function(a,b){return b.s-a.s||a.ci-b.ci});
+  var map={},used={};
+  cand.forEach(function(c){
+    if(map[c.k]!=null||used[c.ci])return;
+    if((c.k==='planned'||c.k==='delivered')&&dateRate(rows,c.ci)<0.5)return;
+    map[c.k]=c.ci;used[c.ci]=true;
+  });
+  return map;
+}
+function headerScore(row){var f={};(row||[]).forEach(function(c){if(typeof c!=='string')return;var g=guessField(c);if(g)f[g]=1});return Object.keys(f).length}
+function detectHeader(m){
+  var best=-1,hr=0;
+  for(var i=0;i<Math.min(m.length,15);i++){var sc=headerScore(m[i]);if(sc>best){best=sc;hr=i}}
+  if(best<=0){for(var j=0;j<Math.min(m.length,15);j++){if(m[j].filter(function(c){return typeof c==='string'&&c.trim()}).length>=3){return {hr:j,score:0}}}return {hr:0,score:0}}
+  return {hr:hr,score:best};
+}
+var TOTAL_RE=/^(genel toplam|ara toplam|toplam|total|grand total|subtotal|sum)\b/;
+
+/* ---------- Durum ---------- */
+var S={headers:[],rows:[],rowNums:[],headerRow:0,map:{},recs:[],fileName:'',sheet:'',book:null,matrix:null,skipped:[],orders:{}};
+
+function loadMatrix(m,name,sheet,opt){
+  opt=opt||{};
+  if(!m||!m.length)throw Err('eEmpty');
+  var det=opt.hr!=null?{hr:opt.hr}:detectHeader(m),hr=det.hr;
+  var width=0;m.forEach(function(r){if(r.length>width)width=r.length});
+  var headers=[];for(var c=0;c<width;c++){var h=String(m[hr][c]==null?'':m[hr][c]).trim();headers.push(h)}   // boş başlıklar hdr() ile dile göre adlandırılır
+  var rows=[],rowNums=[],skipped=[];
+  for(var i=hr+1;i<m.length;i++){
+    var r=m[i];if(!r.some(function(x){return x!==''&&x!=null}))continue;
+    var head=r.slice(0,3).map(fold).join(' ').trim();
+    if(TOTAL_RE.test(head)){skipped.push(i+1);continue}
+    while(r.length<width)r.push('');
+    rows.push(r);rowNums.push(i+1);
+  }
+  if(!rows.length)throw Err('eNoData');
+  var map=opt.keepMap&&S.headers.join('|')===headers.join('|')?S.map:autoMap(headers,rows);
+  if(!Object.keys(map).length&&!opt.allowEmpty)throw Err('eNoCols');
+  var book=opt.book||null;
+  S={headers:headers,rows:rows,rowNums:rowNums,headerRow:hr,map:map,recs:[],fileName:name,sheet:sheet||'',book:book,matrix:m,skipped:skipped,orders:{}};
+  buildSheetUI();buildMapUI();compute();
+  $('uploadSec').hidden=true;$('results').hidden=false;$('btnExport').hidden=false;
+  var missing=FIELDS.filter(function(f){return f.req&&map[f.k]==null});
+  if(missing.length){$('mapBox').open=true;toast(t('tMissing'))}
+  if(!opt.quiet)window.scrollTo(0,0);
+}
+function sheetMatrix(wb,name){
+  var ws=wb.Sheets[name];if(!ws||!ws['!ref'])return [];
+  var r=XLSX.utils.decode_range(ws['!ref']);r.s.r=0;r.s.c=0;   // A1'den oku: sütun harfleri ve satır numaraları dosyayla aynı olsun
+  return XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:'',range:r,blankrows:true});
+}
+function sig(u8,arr){for(var i=0;i<arr.length;i++)if(u8[i]!==arr[i])return false;return true}
+function readFile(file){
+  showErr('');
+  if(!file)return;
+  if(file.size===0){showErr('eEmpty');return}
+  if(file.size>100*1024*1024){showErr('eTooBig');return}
+  var ext=(file.name.split('.').pop()||'').toLowerCase();
+  if(['xlsx','xlsm','xls','csv','txt'].indexOf(ext)<0){showErr('eType');return}
+  busy(true);
+  var fr=new FileReader();
+  fr.onerror=function(){busy(false);showErr('eRead')};
+  fr.onload=function(){setTimeout(function(){
+    try{
+      var u8=new Uint8Array(fr.result);
+      if(ext==='csv'||ext==='txt'){
+        if(sig(u8,[0x50,0x4B,0x03,0x04])||sig(u8,[0xD0,0xCF,0x11,0xE0]))throw Err('eCsvIsXl');
+        var rows=parseCSV(decodeText(u8));
+        loadMatrix(rows,file.name,'');
+      }else{
+        var isZip=sig(u8,[0x50,0x4B,0x03,0x04]),isOle=sig(u8,[0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A,0xE1]);
+        if(!isZip&&!isOle)throw Err('eNotXl');
+        if(typeof XLSX==='undefined')throw Err('eNoLib');
+        var wb=XLSX.read(u8,{type:'array'});
+        if(!wb.SheetNames||!wb.SheetNames.length)throw Err('eEmpty');
+        // En iyi başlık puanına sahip sayfayı seç (kapak/özet sayfalarını atla)
+        var best=null;
+        wb.SheetNames.forEach(function(n){var mm=sheetMatrix(wb,n);if(!mm.length)return;var d=detectHeader(mm);var nonEmpty=mm.filter(function(r){return r.some(function(x){return x!==''})}).length;var sc=d.score*1000+Math.min(nonEmpty,999);if(!best||sc>best.sc)best={n:n,m:mm,sc:sc}});
+        if(!best)throw Err('eEmpty');
+        loadMatrix(best.m,file.name,best.n,{book:wb});
+      }
+    }catch(e){showErr(e.key||'eGeneric',e.key?null:e.message)}
+    busy(false);
+  },20)};
+  fr.readAsArrayBuffer(file);
+}
+function busy(on){var d=$('drop');d.setAttribute('aria-busy',on?'true':'false');$('busy').hidden=!on}
+// Hata, dil değişince yeniden çevrilebilsin diye anahtar olarak saklanır; anahtarsız (kütüphane) mesajlar olduğu gibi gösterilir
+var lastErr=null;
+function showErr(key,raw){lastErr=key?{key:key,raw:raw}:null;var e=$('err');e.textContent=key?(raw||t(key)):'';e.hidden=!key}
+
+/* ---------- Hesaplama ---------- */
+function buildRecs(){
+  var mp=S.map,get=function(r,k){return mp[k]==null?'':r[mp[k]]};
+  var colVals=function(k){return mp[k]==null?[]:S.rows.map(function(r){return r[mp[k]]})};
+  var op=detectOrder(colVals('planned')),od=detectOrder(colVals('delivered'));
+  // Dosya düzeyinde karar: iki tarih sütununun oyları birlikte değerlendirilir
+  var all=detectOrder(colVals('planned').concat(colVals('delivered')));
+  op.order=od.order=all.order;if(all.order==='mdy'){op.ambiguous=od.ambiguous=false}
+  S.orders={planned:op,delivered:od};
+  var us=all.order==='mdy';
+  var seen={},recs=[];
+  S.rows.forEach(function(r,i){
+    var p=parseDate(get(r,'planned'),op.order),d=parseDate(get(r,'delivered'),od.order);
+    var fr=mp.freight==null?null:parseNum(get(r,'freight'),us);
+    var qo=mp.qo==null?null:parseNum(get(r,'qo'),us),qd=mp.qd==null?null:parseNum(get(r,'qd'),us),wt=mp.weight==null?null:parseNum(get(r,'weight'),us);
+    var id=String(get(r,'id')).trim();
+    var rec={i:i,row:r,excelRow:S.rowNums[i],
+      carrier:String(get(r,'carrier')).replace(/\s+/g,' ').trim()||EMPTY_CARRIER,origin:String(get(r,'origin')).trim(),dest:String(get(r,'dest')).trim(),
+      reason:String(get(r,'reason')).trim(),id:id,planned:p.t==null?null:p.t,delivered:d.t==null?null:d.t,
+      pBad:!!p.bad,dBad:!!d.bad,pText:!!p.text,dText:!!d.text,pEmpty:!!p.empty,dEmpty:!!d.empty,freight:fr,freightRaw:get(r,'freight'),qo:qo,qd:qd,wt:wt,dup:false};
+    if(id){ if(seen[id]!=null){rec.dup=true;recs[seen[id]].dup=true} else seen[id]=recs.length; }
+    rec.open=!!d.empty;                       // yalnızca boş teslim tarihi "açık" sayılır; okunamayan tarih hatadır
+    if(rec.planned!=null&&rec.delivered!=null){
+      rec.delay=dayOf(rec.delivered)-dayOf(rec.planned);
+      rec.onTime=rec.delay<=0;
+    }else{rec.delay=null;rec.onTime=null}
+    rec.inFull=(qo!=null&&qd!=null)?qd>=qo:null;
+    rec.otif=(rec.onTime!=null&&rec.inFull!=null)?(rec.onTime&&rec.inFull):null;
+    rec.month=rec.planned!=null?monthKey(rec.planned):null;
+    recs.push(rec);
+  });
+  S.recs=recs;
+}
+function filtered(){
+  var c=$('fCarrier').value,m=$('fMonth').value;
+  return S.recs.filter(function(r){return (!c||r.carrier===c)&&(!m||r.month===m)});
+}
+function agg(list){
+  var a={invalid:0,n:list.length,fr:0,frN:0,closed:0,on:0,late:0,open:0,delaySum:0,otifN:0,otifOk:0,inFullN:0,inFullOk:0,wt:0};
+  list.forEach(function(r){
+    if(r.freight!=null){a.fr+=r.freight;a.frN++}
+    if(r.open)a.open++;else if(r.onTime==null)a.invalid++;
+    if(r.onTime!=null){a.closed++;if(r.onTime)a.on++;else{a.late++;a.delaySum+=r.delay}}
+    if(r.otif!=null){a.otifN++;if(r.otif)a.otifOk++}
+    if(r.inFull!=null){a.inFullN++;if(r.inFull)a.inFullOk++}
+  });
+  a.otd=a.closed?a.on/a.closed*100:null;
+  a.otifP=a.otifN?a.otifOk/a.otifN*100:null;
+  a.avgDelay=a.late?a.delaySum/a.late:null;
+  return a;
+}
+function groupBy(list,key){var g={};list.forEach(function(r){var k=key(r);if(k==null)return;(g[k]=g[k]||[]).push(r)});return g}
+
+function compute(){
+  buildRecs();
+  var cs=$('fCarrier'),ms=$('fMonth'),cv=cs.value,mv=ms.value;
+  var carriers=Object.keys(groupBy(S.recs,function(r){return r.carrier})).sort(function(a,b){return carrierLabel(a).localeCompare(carrierLabel(b),'tr')});
+  var months=Object.keys(groupBy(S.recs,function(r){return r.month})).sort();
+  cs.innerHTML='<option value="">'+esc(t('all'))+'</option>'+carriers.map(function(c){return '<option value="'+esc(c)+'"'+(c===cv?' selected':'')+'>'+esc(carrierLabel(c))+'</option>'}).join('');
+  ms.innerHTML='<option value="">'+esc(t('all'))+'</option>'+months.map(function(m){return '<option value="'+m+'"'+(m===mv?' selected':'')+'>'+monthLabel(m)+'</option>'}).join('');
+  render();renderQuality();renderFormulas();
+}
+
+function render(){
+  var list=filtered(),a=agg(list),hasQty=S.map.qo!=null&&S.map.qd!=null,hasFr=S.map.freight!=null;
+  $('fileMeta').innerHTML='<b>'+esc(S.fileName)+'</b>'+(S.sheet?esc(t('metaSheet',{s:S.sheet})):'')+esc(t('metaRows',cnt(S.recs.length)))+(list.length!==S.recs.length?t('metaFiltered',{n:fmtInt(list.length)}):'');
+  var k=[
+    {l:t('kShip'),v:fmtInt(a.n),s:t('kShipS',{c:fmtInt(a.closed),o:fmtInt(a.open)})+(a.invalid?t('kShipInv',{n:fmtInt(a.invalid)}):'')},
+    {l:t('kOtd'),v:fmtPct(a.otd),s:t('kOtdS',{a:fmtInt(a.on),b:fmtInt(a.closed)}),hl:true},
+    {l:t('kOtif'),v:hasQty?fmtPct(a.otifP):'–',s:hasQty?t('kOtifS'):t('kNeedQty')},
+    {l:t('kLate'),v:fmtInt(a.late),s:a.avgDelay!=null?t('kLateS',{d:fmt1(a.avgDelay)}):t('kNoLate')},
+    {l:t('kFr'),v:hasFr?fmtMoney(a.fr):'–',s:hasFr?(a.frN?t('kFrS',{v:fmtMoney(a.fr/a.frN)}):''):t('kNeedFr')},
+    {l:t('kInFull'),v:hasQty?fmtPct(a.inFullN?a.inFullOk/a.inFullN*100:null):'–',s:hasQty?t('kInFullS'):t('kNeedQty')}
+  ];
+  $('kpis').innerHTML=k.map(function(x){return '<div class="kpi'+(x.hl?' hl':'')+'"><div class="l">'+esc(x.l)+'</div><div class="v">'+x.v+'</div><div class="s">'+esc(x.s)+'</div></div>'}).join('');
+
+  // Taşıyıcılar
+  var gc=groupBy(list,function(r){return r.carrier}),rowsC=Object.keys(gc).map(function(c){var g=agg(gc[c]);g.name=c;return g}).sort(function(x,y){return y.n-x.n});
+  $('tCarriers').innerHTML=table([t('thCarrier'),t('thShip'),t('thFr'),t('thAvgFr'),'OTD',hasQty?'OTIF':null,t('thLate'),t('thAvgDelay')],
+    rowsC.map(function(g){return [esc(carrierLabel(g.name)),fmtInt(g.n),hasFr?fmtMoney(g.fr):'–',hasFr&&g.frN?fmtMoney(g.fr/g.frN):'–',pctCell(g.otd,a.otd),hasQty?pctCell(g.otifP,a.otifP):null,fmtInt(g.late),fmt1(g.avgDelay)]}),
+    [esc(t('total')),fmtInt(a.n),hasFr?fmtMoney(a.fr):'–',hasFr&&a.frN?fmtMoney(a.fr/a.frN):'–',fmtPct(a.otd),hasQty?fmtPct(a.otifP):null,fmtInt(a.late),fmt1(a.avgDelay)],[1,2,3,4,5,6,7]);
+
+  // Rotalar
+  if(S.map.origin!=null&&S.map.dest!=null){
+    var gr=groupBy(list,function(r){return (r.origin||'?')+' → '+(r.dest||'?')});
+    var rr=Object.keys(gr).map(function(k){var g=agg(gr[k]);g.name=k;return g}).sort(function(x,y){return y.n-x.n}).slice(0,10);
+    $('tRoutes').innerHTML=table([t('thRoute'),t('thShip'),t('thFr'),t('thAvgFr'),'OTD'],rr.map(function(g){return [esc(g.name),fmtInt(g.n),hasFr?fmtMoney(g.fr):'–',hasFr&&g.frN?fmtMoney(g.fr/g.frN):'–',pctCell(g.otd,a.otd)]}),null,[1,2,3,4]);
+  }else $('tRoutes').innerHTML='<p class="muted">'+esc(t('noRoute'))+'</p>';
+
+  // Gecikme nedenleri
+  var lateList=list.filter(function(r){return r.onTime===false});
+  if(!lateList.length)$('tReasons').innerHTML='<p class="muted">'+esc(t('noLate'))+'</p>';
+  else{
+    var grn=groupBy(lateList,function(r){return r.reason||'\u0000'});   // boş neden: dile göre etiketlenir
+    var rn=Object.keys(grn).map(function(k){return {k:k,n:grn[k].length}}).sort(function(x,y){return y.n-x.n});
+    $('tReasons').innerHTML=table([t('thReason'),t('thCount'),t('thShare'),'<span class="sr-only">'+esc(t('thBar'))+'</span>'],rn.map(function(x){var p=x.n/lateList.length*100;return [esc(x.k==='\u0000'?t('unspecified'):x.k),fmtInt(x.n),fmtPct(p),'<div class="bar-h" aria-hidden="true"><i style="width:'+p.toFixed(1)+'%"></i></div>']}),[esc(t('total')),fmtInt(lateList.length),fmtPct(100),''],[1,2]);
+  }
+
+  // Aylık OTD grafiği (0–100 ölçek, kesik eksen yok)
+  var gm=groupBy(list,function(r){return r.month}),mk=Object.keys(gm).sort();
+  if(!mk.length){$('chart').innerHTML='<p class="muted">'+esc(t('noPlanned'))+'</p>'}
+  else{
+    var data=mk.map(function(m){var g=agg(gm[m]);return {m:m,v:g.otd,n:g.closed}});
+    var label=t('chartAria',{list:data.map(function(d){return monthLabel(d.m)+' '+fmtPct(d.v)}).join(LANG==='tr'?', ':'; ')});
+    $('chart').innerHTML='<div class="chart" role="img" aria-label="'+esc(label)+'">'+data.map(function(d,i){return '<div class="b'+(i===data.length-1?' last':'')+'" style="height:'+(d.v==null?0:d.v)+'%"><em>'+(d.v==null?'–':fmt1(d.v))+'</em></div>'}).join('')+'</div><div class="chart-l" aria-hidden="true">'+data.map(function(d){return '<span>'+monthLabel(d.m)+'</span>'}).join('')+'</div><p class="axis-note">'+esc(t('axisNote'))+'</p>';
+  }
+
+  // Satırlar
+  var shown=list.slice(0,500);
+  $('rowsNote').textContent=list.length>500?t('rowsFirst',{n:fmtInt(list.length)}):t('rowsN',cnt(list.length));
+  var pill=function(c,k){return '<span class="pill '+c+'">'+esc(t(k))+'</span>'};
+  $('tRows').innerHTML=table([t('thRow'),t('thId'),t('thCarrier'),t('thRoute'),t('thPlanned'),t('thDelivered'),t('thStatus'),t('thDelay'),t('thFr')],
+    shown.map(function(r){var st=r.open?pill('open','stOpen'):r.onTime==null?pill('bad','stErr'):r.onTime?pill('ok','stOn'):pill('bad','stLate');
+      return [r.excelRow,esc(r.id),esc(carrierLabel(r.carrier)),esc((r.origin||'')+(r.dest?' → '+r.dest:'')),fmtDate(r.planned),fmtDate(r.delivered),st,r.delay==null?'':Math.max(0,r.delay),r.freight==null?'':fmtMoney(r.freight)]}),null,[0,7,8]);
+}
+function pctCell(v,avg){if(v==null)return '–';var c=avg==null?'':v>=avg?'good':'poor';return '<span class="'+c+'">'+fmtPct(v)+'</span>'}
+function table(h,rows,tot,numCols){
+  numCols=numCols||[];var keep=h.map(function(x){return x!==null});
+  var th=h.map(function(x,i){return x===null?'':'<th scope="col"'+(numCols.indexOf(i)>-1?' class="n"':'')+'>'+(/^</.test(x)?x:esc(x))+'</th>'}).join('');
+  var tr=function(r,cls){return '<tr'+(cls?' class="'+cls+'"':'')+'>'+r.map(function(c,i){if(!keep[i])return '';var tag=i===0?'th scope="row"':'td';return '<'+tag+(numCols.indexOf(i)>-1?' class="n"':'')+'>'+c+'</'+tag.split(' ')[0]+'>'}).join('')+'</tr>'};
+  return '<table><thead><tr>'+th+'</tr></thead><tbody>'+rows.map(function(r){return tr(r)}).join('')+(tot?tr(tot,'tot'):'')+'</tbody></table>';
+}
+
+/* ---------- Veri kalitesi ---------- */
+function renderQuality(){
+  var R=S.recs,issues=[],info=[],mp=S.map;
+  var LS=LANG==='tr'?', ':', ';
+  var miss=FIELDS.filter(function(f){return f.req&&mp[f.k]==null}).map(fl);
+  if(miss.length)issues.push({t:t('qReq',{f:miss.join(LS)}),d:t('qReqD')});
+  var byCol={};FIELDS.forEach(function(f){if(mp[f.k]!=null)(byCol[mp[f.k]]=byCol[mp[f.k]]||[]).push(fl(f))});
+  Object.keys(byCol).forEach(function(c){if(byCol[c].length>1)issues.push({t:t('qSame',{c:colLetter(+c),f:byCol[c].join(LS)}),d:t('qSameD')})});
+  var qc=function(title,n){var o=cnt(n);o.t=t(title);return t('qCount',o)};
+  var add=function(arr,title,tip){if(arr.length)issues.push({t:qc(title,arr.length),d:t(tip),n:arr.length,rows:arr.slice(0,12).map(function(r){return r.excelRow})})};
+  if(mp.planned!=null){add(R.filter(function(r){return r.pBad}),'qPBad','qPBadD');add(R.filter(function(r){return r.pEmpty&&!r.dEmpty}),'qPEmpty','qPEmptyD')}
+  if(mp.delivered!=null)add(R.filter(function(r){return r.dBad}),'qDBad','qDBadD');
+  ['planned','delivered'].forEach(function(k){var o=S.orders[k];if(!o)return;var lab=t(k==='planned'?'qLabP':'qLabD');
+    if(o.order==='mdy')info.push({t:t('qMdy',{l:lab}),d:t('qMdyD')});
+    else if(o.ambiguous)issues.push({t:t('qAmb',{l:lab}),d:t('qAmbD')});});
+  var txt=R.filter(function(r){return r.pText||r.dText});
+  if(txt.length)info.push({n:txt.length,t:qc('qText',txt.length),d:t('qTextD'),rows:txt.slice(0,12).map(function(r){return r.excelRow})});
+  if(mp.freight!=null){add(R.filter(function(r){return r.freight==null&&String(r.freightRaw).trim()===''}),'qFrEmpty','qFrEmptyD');add(R.filter(function(r){return r.freight==null&&String(r.freightRaw).trim()!==''}),'qFrBad','qFrBadD');add(R.filter(function(r){return r.freight!=null&&r.freight<0}),'qFrNeg','qFrNegD')}
+  if(mp.id!=null)add(R.filter(function(r){return r.dup}),'qDup','qDupD');
+  add(R.filter(function(r){return r.delay!=null&&r.delay>60}),'qLong','qDateTypo');
+  add(R.filter(function(r){return r.delay!=null&&r.delay<-60}),'qEarly','qDateTypo');
+  if(mp.qo!=null&&mp.qd!=null)add(R.filter(function(r){return r.qo!=null&&r.qd!=null&&r.qd>r.qo}),'qOver','qOverD');
+  if(S.skipped.length)info.push({n:S.skipped.length,t:t('qSkip',{n:fmtInt(S.skipped.length)}),d:t('qSkipD'),rows:S.skipped.slice(0,12)});
+  var item=function(x,cls,ico){return '<div class="q-item"><span class="q-ico '+cls+'" aria-hidden="true">'+ico+'</span><div><b>'+esc(x.t)+'</b><br><small>'+esc(x.d)+(x.rows?esc(t('qRows',{r:x.rows.join(', ')}))+(x.n>x.rows.length?' …':''):'')+'</small></div></div>'};
+  $('qCnt').hidden=!issues.length;$('qCnt').textContent=issues.length;
+  $('quality').innerHTML='<h2>'+esc(t('qTitle'))+'</h2>'+(issues.length?issues.map(function(x){return item(x,'w','!')}).join(''):'<div class="q-item"><span class="q-ico ok" aria-hidden="true">✓</span><div><b>'+esc(t('qNone'))+'</b><br><small>'+esc(t('qNoneD'))+'</small></div></div>')+
+    (info.length?'<h2 style="margin-top:18px">'+esc(t('qInfo'))+'</h2>'+info.map(function(x){return item(x,'ok','i')}).join(''):'');
+}
+
+/* ---------- Formül üretici ---------- */
+function renderFormulas(){
+  var mp=S.map,L=function(k){return mp[k]==null?null:colLetter(mp[k])};
+  var P=L('planned')||'?',D=L('delivered')||'?',C=L('carrier')||'?',F=L('freight')||'?',QO=L('qo'),QD=L('qd'),W=L('weight');
+  var stat=colLetter(S.headers.length),dl=colLetter(S.headers.length+1);
+  var R=S.headerRow+2;          // verinin sayfadaki ilk satırı
+  var d=D+R,p=P+R;
+  var firstCarrier=(S.recs[0]&&S.recs[0].carrier!==EMPTY_CARRIER&&S.recs[0].carrier)||t('thCarrier');
+  var y=new Date().getFullYear(),mo=new Date().getMonth()+1;
+  var mm=Object.keys(groupBy(S.recs,function(r){return r.month})).sort();if(mm.length){var pp=mm[mm.length-1].split('-');y=+pp[0];mo=+pp[1]}
+  var q=function(s){return s.replace(/"/g,'""')},fc=q(firstCarrier);
+  // Durum değerleri arayüz diline göre; formül sözdizimi (işlev adları, ayraçlar) her iki modda da aynı
+  var ON=q(t('stOn')),LATE=q(t('stLate')),ERR=q(t('stErr')),NF=q(t('notFound'));
+  var cards=[
+    {t:t('fc1',{on:t('stOn'),late:t('stLate')}),d:t('fc1d',{cell:stat+R,err:t('stErr')}),
+     tr:'=EĞER('+d+'="";"";EĞER('+p+'="";"'+ERR+'";EĞERHATA(EĞER(TAMSAYI('+d+')<=TAMSAYI('+p+');"'+ON+'";"'+LATE+'");"'+ERR+'")))',
+     en:'=IF('+d+'="","",IF('+p+'="","'+ERR+'",IFERROR(IF(INT('+d+')<=INT('+p+'),"'+ON+'","'+LATE+'"),"'+ERR+'")))'},
+    {t:t('fc2'),d:t('fc2d',{cell:dl+R}),
+     tr:'=EĞER(VEYA('+d+'="";'+p+'="");"";EĞERHATA(MAK(0;TAMSAYI('+d+')-TAMSAYI('+p+'));""))\n=EĞER(VEYA('+d+'="";'+p+'="");"";EĞERHATA(MAK(0;TAMİŞGÜNÜ(TAMSAYI('+p+')+1;'+d+'));""))',
+     en:'=IF(OR('+d+'="",'+p+'=""),"",IFERROR(MAX(0,INT('+d+')-INT('+p+')),""))\n=IF(OR('+d+'="",'+p+'=""),"",IFERROR(MAX(0,NETWORKDAYS(INT('+p+')+1,'+d+')),""))'},
+    {t:t('fc3'),d:t('fc3d'),
+     tr:'=ÇOKEĞERSAY('+C+':'+C+';"'+fc+'";'+stat+':'+stat+';"'+ON+'")/(ÇOKEĞERSAY('+C+':'+C+';"'+fc+'";'+stat+':'+stat+';"'+ON+'")+ÇOKEĞERSAY('+C+':'+C+';"'+fc+'";'+stat+':'+stat+';"'+LATE+'"))',
+     en:'=COUNTIFS('+C+':'+C+',"'+fc+'",'+stat+':'+stat+',"'+ON+'")/(COUNTIFS('+C+':'+C+',"'+fc+'",'+stat+':'+stat+',"'+ON+'")+COUNTIFS('+C+':'+C+',"'+fc+'",'+stat+':'+stat+',"'+LATE+'"))'},
+    {t:t('fc4',{m:t('months')[mo-1]+' '+y}),d:t('fc4d',{y:y,m1:mo+1}),
+     tr:'=ÇOKETOPLA('+F+':'+F+';'+C+':'+C+';"'+fc+'";'+P+':'+P+';">="&TARİH('+y+';'+mo+';1);'+P+':'+P+';"<"&TARİH('+y+';'+(mo+1)+';1))',
+     en:'=SUMIFS('+F+':'+F+','+C+':'+C+',"'+fc+'",'+P+':'+P+',">="&DATE('+y+','+mo+',1),'+P+':'+P+',"<"&DATE('+y+','+(mo+1)+',1))'}
+  ];
+  if(QO&&QD)cards.push({t:t('fc5'),d:t('fc5d'),
+     tr:'=EĞER(VEYA('+d+'="";'+p+'="");"";EĞERHATA(EĞER(VE(TAMSAYI('+d+')<=TAMSAYI('+p+');'+QD+R+'>='+QO+R+');1;0);""))',
+     en:'=IF(OR('+d+'="",'+p+'=""),"",IFERROR(IF(AND(INT('+d+')<=INT('+p+'),'+QD+R+'>='+QO+R+'),1,0),""))'});
+  if(W&&mp.freight!=null)cards.push({t:t('fc6'),d:t('fc6d'),tr:'=EĞERHATA('+F+R+'/'+W+R+';"")',en:'=IFERROR('+F+R+'/'+W+R+',"")'});
+  cards.push({t:t('fc7'),d:t('fc7d'),
+     tr:'E2 (emniyet stoğu):     =1,65*STDSAPMA.S(A2:A91)*KAREKÖK(E1)\nE3 (yeniden sipariş):  =ORTALAMA(A2:A91)*E1+E2',
+     en:'E2 (safety stock):  =1.65*STDEV.S(A2:A91)*SQRT(E1)\nE3 (reorder point): =AVERAGE(A2:A91)*E1+E2'});
+  cards.push({t:t('fc8'),d:t('fc8d'),
+     tr:'=ÇAPRAZARA(A2;GTIP!A:A;GTIP!B:B;"'+NF+'")\n=EĞERHATA(DÜŞEYARA(A2;GTIP!A:B;2;YANLIŞ);"'+NF+'")',en:'=XLOOKUP(A2,GTIP!A:A,GTIP!B:B,"'+NF+'")\n=IFERROR(VLOOKUP(A2,GTIP!A:B,2,FALSE),"'+NF+'")'});
+  var warn=(P==='?'||D==='?'||C==='?')?'<p class="err" style="grid-column:1/-1">'+esc(t('fWarn'))+'</p>':'';
+  // TR modunda önce Türkçe, EN modunda önce İngilizce formül
+  var order=LANG==='en'?['en','tr']:['tr','en'];
+  var tag=function(l){return l==='tr'&&LANG==='en'?'<span class="lang wide">TR <small>'+esc(t('trLocal'))+'</small></span>':'<span class="lang">'+l.toUpperCase()+'</span>'};
+  $('formulas').innerHTML=warn+cards.map(function(c,i){return '<div class="card fcard"><h3>'+esc(c.t)+'</h3><p>'+esc(c.d)+'</p>'+
+    order.map(function(l){return '<div class="code">'+tag(l)+'<code tabindex="0" id="f'+i+l+'" lang="'+l+'" translate="no">'+esc(c[l])+'</code><button type="button" class="copy" data-copy="f'+i+l+'" aria-label="'+esc(t('copyAria',{t:c.t,l:t(l==='tr'?'lTr':'lEn')}))+'">'+esc(t('copy'))+'</button></div>'}).join('')+'</div>'}).join('');
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-copy]');if(!b)return;
+  var txt=$(b.getAttribute('data-copy')).textContent;
+  var done=function(){toast(t('tCopied'))};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done,function(){fallback(txt);done()});else{fallback(txt);done()}
+});
+function fallback(t){var a=document.createElement('textarea');a.value=t;a.setAttribute('readonly','');a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(e){}a.remove()}
+
+/* ---------- Sütun eşleştirme arayüzü ---------- */
+function buildSheetUI(){
+  var names=S.book?S.book.SheetNames:[];
+  $('sheetWrap').hidden=names.length<2;
+  $('fSheet').innerHTML=names.map(function(n){return '<option value="'+esc(n)+'"'+(n===S.sheet?' selected':'')+'>'+esc(n)+'</option>'}).join('');
+  var m=S.matrix||[];
+  $('fHdr').innerHTML=m.slice(0,15).map(function(r,i){var prev=r.filter(function(x){return x!==''&&x!=null}).slice(0,3).map(String).join(' · ');return '<option value="'+i+'"'+(i===S.headerRow?' selected':'')+'>'+esc(t('hdrRow',{n:i+1}))+(prev?': '+esc(prev.slice(0,50)):esc(t('hdrEmpty')))+'</option>'}).join('');
+}
+function buildMapUI(){
+  var opts=function(sel){return '<option value="">'+esc(t('none'))+'</option>'+S.headers.map(function(h,i){return '<option value="'+i+'"'+(sel===i?' selected':'')+'>'+colLetter(i)+' · '+esc(hdr(i))+'</option>'}).join('')};
+  $('mapGrid').innerHTML=FIELDS.map(function(f){return '<label class="f">'+esc(fl(f))+(f.req?' <span class="req" aria-hidden="true">*</span>':'')+'<select data-field="'+f.k+'"'+(f.req?' aria-required="true"':'')+'>'+opts(S.map[f.k])+'</select></label>'}).join('');
+  updMapSummary();
+}
+function updMapSummary(){var n=FIELDS.filter(function(f){return S.map[f.k]!=null}).length;var miss=FIELDS.filter(function(f){return f.req&&S.map[f.k]==null}).length;$('mapSummary').textContent=t('mapSum',{n:n,t:FIELDS.length})+(miss?t('mapMiss',{n:miss}):'')}
+$('fSheet').addEventListener('change',function(){try{loadMatrix(sheetMatrix(S.book,this.value),S.fileName,this.value,{book:S.book,allowEmpty:true,quiet:true})}catch(e){toast(e.key?t(e.key):e.message)}});
+$('fHdr').addEventListener('change',function(){try{loadMatrix(S.matrix,S.fileName,S.sheet,{hr:+this.value,book:S.book,allowEmpty:true,quiet:true})}catch(e){toast(e.key?t(e.key):e.message)}});
+$('mapGrid').addEventListener('change',function(e){var s=e.target.closest('select[data-field]');if(!s)return;var v=s.value===''?null:+s.value;if(v==null)delete S.map[s.dataset.field];else S.map[s.dataset.field]=v;updMapSummary();compute()});
+
+/* ---------- Dışa aktarma ---------- */
+function setDateFmt(ws,cols,n){var z=t('xDateFmt');cols.forEach(function(ci){if(ci==null)return;var L=colLetter(ci);for(var i=2;i<=n;i++){var c=ws[L+i];if(c&&c.t==='n')c.z=z}})}
+function exportXlsx(){
+  if(typeof XLSX==='undefined'){toast(t('tNoLib'));return}
+  var list=filtered(),a=agg(list),wb=XLSX.utils.book_new(),hasQty=S.map.qo!=null&&S.map.qd!=null;
+  var r1=function(v){return v==null?'':Math.round(v*10)/10};
+  var ozet=[[t('xTitle')],[t('xFile'),S.fileName],[t('xCreated'),new Date().toLocaleString(loc())],[t('xFCarrier'),$('fCarrier').value?carrierLabel($('fCarrier').value):t('all')],[t('xFMonth'),$('fMonth').value?monthLabel($('fMonth').value):t('all')],[],
+    [t('xMetric'),t('xValue')],[t('xShip'),a.n],[t('xDelivered'),a.closed],[t('xOpen'),a.open],[t('xOn'),a.on],[t('xLate'),a.late],['OTD (%)',r1(a.otd)],['OTIF (%)',hasQty?r1(a.otifP):''],[t('xAvgDelay'),r1(a.avgDelay)],[t('xTotalFr'),Math.round(a.fr)]];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ozet),t('shSummary'));
+  var gc=groupBy(list,function(r){return r.carrier});
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([[t('thCarrier'),t('xShip'),t('xFr'),'OTD (%)','OTIF (%)',t('xLate'),t('xAvgDelay')]].concat(Object.keys(gc).map(function(c){var g=agg(gc[c]);return [carrierLabel(c),g.n,Math.round(g.fr),r1(g.otd),hasQty?r1(g.otifP):'',g.late,r1(g.avgDelay)]}))),t('shCarriers'));
+  if(S.map.origin!=null&&S.map.dest!=null){var gr=groupBy(list,function(r){return (r.origin||'?')+' → '+(r.dest||'?')});
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([[t('thRoute'),t('xShip'),t('xFr'),t('xAvgFr'),'OTD (%)']].concat(Object.keys(gr).map(function(k){var g=agg(gr[k]);return [k,g.n,Math.round(g.fr),g.frN?Math.round(g.fr/g.frN):'',r1(g.otd)]}).sort(function(x,y){return y[1]-x[1]}))),t('shRoutes'))}
+  var gm=groupBy(list,function(r){return r.month});
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([[t('xMonth'),t('xShip'),t('xDel'),'OTD (%)','OTIF (%)',t('xFr')]].concat(Object.keys(gm).sort().map(function(m){var g=agg(gm[m]);return [monthLabel(m),g.n,g.closed,r1(g.otd),hasQty?r1(g.otifP):'',Math.round(g.fr)]}))),t('shMonthly'));
+  // Sevkiyatlar: orijinal sütunlar + canlı formüllü Durum ve Gecikme sütunları
+  var P=S.map.planned,D=S.map.delivered,nc=S.headers.length;
+  var aoa=[S.headers.map(function(h,i){return hdr(i)}).concat([t('thStatus'),t('thDelay')])];
+  var ON=t('stOn'),LATE=t('stLate'),ERR=t('stErr'),q=function(x){return x.replace(/"/g,'""')};
+  var num={freight:'freight',qo:'qo',qd:'qd',weight:'wt'};
+  list.forEach(function(r){var row=r.row.slice(0,nc).map(function(v){return v===''?null:v});while(row.length<nc)row.push(null);
+    if(P!=null&&r.planned!=null)row[P]=r.planned/DAY+25569;
+    if(D!=null&&r.delivered!=null)row[D]=r.delivered/DAY+25569;
+    Object.keys(num).forEach(function(k){var ci=S.map[k];if(ci!=null&&r[num[k]]!=null)row[ci]=r[num[k]]});
+    row.push(r.open?'':r.onTime==null?ERR:r.onTime?ON:LATE,r.delay==null?'':Math.max(0,r.delay));aoa.push(row)});
+  var ws=XLSX.utils.aoa_to_sheet(aoa);
+  setDateFmt(ws,[P,D],aoa.length);
+  if(P!=null&&D!=null){var pl=colLetter(P),dl=colLetter(D),sc=colLetter(nc),gc2=colLetter(nc+1);
+    for(var i=2;i<=aoa.length;i++){var c1=ws[sc+i],c2=ws[gc2+i];
+      if(c1)c1.f='IF('+dl+i+'="","",IF('+pl+i+'="","'+q(ERR)+'",IFERROR(IF(INT('+dl+i+')<=INT('+pl+i+'),"'+q(ON)+'","'+q(LATE)+'"),"'+q(ERR)+'")))';
+      if(c2)c2.f='IF(OR('+dl+i+'="",'+pl+i+'=""),"",IFERROR(MAX(0,INT('+dl+i+')-INT('+pl+i+')),""))';}}
+  XLSX.utils.book_append_sheet(wb,ws,t('shRows'));
+  var base=S.fileName.replace(/\.[^.]+$/,'');
+  XLSX.writeFile(wb,t('xPrefix')+base+'.xlsx');
+  toast(t('tDownloaded'));
+}
+
+/* ---------- Örnek veri ---------- */
+function sampleMatrix(){
+  var seed=42,rnd=function(){seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296};
+  var carriers=[['Anadolu Kargo',.06],['Marmara Lojistik',.08],['Ege Nakliyat',.15],['Karadeniz Taşıma',.19],['Trakya Express',.10]];
+  var cities=[['İstanbul',0],['Ankara',450],['İzmir',480],['Bursa',150],['Kocaeli',100],['Antalya',720],['Adana',940],['Konya',660],['Gaziantep',1130],['Kayseri',770]];
+  // Şehir/taşıyıcı adları veri olarak Türkçe kalır; başlıklar ve nedenler dile göre
+  var reasons=t('sampleReasons');
+  var head=t('sampleHead').slice();
+  var rows=[head],start=Date.UTC(2026,6,1);
+  for(var i=0;i<420;i++){
+    var c=carriers[Math.floor(rnd()*carriers.length)],o=rnd()<.6?cities[0]:cities[1+Math.floor(rnd()*3)],d;do{d=cities[1+Math.floor(rnd()*9)]}while(d[0]===o[0]);
+    var ship=start+Math.floor(rnd()*118)*DAY,plan=ship+(2+Math.floor(rnd()*3))*DAY;
+    var late=rnd()<c[1],delay=late?1+Math.floor(rnd()*4):-Math.floor(rnd()*2);
+    var del=plan+delay*DAY+(8+Math.floor(rnd()*10))*36e5+Math.floor(rnd()*60)*6e4;
+    var open=plan>Date.UTC(2026,9,24);if(open&&rnd()<.4)open=false;
+    var qo=10*(1+Math.floor(rnd()*30)),qd=rnd()<.05?qo-10*(1+Math.floor(rnd()*2)):qo;
+    var kg=qo*(8+Math.floor(rnd()*15)),km=Math.abs(d[1]-o[1])+120;
+    var fr=Math.round((1800+km*kg*.0045)/10)*10;
+    var dt=function(t){return t/DAY+25569};
+    rows.push(['IRS-'+(260000+i),c[0],o[0],d[0],dt(plan),open?'':dt(del),qo,open?'':qd,fr,kg,late&&!open?reasons[Math.floor(rnd()*reasons.length)]:'']);
+  }
+  rows[15][8]='';rows[77][4]='31.02.2026';rows[120][0]=rows[119][0];rows[200][8]=t('sampleBadFr');
+  return rows;
+}
+$('btnSample').addEventListener('click',function(){showErr('');try{loadMatrix(sampleMatrix(),t('sampleFile'),t('sampleSheet'))}catch(e){showErr(e.key||'eGeneric',e.key?null:e.message)}});
+$('btnSampleDl').addEventListener('click',function(){
+  if(typeof XLSX==='undefined'){toast(t('tNoLib'));return}
+  var m=sampleMatrix(),ws=XLSX.utils.aoa_to_sheet(m);setDateFmt(ws,[4,5],m.length);ws['!cols']=[12,18,12,12,17,17,12,12,12,12,22].map(function(w){return {wch:w}});var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,t('sampleSheet'));XLSX.writeFile(wb,t('sampleFile'));
+});
+
+/* ---------- Olaylar ---------- */
+$('file').addEventListener('change',function(e){readFile(e.target.files[0]);e.target.value=''});
+var drop=$('drop');
+['dragenter','dragover'].forEach(function(ev){drop.addEventListener(ev,function(e){e.preventDefault();drop.classList.add('over')})});
+['dragleave','drop'].forEach(function(ev){drop.addEventListener(ev,function(e){e.preventDefault();drop.classList.remove('over')})});
+drop.addEventListener('drop',function(e){var f=e.dataTransfer&&e.dataTransfer.files[0];if(f)readFile(f)});
+window.addEventListener('dragover',function(e){e.preventDefault()});window.addEventListener('drop',function(e){e.preventDefault()});
+$('fCarrier').addEventListener('change',render);$('fMonth').addEventListener('change',render);
+$('btnExport').addEventListener('click',exportXlsx);
+$('btnNew').addEventListener('click',function(){$('results').hidden=true;$('uploadSec').hidden=false;$('btnExport').hidden=true;$('fCarrier').value='';$('fMonth').value='';$('file').focus()});
+
+// Sekmeler
+var tabs=[].slice.call(document.querySelectorAll('[role=tab]'));
+function sel(t,focus){tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',String(on));x.tabIndex=on?0:-1;$(x.getAttribute('aria-controls')).hidden=!on});if(focus)t.focus()}
+tabs.forEach(function(t,i){t.addEventListener('click',function(){sel(t)});t.addEventListener('keydown',function(e){var n={ArrowRight:tabs[(i+1)%tabs.length],ArrowLeft:tabs[(i-1+tabs.length)%tabs.length],Home:tabs[0],End:tabs[tabs.length-1]}[e.key];if(n){e.preventDefault();sel(n,true)}})});
+
+// Dil değiştirme: statik metinler data-i18n ile, dinamik bölümler yeniden çizilerek güncellenir (veri korunur)
+function applyStatic(){
+  var de=document.documentElement;de.lang=LANG;document.title=t('title');
+  var md=document.querySelector('meta[name=description]');if(md)md.setAttribute('content',t('metaDesc'));
+  [].forEach.call(document.querySelectorAll('[data-i18n]'),function(el){el.textContent=t(el.getAttribute('data-i18n'))});
+  [].forEach.call(document.querySelectorAll('[data-i18n-aria]'),function(el){el.setAttribute('aria-label',t(el.getAttribute('data-i18n-aria')))});
+  [].forEach.call(document.querySelectorAll('[data-i18n-title]'),function(el){el.setAttribute('title',t(el.getAttribute('data-i18n-title')))});
+  $('homeLogo').setAttribute('href',t('homeHref'));$('homeLink').setAttribute('href',t('homeHref'));
+  var ms=$('mapSum');ms.setAttribute('data-edit',t('mapEdit'));ms.setAttribute('data-close',t('mapClose'));
+  [].forEach.call(document.querySelectorAll('#langSw [data-lang]'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-lang')===LANG))});
+}
+function setLang(l,persist){
+  if(!I18N[l])return;LANG=l;
+  if(persist){try{localStorage.setItem('lx-lang',l)}catch(e){}
+    try{var u=new URL(location.href);if(u.searchParams.has('lang')){u.searchParams.set('lang',l);history.replaceState(history.state,'',u.toString())}}catch(e){}}
+  applyStatic();
+  if(lastErr)showErr(lastErr.key,lastErr.raw);
+  if(S.recs.length||S.headers.length){var cv=$('fCarrier').value,mv=$('fMonth').value;buildSheetUI();buildMapUI();compute();$('fCarrier').value=cv;$('fMonth').value=mv;render()}
+}
+$('langSw').addEventListener('click',function(e){var b=e.target.closest('[data-lang]');if(b&&b.getAttribute('data-lang')!==LANG)setLang(b.getAttribute('data-lang'),true)});
+setLang(LANG,false);
+
+// ?demo=1 ile doğrudan örnek veri
+if(/[?&]demo=1/.test(location.search))$('btnSample').click();
+// Test kancası
+window.LojiXcel={setLang:setLang,lang:function(){return LANG},t:t,autoMap:autoMap,fold:fold,detectHeader:detectHeader,detectOrder:detectOrder,parseDate:parseDate,parseNum:parseNum,parseCSV:parseCSV,guessField:guessField,state:function(){return S},agg:agg,filtered:filtered,loadMatrix:loadMatrix};
+})();
+</script>
+</body>
+</html>
